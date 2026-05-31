@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Machine Learning – The Complete Reference</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p, li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword { color: var(--tok-keyword); }
+        .tok-type { color: var(--tok-type); }
+        .tok-string { color: var(--tok-string); }
+        .tok-number { color: var(--tok-number); }
+        .tok-comment { color: var(--tok-comment); font-style: italic; }
+        .tok-method { color: var(--tok-method); }
+        .tok-class { color: var(--tok-class); }
+        .tok-property { color: var(--tok-property); }
+        .tok-operator { color: var(--tok-operator); }
+        .tok-punctuation { color: var(--tok-punctuation); }
+        .tok-variable { color: var(--tok-variable); }
+        .tok-namespace { color: var(--tok-namespace); }
+        .tok-preproc { color: var(--tok-preproc); }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>Machine Learning – The Complete Reference</h1>
+        <p>
+            A massive, teaching‑oriented guide to Machine Learning: from foundational concepts
+            to advanced algorithms, model evaluation, deep learning, and production MLOps.
+            Packed with code examples, tables, and practical insights.
+        </p>
+    </header>
+
+    <div class="layout">
+        <main>
+            <!-- 1. ML Basics -->
+            <section id="intro">
+                <h2>1. ML Fundamentals</h2>
+                <p>Machine Learning (ML) is a subset of AI that enables systems to learn from data without explicit programming. It automates analytical model building.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Types of ML</h3>
+                        <ul>
+                            <li><strong>Supervised</strong> – labeled data (classification, regression)</li>
+                            <li><strong>Unsupervised</strong> – unlabeled data (clustering, dimensionality reduction)</li>
+                            <li><strong>Semi‑supervised</strong> – mix of labeled and unlabeled</li>
+                            <li><strong>Reinforcement</strong> – agent learns via rewards/punishments</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Key terminology</h3>
+                        <ul>
+                            <li><strong>Features (X)</strong> – input variables</li>
+                            <li><strong>Labels (y)</strong> – target variable (supervised)</li>
+                            <li><strong>Training / Validation / Test</strong> – data splits</li>
+                            <li><strong>Overfitting</strong> – model memorizes noise</li>
+                            <li><strong>Underfitting</strong> – too simple to capture pattern</li>
+                            <li><strong>Bias / Variance trade‑off</strong></li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Common steps</h3>
+                        <ol>
+                            <li>Data collection & preprocessing</li>
+                            <li>Feature engineering & selection</li>
+                            <li>Model selection & training</li>
+                            <li>Hyperparameter tuning</li>
+                            <li>Evaluation & deployment</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Data Preprocessing -->
+            <section id="preprocessing">
+                <h2>2. Data Preprocessing</h2>
+                <p>Clean, transform, and prepare raw data for modeling.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Handling missing values</h3>
+                        <ul>
+                            <li>Delete rows/columns</li>
+                            <li>Impute (mean, median, mode, KNN, regression)</li>
+                            <li>Use algorithms that handle NaN (XGBoost)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Encoding categoricals</h3>
+                        <ul>
+                            <li>One‑Hot Encoding (nominal)</li>
+                            <li>Label Encoding (ordinal)</li>
+                            <li>Target Encoding (mean target per category)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Feature scaling</h3>
+                        <ul>
+                            <li><strong>Standardization</strong> (z‑score): (x - μ) / σ</li>
+                            <li><strong>Normalization</strong> (min‑max): (x - min) / (max - min)</li>
+                            <li>Important for SVM, KNN, Neural Networks</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Outlier detection</h3>
+                        <ul>
+                            <li>Z‑score, IQR, Isolation Forest, DBSCAN</li>
+                            <li>Cap / floor values</li>
+                        </ul>
+                    </div>
+                </div>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">preprocessing</span> <span class="tok-keyword">import</span> <span class="tok-variable">StandardScaler</span><span class="tok-punctuation">,</span> <span class="tok-variable">OneHotEncoder</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">impute</span> <span class="tok-keyword">import</span> <span class="tok-variable">SimpleImputer</span>
+
+<span class="tok-comment"># Impute missing values</span>
+<span class="tok-variable">imputer</span> <span class="tok-operator">=</span> <span class="tok-variable">SimpleImputer</span><span class="tok-punctuation">(</span><span class="tok-variable">strategy</span><span class="tok-operator">=</span><span class="tok-string">'median'</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">X_train</span> <span class="tok-operator">=</span> <span class="tok-variable">imputer</span><span class="tok-punctuation">.</span><span class="tok-method">fit_transform</span><span class="tok-punctuation">(</span><span class="tok-variable">X_train</span><span class="tok-punctuation">)</span>
+
+<span class="tok-comment"># Scale features</span>
+<span class="tok-variable">scaler</span> <span class="tok-operator">=</span> <span class="tok-variable">StandardScaler</span><span class="tok-punctuation">()</span>
+<span class="tok-variable">X_train</span> <span class="tok-operator">=</span> <span class="tok-variable">scaler</span><span class="tok-punctuation">.</span><span class="tok-method">fit_transform</span><span class="tok-punctuation">(</span><span class="tok-variable">X_train</span><span class="tok-punctuation">)</span></code></pre>
+            </section>
+
+            <!-- 3. Regression Algorithms -->
+            <section id="regression">
+                <h2>3. Regression Algorithms</h2>
+                <p>Predict continuous target values.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Linear Regression</h3>
+                        <p>y = w·x + b. Minimizes MSE. Assumes linearity, no multicollinearity.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">linear_model</span> <span class="tok-keyword">import</span> <span class="tok-variable">LinearRegression</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">LinearRegression</span><span class="tok-punctuation">()</span>
+<span class="tok-variable">model</span><span class="tok-punctuation">.</span><span class="tok-method">fit</span><span class="tok-punctuation">(</span><span class="tok-variable">X_train</span><span class="tok-punctuation">,</span> <span class="tok-variable">y_train</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Ridge Regression</h3>
+                        <p>Adds L2 penalty (λ·Σw²) to reduce overfitting. Shrinks coefficients.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">linear_model</span> <span class="tok-keyword">import</span> <span class="tok-variable">Ridge</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">Ridge</span><span class="tok-punctuation">(</span><span class="tok-variable">alpha</span><span class="tok-operator">=</span><span class="tok-number">1.0</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Lasso Regression</h3>
+                        <p>L1 penalty (λ·Σ|w|). Performs feature selection by driving some coefficients to zero.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">linear_model</span> <span class="tok-keyword">import</span> <span class="tok-variable">Lasso</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">Lasso</span><span class="tok-punctuation">(</span><span class="tok-variable">alpha</span><span class="tok-operator">=</span><span class="tok-number">0.1</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>ElasticNet</h3>
+                        <p>Combines L1 & L2. α controls weight between them.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">linear_model</span> <span class="tok-keyword">import</span> <span class="tok-variable">ElasticNet</span></code></pre>
+                    </div>
+                </div>
+                <p>Evaluation metrics for regression: MSE, RMSE, MAE, R². Use cross‑validation to get reliable estimates.</p>
+            </section>
+
+            <!-- 4. Classification Algorithms -->
+            <section id="classification">
+                <h2>4. Classification Algorithms</h2>
+                <p>Predict discrete class labels.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Logistic Regression</h3>
+                        <p>Despite the name, used for classification. Outputs probabilities via sigmoid. Regularization (L1/L2) available.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">linear_model</span> <span class="tok-keyword">import</span> <span class="tok-variable">LogisticRegression</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">LogisticRegression</span><span class="tok-punctuation">(</span><span class="tok-variable">C</span><span class="tok-operator">=</span><span class="tok-number">1.0</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">model</span><span class="tok-punctuation">.</span><span class="tok-method">fit</span><span class="tok-punctuation">(</span><span class="tok-variable">X_train</span><span class="tok-punctuation">,</span> <span class="tok-variable">y_train</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>K‑Nearest Neighbors (KNN)</h3>
+                        <p>Lazy learning: store training data, classify by majority vote of K nearest points. Non‑parametric.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">neighbors</span> <span class="tok-keyword">import</span> <span class="tok-variable">KNeighborsClassifier</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">KNeighborsClassifier</span><span class="tok-punctuation">(</span><span class="tok-variable">n_neighbors</span><span class="tok-operator">=</span><span class="tok-number">5</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Support Vector Machines (SVM)</h3>
+                        <p>Finds hyperplane that maximally separates classes. Kernel trick (RBF, polynomial) for non‑linear data.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">svm</span> <span class="tok-keyword">import</span> <span class="tok-variable">SVC</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">SVC</span><span class="tok-punctuation">(</span><span class="tok-variable">kernel</span><span class="tok-operator">=</span><span class="tok-string">'rbf'</span><span class="tok-punctuation">,</span> <span class="tok-variable">C</span><span class="tok-operator">=</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-variable">gamma</span><span class="tok-operator">=</span><span class="tok-string">'scale'</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Decision Trees</h3>
+                        <p>Recursively split data based on feature thresholds. Interpretable, prone to overfitting.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">tree</span> <span class="tok-keyword">import</span> <span class="tok-variable">DecisionTreeClassifier</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">DecisionTreeClassifier</span><span class="tok-punctuation">(</span><span class="tok-variable">max_depth</span><span class="tok-operator">=</span><span class="tok-number">5</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                </div>
+                <p>Also important: Random Forest, Gradient Boosting (XGBoost, LightGBM, CatBoost), Naive Bayes.</p>
+            </section>
+
+            <!-- 5. Ensemble Methods -->
+            <section id="ensemble">
+                <h2>5. Ensemble Learning</h2>
+                <p>Combine multiple models to improve performance.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Bagging (Bootstrap Aggregating)</h3>
+                        <p>Train base models on random subsets. Reduces variance. Example: Random Forest.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">ensemble</span> <span class="tok-keyword">import</span> <span class="tok-variable">RandomForestClassifier</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">RandomForestClassifier</span><span class="tok-punctuation">(</span><span class="tok-variable">n_estimators</span><span class="tok-operator">=</span><span class="tok-number">100</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Boosting</h3>
+                        <p>Sequentially train weak learners, each correcting previous errors. Reduces bias. Examples: AdaBoost, Gradient Boosting, XGBoost.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">ensemble</span> <span class="tok-keyword">import</span> <span class="tok-variable">GradientBoostingClassifier</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Stacking</h3>
+                        <p>Combine multiple different models via a meta‑learner.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">ensemble</span> <span class="tok-keyword">import</span> <span class="tok-variable">StackingClassifier</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Clustering -->
+            <section id="clustering">
+                <h2>6. Clustering (Unsupervised)</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>K‑Means</h3>
+                        <p>Partition data into K clusters. Iteratively assigns points to nearest centroid, updates centroids. Sensitive to initialization (use K‑Means++).</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">cluster</span> <span class="tok-keyword">import</span> <span class="tok-variable">KMeans</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">KMeans</span><span class="tok-punctuation">(</span><span class="tok-variable">n_clusters</span><span class="tok-operator">=</span><span class="tok-number">3</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">labels</span> <span class="tok-operator">=</span> <span class="tok-variable">model</span><span class="tok-punctuation">.</span><span class="tok-method">fit_predict</span><span class="tok-punctuation">(</span><span class="tok-variable">X</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>DBSCAN</h3>
+                        <p>Density‑based clustering, identifies arbitrary‑shaped clusters and noise. Parameters: eps (radius) and min_samples.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">cluster</span> <span class="tok-keyword">import</span> <span class="tok-variable">DBSCAN</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">DBSCAN</span><span class="tok-punctuation">(</span><span class="tok-variable">eps</span><span class="tok-operator">=</span><span class="tok-number">0.5</span><span class="tok-punctuation">,</span> <span class="tok-variable">min_samples</span><span class="tok-operator">=</span><span class="tok-number">5</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Hierarchical Clustering</h3>
+                        <p>Builds tree of clusters (dendrogram). Agglomerative (bottom‑up) or divisive (top‑down).</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">cluster</span> <span class="tok-keyword">import</span> <span class="tok-variable">AgglomerativeClustering</span></code></pre>
+                    </div>
+                </div>
+                <p>Evaluation: Silhouette Score, Davies‑Bouldin Index, inertia (within‑cluster sum of squares).</p>
+            </section>
+
+            <!-- 7. Dimensionality Reduction -->
+            <section id="dimred">
+                <h2>7. Dimensionality Reduction</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>PCA (Principal Component Analysis)</h3>
+                        <p>Finds orthogonal axes of maximum variance. Linear, unsupervised. Data must be scaled.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">decomposition</span> <span class="tok-keyword">import</span> <span class="tok-variable">PCA</span>
+<span class="tok-variable">pca</span> <span class="tok-operator">=</span> <span class="tok-variable">PCA</span><span class="tok-punctuation">(</span><span class="tok-variable">n_components</span><span class="tok-operator">=</span><span class="tok-number">2</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">X_reduced</span> <span class="tok-operator">=</span> <span class="tok-variable">pca</span><span class="tok-punctuation">.</span><span class="tok-method">fit_transform</span><span class="tok-punctuation">(</span><span class="tok-variable">X_scaled</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>t‑SNE</h3>
+                        <p>Non‑linear technique for visualization (2D/3D). Preserves local structure. Computationally heavy.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">manifold</span> <span class="tok-keyword">import</span> <span class="tok-variable">TSNE</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>UMAP</h3>
+                        <p>Faster, preserves more global structure. Often preferred over t‑SNE for large datasets.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. Model Evaluation -->
+            <section id="evaluation">
+                <h2>8. Model Evaluation & Validation</h2>
+                <h3>Classification metrics</h3>
+                <table>
+                    <tr><th>Metric</th><th>Formula / Description</th></tr>
+                    <tr><td>Accuracy</td><td>(TP+TN) / Total</td></tr>
+                    <tr><td>Precision</td><td>TP / (TP+FP)</td></tr>
+                    <tr><td>Recall (Sensitivity)</td><td>TP / (TP+FN)</td></tr>
+                    <tr><td>F1‑Score</td><td>Harmonic mean of Precision & Recall</td></tr>
+                    <tr><td>ROC‑AUC</td><td>Area under ROC curve (TPR vs FPR)</td></tr>
+                    <tr><td>Log Loss</td><td>Measures probability estimates</td></tr>
+                </table>
+                <h3>Regression metrics</h3>
+                <table>
+                    <tr><th>Metric</th><th>Formula</th></tr>
+                    <tr><td>MSE</td><td>Mean squared error</td></tr>
+                    <tr><td>RMSE</td><td>Root MSE, interpretable units</td></tr>
+                    <tr><td>MAE</td><td>Mean absolute error</td></tr>
+                    <tr><td>R²</td><td>1 - (SS_res / SS_tot)</td></tr>
+                </table>
+                <h3>Cross‑validation</h3>
+                <p>K‑fold CV splits data into K folds, trains on K‑1, tests on the remaining. Provides robust performance estimate.</p>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">model_selection</span> <span class="tok-keyword">import</span> <span class="tok-variable">cross_val_score</span>
+<span class="tok-variable">scores</span> <span class="tok-operator">=</span> <span class="tok-method">cross_val_score</span><span class="tok-punctuation">(</span><span class="tok-variable">model</span><span class="tok-punctuation">,</span> <span class="tok-variable">X</span><span class="tok-punctuation">,</span> <span class="tok-variable">y</span><span class="tok-punctuation">,</span> <span class="tok-variable">cv</span><span class="tok-operator">=</span><span class="tok-number">5</span><span class="tok-punctuation">,</span> <span class="tok-variable">scoring</span><span class="tok-operator">=</span><span class="tok-string">'f1'</span><span class="tok-punctuation">)</span></code></pre>
+            </section>
+
+            <!-- 9. Hyperparameter Tuning -->
+            <section id="tuning">
+                <h2>9. Hyperparameter Tuning</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Grid Search</h3>
+                        <p>Exhaustive search over predefined parameter grid. Uses cross‑validation.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">model_selection</span> <span class="tok-keyword">import</span> <span class="tok-variable">GridSearchCV</span>
+<span class="tok-variable">params</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-string">'n_estimators'</span><span class="tok-punctuation">:</span> <span class="tok-punctuation">[</span><span class="tok-number">50</span><span class="tok-punctuation">,</span><span class="tok-number">100</span><span class="tok-punctuation">],</span> <span class="tok-string">'max_depth'</span><span class="tok-punctuation">:</span> <span class="tok-punctuation">[</span><span class="tok-number">3</span><span class="tok-punctuation">,</span><span class="tok-number">5</span><span class="tok-punctuation">]}</span>
+<span class="tok-variable">grid</span> <span class="tok-operator">=</span> <span class="tok-variable">GridSearchCV</span><span class="tok-punctuation">(</span><span class="tok-variable">model</span><span class="tok-punctuation">,</span> <span class="tok-variable">params</span><span class="tok-punctuation">,</span> <span class="tok-variable">cv</span><span class="tok-operator">=</span><span class="tok-number">5</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Random Search</h3>
+                        <p>Samples random combinations. More efficient for large search spaces.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">model_selection</span> <span class="tok-keyword">import</span> <span class="tok-variable">RandomizedSearchCV</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Bayesian Optimization</h3>
+                        <p>Uses prior evaluations to guide search (e.g., Optuna, Hyperopt).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. Feature Engineering & Selection -->
+            <section id="features">
+                <h2>10. Feature Engineering & Selection</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Feature creation</h3>
+                        <ul>
+                            <li>Polynomial features</li>
+                            <li>Domain‑specific transformations (log, sqrt)</li>
+                            <li>Interaction terms</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Feature selection</h3>
+                        <ul>
+                            <li>Filter methods: correlation, chi‑square, mutual information</li>
+                            <li>Wrapper: RFE, forward/backward selection</li>
+                            <li>Embedded: Lasso, tree feature importance</li>
+                        </ul>
+                    </div>
+                </div>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">feature_selection</span> <span class="tok-keyword">import</span> <span class="tok-variable">SelectKBest</span><span class="tok-punctuation">,</span> <span class="tok-variable">mutual_info_classif</span>
+<span class="tok-variable">selector</span> <span class="tok-operator">=</span> <span class="tok-variable">SelectKBest</span><span class="tok-punctuation">(</span><span class="tok-variable">mutual_info_classif</span><span class="tok-punctuation">,</span> <span class="tok-variable">k</span><span class="tok-operator">=</span><span class="tok-number">10</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">X_new</span> <span class="tok-operator">=</span> <span class="tok-variable">selector</span><span class="tok-punctuation">.</span><span class="tok-method">fit_transform</span><span class="tok-punctuation">(</span><span class="tok-variable">X</span><span class="tok-punctuation">,</span> <span class="tok-variable">y</span><span class="tok-punctuation">)</span></code></pre>
+            </section>
+
+            <!-- 11. Deep Learning Basics -->
+            <section id="dl">
+                <h2>11. Deep Learning Essentials</h2>
+                <h3>Neural Networks</h3>
+                <p>Composed of layers of neurons. Each neuron computes a weighted sum of inputs, adds bias, and passes through an activation function.</p>
+                <ul>
+                    <li><strong>Activation functions</strong>: ReLU, sigmoid, tanh, LeakyReLU, softmax</li>
+                    <li><strong>Loss functions</strong>: Cross‑Entropy (classification), MSE (regression)</li>
+                    <li><strong>Backpropagation</strong>: gradient computation via chain rule</li>
+                    <li><strong>Optimizers</strong>: SGD, Adam, RMSprop</li>
+                </ul>
+                <h3>Key architectures</h3>
+                <ul>
+                    <li><strong>CNN</strong> (Convolutional Neural Networks): for images</li>
+                    <li><strong>RNN/LSTM/GRU</strong>: sequences, time series</li>
+                    <li><strong>Transformer</strong>: attention‑based, used in NLP (BERT, GPT)</li>
+                </ul>
+                <h3>Regularization in DL</h3>
+                <ul>
+                    <li>Dropout, Batch Normalization, Early Stopping, Weight Decay</li>
+                </ul>
+            </section>
+
+            <!-- 12. Frameworks: PyTorch & TensorFlow -->
+            <section id="frameworks">
+                <h2>12. Popular ML/DL Frameworks</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Scikit‑learn</h3>
+                        <p>Classic ML library. Consistent API, excellent for preprocessing, classification, regression, clustering.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">ensemble</span> <span class="tok-keyword">import</span> <span class="tok-variable">RandomForestClassifier</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">RandomForestClassifier</span><span class="tok-punctuation">()</span>
+<span class="tok-variable">model</span><span class="tok-punctuation">.</span><span class="tok-method">fit</span><span class="tok-punctuation">(</span><span class="tok-variable">X_train</span><span class="tok-punctuation">,</span> <span class="tok-variable">y_train</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>TensorFlow / Keras</h3>
+                        <p>Industry‑standard for deep learning. Keras provides high‑level API.</p>
+                        <pre><code><span class="tok-keyword">import</span> <span class="tok-namespace">tensorflow</span> <span class="tok-keyword">as</span> <span class="tok-namespace">tf</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">tf</span><span class="tok-punctuation">.</span><span class="tok-variable">keras</span><span class="tok-punctuation">.</span><span class="tok-variable">Sequential</span><span class="tok-punctuation">([</span>
+    <span class="tok-variable">tf</span><span class="tok-punctuation">.</span><span class="tok-variable">keras</span><span class="tok-punctuation">.</span><span class="tok-variable">layers</span><span class="tok-punctuation">.</span><span class="tok-variable">Dense</span><span class="tok-punctuation">(</span><span class="tok-number">128</span><span class="tok-punctuation">,</span> <span class="tok-variable">activation</span><span class="tok-operator">=</span><span class="tok-string">'relu'</span><span class="tok-punctuation">),</span>
+    <span class="tok-variable">tf</span><span class="tok-punctuation">.</span><span class="tok-variable">keras</span><span class="tok-punctuation">.</span><span class="tok-variable">layers</span><span class="tok-punctuation">.</span><span class="tok-variable">Dense</span><span class="tok-punctuation">(</span><span class="tok-number">10</span><span class="tok-punctuation">,</span> <span class="tok-variable">activation</span><span class="tok-operator">=</span><span class="tok-string">'softmax'</span><span class="tok-punctuation">)</span>
+<span class="tok-punctuation">])</span>
+<span class="tok-variable">model</span><span class="tok-punctuation">.</span><span class="tok-method">compile</span><span class="tok-punctuation">(</span><span class="tok-variable">optimizer</span><span class="tok-operator">=</span><span class="tok-string">'adam'</span><span class="tok-punctuation">,</span> <span class="tok-variable">loss</span><span class="tok-operator">=</span><span class="tok-string">'sparse_categorical_crossentropy'</span><span class="tok-punctuation">,</span> <span class="tok-variable">metrics</span><span class="tok-operator">=</span><span class="tok-punctuation">[</span><span class="tok-string">'accuracy'</span><span class="tok-punctuation">])</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>PyTorch</h3>
+                        <p>Dynamic computational graphs, popular in research. More Pythonic feel.</p>
+                        <pre><code><span class="tok-keyword">import</span> <span class="tok-namespace">torch</span>
+<span class="tok-keyword">import</span> <span class="tok-namespace">torch.nn</span> <span class="tok-keyword">as</span> <span class="tok-namespace">nn</span>
+<span class="tok-keyword">class</span> <span class="tok-class">MyModel</span><span class="tok-punctuation">(</span><span class="tok-variable">nn</span><span class="tok-punctuation">.</span><span class="tok-variable">Module</span><span class="tok-punctuation">):</span>
+    <span class="tok-keyword">def</span> <span class="tok-method">__init__</span><span class="tok-punctuation">(</span><span class="tok-variable">self</span><span class="tok-punctuation">):</span>
+        <span class="tok-variable">super</span><span class="tok-punctuation">().</span><span class="tok-method">__init__</span><span class="tok-punctuation">()</span>
+        <span class="tok-variable">self</span><span class="tok-punctuation">.</span><span class="tok-property">fc</span> <span class="tok-operator">=</span> <span class="tok-variable">nn</span><span class="tok-punctuation">.</span><span class="tok-variable">Linear</span><span class="tok-punctuation">(</span><span class="tok-number">784</span><span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span>
+    <span class="tok-keyword">def</span> <span class="tok-method">forward</span><span class="tok-punctuation">(</span><span class="tok-variable">self</span><span class="tok-punctuation">,</span> <span class="tok-variable">x</span><span class="tok-punctuation">):</span>
+        <span class="tok-keyword">return</span> <span class="tok-variable">self</span><span class="tok-punctuation">.</span><span class="tok-variable">fc</span><span class="tok-punctuation">(</span><span class="tok-variable">x</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">MyModel</span><span class="tok-punctuation">()</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 13. ML Pipeline & MLOps -->
+            <section id="pipeline">
+                <h2>13. ML Pipelines & MLOps</h2>
+                <p>End‑to‑end ML workflow automation: from data ingestion to model deployment and monitoring.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Scikit‑learn Pipelines</h3>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">sklearn</span><span class="tok-punctuation">.</span><span class="tok-namespace">pipeline</span> <span class="tok-keyword">import</span> <span class="tok-variable">Pipeline</span>
+<span class="tok-variable">pipe</span> <span class="tok-operator">=</span> <span class="tok-variable">Pipeline</span><span class="tok-punctuation">([</span>
+    <span class="tok-punctuation">(</span><span class="tok-string">'scaler'</span><span class="tok-punctuation">,</span> <span class="tok-variable">StandardScaler</span><span class="tok-punctuation">()),</span>
+    <span class="tok-punctuation">(</span><span class="tok-string">'clf'</span><span class="tok-punctuation">,</span> <span class="tok-variable">LogisticRegression</span><span class="tok-punctuation">())</span>
+<span class="tok-punctuation">])</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Experiment tracking</h3>
+                        <p>MLflow, Weights & Biases, TensorBoard for logging metrics, parameters, artifacts.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Model serving</h3>
+                        <p>Flask/FastAPI for REST APIs, TensorFlow Serving, TorchServe, ONNX Runtime.</p>
+                    </div>
+                    <div class="card">
+                        <h3>CI/CD for ML</h3>
+                        <p>Automate training, testing, and deployment. Tools: GitHub Actions, Kubeflow.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 14. Ethics & Bias -->
+            <section id="ethics">
+                <h2>14. Responsible AI & Bias</h2>
+                <ul>
+                    <li><strong>Fairness</strong> – models should not discriminate against protected groups. Metrics: demographic parity, equal opportunity.</li>
+                    <li><strong>Explainability</strong> – SHAP, LIME, feature importance.</li>
+                    <li><strong>Data privacy</strong> – differential privacy, federated learning.</li>
+                </ul>
+            </section>
+
+            <!-- 15. Quick Reference Tables -->
+            <section id="cheatsheet">
+                <h2>15. Quick Reference – Algorithm Selection</h2>
+                <table>
+                    <tr><th>Problem</th><th>Algorithms to try</th></tr>
+                    <tr><td>Binary classification</td><td>Logistic Regression, SVM, Random Forest, XGBoost, Neural Net</td></tr>
+                    <tr><td>Multi‑class classification</td><td>Softmax Regression, Random Forest, XGBoost, CNN (images)</td></tr>
+                    <tr><td>Regression</td><td>Linear/Ridge/Lasso, Random Forest Regressor, Gradient Boosting Regressor</td></tr>
+                    <tr><td>Clustering</td><td>K‑Means, DBSCAN, Agglomerative Clustering, Gaussian Mixture</td></tr>
+                    <tr><td>Dimensionality reduction</td><td>PCA, t‑SNE, UMAP, Autoencoders</td></tr>
+                    <tr><td>Text classification</td><td>Naive Bayes, Logistic Regression, LSTM, Transformer (BERT)</td></tr>
+                    <tr><td>Image classification</td><td>CNN (ResNet, EfficientNet), Vision Transformer</td></tr>
+                    <tr><td>Time series forecasting</td><td>ARIMA, Prophet, LSTM, Transformer</td></tr>
+                </table>
+            </section>
+
+            <section id="tips">
+                <h2>16. Best Practices & Common Pitfalls</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Do</h3>
+                        <ul>
+                            <li>Always split data before preprocessing</li>
+                            <li>Try simple models first (baseline)</li>
+                            <li>Use cross‑validation for evaluation</li>
+                            <li>Monitor for data drift in production</li>
+                            <li>Keep a reproducible pipeline</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Don't</h3>
+                        <ul>
+                            <li>Use test set for hyperparameter tuning</li>
+                            <li>Ignore feature scaling for distance‑based models</li>
+                            <li>Assume more data always helps without checking quality</li>
+                            <li>Deploy without monitoring</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common mistakes: data leakage (using future information), overfitting to validation set,
+                    not handling class imbalance, and evaluating with only accuracy on imbalanced data.
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+<!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

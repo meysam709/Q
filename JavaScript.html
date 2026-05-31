@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Complete Summary</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p,
+        li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(59,130,246,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(59,130,246,0.2);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin: 4px 6px 4px 0;
+            font-weight: 600;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword {
+            color: var(--tok-keyword);
+        }
+        .tok-type {
+            color: var(--tok-type);
+        }
+        .tok-string {
+            color: var(--tok-string);
+        }
+        .tok-number {
+            color: var(--tok-number);
+        }
+        .tok-comment {
+            color: var(--tok-comment);
+            font-style: italic;
+        }
+        .tok-method {
+            color: var(--tok-method);
+        }
+        .tok-class {
+            color: var(--tok-class);
+        }
+        .tok-property {
+            color: var(--tok-property);
+        }
+        .tok-operator {
+            color: var(--tok-operator);
+        }
+        .tok-punctuation {
+            color: var(--tok-punctuation);
+        }
+        .tok-variable {
+            color: var(--tok-variable);
+        }
+        .tok-namespace {
+            color: var(--tok-namespace);
+        }
+        .tok-preproc {
+            color: var(--tok-preproc);
+        }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>JavaScript Complete Summary</h1>
+        <p>
+            A complete remembrance‑style JavaScript reference covering syntax, data types, functions,
+            OOP, DOM, events, async patterns, and modern ES6+ essentials with VS Code‑like syntax coloring.
+        </p>
+    </header>
+
+    <div class="layout">
+        <main>
+            <!-- 1. Basics -->
+            <section id="intro">
+                <h2>1. JavaScript Basics</h2>
+                <p>
+                    JavaScript is a high‑level, interpreted language that powers dynamic behavior on the web.
+                    It supports event‑driven, functional, and object‑oriented programming styles, and runs
+                    both in the browser and on the server (Node.js).
+                </p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Main features</h3>
+                        <ul>
+                            <li>Dynamic typing</li>
+                            <li>Prototype‑based OOP</li>
+                            <li>First‑class functions</li>
+                            <li>Event‑driven & asynchronous</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Common uses</h3>
+                        <ul>
+                            <li>Front‑end web (React, Vue, etc.)</li>
+                            <li>Back‑end (Node.js)</li>
+                            <li>Mobile apps (React Native)</li>
+                            <li>Desktop apps (Electron)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Run code</h3>
+                        <pre><code><span class="tok-comment">// Browser console or Node.js</span>
+<span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-string">"Hello, JS!"</span><span class="tok-punctuation">);</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Syntax & Structure -->
+            <section id="syntax">
+                <h2>2. Syntax & Structure</h2>
+                <pre><code><span class="tok-keyword">function</span> <span class="tok-method">greet</span><span class="tok-punctuation">(</span><span class="tok-variable">name</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-string">`Hello, ${name}!`</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-method">greet</span><span class="tok-punctuation">(</span><span class="tok-string">"World"</span><span class="tok-punctuation">);</span></code></pre>
+                <h3>Comments</h3>
+                <pre><code><span class="tok-comment">// single-line comment</span>
+<span class="tok-comment">/* multi-line
+   comment */</span></code></pre>
+            </section>
+
+            <!-- 3. Variables & Data Types -->
+            <section id="variables">
+                <h2>3. Variables & Data Types</h2>
+                <pre><code><span class="tok-keyword">let</span> <span class="tok-variable">age</span> <span class="tok-operator">=</span> <span class="tok-number">25</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">PI</span> <span class="tok-operator">=</span> <span class="tok-number">3.14159</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">var</span> <span class="tok-variable">oldStyle</span> <span class="tok-operator">=</span> <span class="tok-string">"avoid"</span><span class="tok-punctuation">;</span>     <span class="tok-comment">// function‑scoped</span>
+
+<span class="tok-keyword">let</span> <span class="tok-variable">name</span> <span class="tok-operator">=</span> <span class="tok-string">"Alice"</span><span class="tok-punctuation">;</span>        <span class="tok-comment">// string</span>
+<span class="tok-keyword">let</span> <span class="tok-variable">isActive</span> <span class="tok-operator">=</span> <span class="tok-keyword">true</span><span class="tok-punctuation">;</span>     <span class="tok-comment">// boolean</span>
+<span class="tok-keyword">let</span> <span class="tok-variable">count</span> <span class="tok-operator">=</span> <span class="tok-number">10</span><span class="tok-punctuation">;</span>         <span class="tok-comment">// number</span>
+<span class="tok-keyword">let</span> <span class="tok-variable">obj</span> <span class="tok-operator">=</span> <span class="tok-keyword">null</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">let</span> <span class="tok-variable">notDefined</span><span class="tok-punctuation">;</span>         <span class="tok-comment">// undefined</span>
+<span class="tok-keyword">let</span> <span class="tok-variable">bigInt</span> <span class="tok-operator">=</span> <span class="tok-number">9007199254740991n</span><span class="tok-punctuation">;</span> <span class="tok-comment">// BigInt</span>
+<span class="tok-keyword">let</span> <span class="tok-variable">sym</span> <span class="tok-operator">=</span> <span class="tok-class">Symbol</span><span class="tok-punctuation">(</span><span class="tok-string">"id"</span><span class="tok-punctuation">);</span></code></pre>
+                <table>
+                    <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+                    <tr><td>number</td><td>Integer or float</td><td><code class="inline">let x = 5;</code></td></tr>
+                    <tr><td>string</td><td>Text</td><td><code class="inline">let s = "Hi";</code></td></tr>
+                    <tr><td>boolean</td><td>true / false</td><td><code class="inline">let ok = true;</code></td></tr>
+                    <tr><td>null</td><td>Intentional absence</td><td><code class="inline">let empty = null;</code></td></tr>
+                    <tr><td>undefined</td><td>Uninitialized</td><td><code class="inline">let x;</code></td></tr>
+                    <tr><td>BigInt</td><td>Large integers</td><td><code class="inline">let n = 10n;</code></td></tr>
+                    <tr><td>Symbol</td><td>Unique identifier</td><td><code class="inline">let s = Symbol();</code></td></tr>
+                </table>
+            </section>
+
+            <!-- 4. Operators -->
+            <section id="operators">
+                <h2>4. Operators</h2>
+                <div class="grid">
+                    <div class="card"><h3>Arithmetic</h3><p><code class="inline">+ - * / % ** ++ --</code></p></div>
+                    <div class="card"><h3>Comparison</h3><p><code class="inline">== === != !== > < >= <=</code></p></div>
+                    <div class="card"><h3>Logical</h3><p><code class="inline">&& || !</code></p></div>
+                    <div class="card"><h3>Assignment</h3><p><code class="inline">= += -= *= /= %= **=</code></p></div>
+                </div>
+                <p class="note">Always prefer strict equality <code class="inline">===</code> and <code class="inline">!==</code> over <code class="inline">==</code> / <code class="inline">!=</code>.</p>
+            </section>
+
+            <!-- 5. Control Flow -->
+            <section id="control">
+                <h2>5. Control Flow</h2>
+                <h3>if / else</h3>
+                <pre><code><span class="tok-keyword">if</span> <span class="tok-punctuation">(</span><span class="tok-variable">age</span> <span class="tok-operator">&gt;=</span> <span class="tok-number">18</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-string">"Adult"</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span> <span class="tok-keyword">else</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-string">"Minor"</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>switch</h3>
+                <pre><code><span class="tok-keyword">switch</span> <span class="tok-punctuation">(</span><span class="tok-variable">day</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">case</span> <span class="tok-number">1</span><span class="tok-punctuation">:</span>
+        <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-string">"Monday"</span><span class="tok-punctuation">);</span>
+        <span class="tok-keyword">break</span><span class="tok-punctuation">;</span>
+    <span class="tok-keyword">default</span><span class="tok-punctuation">:</span>
+        <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-string">"Unknown"</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>Loops</h3>
+                <pre><code><span class="tok-keyword">for</span> <span class="tok-punctuation">(</span><span class="tok-keyword">let</span> <span class="tok-variable">i</span> <span class="tok-operator">=</span> <span class="tok-number">0</span><span class="tok-punctuation">;</span> <span class="tok-variable">i</span> <span class="tok-operator">&lt;</span> <span class="tok-number">5</span><span class="tok-punctuation">;</span> <span class="tok-variable">i</span><span class="tok-operator">++</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-variable">i</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">for</span> <span class="tok-punctuation">(</span><span class="tok-keyword">const</span> <span class="tok-variable">item</span> <span class="tok-keyword">of</span> <span class="tok-variable">items</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>   <span class="tok-comment">// for‑of</span>
+    <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-variable">item</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">while</span> <span class="tok-punctuation">(</span><span class="tok-variable">x</span> <span class="tok-operator">&lt;</span> <span class="tok-number">3</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-variable">x</span><span class="tok-operator">++</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+            </section>
+
+            <!-- 6. Functions -->
+            <section id="functions">
+                <h2>6. Functions</h2>
+                <pre><code><span class="tok-comment">// Function declaration</span>
+<span class="tok-keyword">function</span> <span class="tok-method">add</span><span class="tok-punctuation">(</span><span class="tok-variable">a</span><span class="tok-punctuation">,</span> <span class="tok-variable">b</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">return</span> <span class="tok-variable">a</span> <span class="tok-operator">+</span> <span class="tok-variable">b</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-comment">// Function expression</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">subtract</span> <span class="tok-operator">=</span> <span class="tok-keyword">function</span><span class="tok-punctuation">(</span><span class="tok-variable">a</span><span class="tok-punctuation">,</span> <span class="tok-variable">b</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">return</span> <span class="tok-variable">a</span> <span class="tok-operator">-</span> <span class="tok-variable">b</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">};</span>
+
+<span class="tok-comment">// Arrow function</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">multiply</span> <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-variable">a</span><span class="tok-punctuation">,</span> <span class="tok-variable">b</span><span class="tok-punctuation">)</span> <span class="tok-operator">=&gt;</span> <span class="tok-variable">a</span> <span class="tok-operator">*</span> <span class="tok-variable">b</span><span class="tok-punctuation">;</span>
+
+<span class="tok-comment">// Default parameters</span>
+<span class="tok-keyword">function</span> <span class="tok-method">greet</span><span class="tok-punctuation">(</span><span class="tok-variable">name</span> <span class="tok-operator">=</span> <span class="tok-string">"Guest"</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">return</span> <span class="tok-string">`Hello, ${name}`</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+            </section>
+
+            <!-- 7. Arrays & Objects -->
+            <section id="arrays">
+                <h2>7. Arrays & Objects</h2>
+                <h3>Arrays</h3>
+                <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">numbers</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">]</span><span class="tok-punctuation">;</span>
+<span class="tok-variable">numbers</span><span class="tok-punctuation">.</span><span class="tok-method">push</span><span class="tok-punctuation">(</span><span class="tok-number">4</span><span class="tok-punctuation">);</span>
+<span class="tok-variable">numbers</span><span class="tok-punctuation">.</span><span class="tok-method">forEach</span><span class="tok-punctuation">(</span><span class="tok-variable">n</span> <span class="tok-operator">=&gt;</span> <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-variable">n</span><span class="tok-punctuation">));</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">doubled</span> <span class="tok-operator">=</span> <span class="tok-variable">numbers</span><span class="tok-punctuation">.</span><span class="tok-method">map</span><span class="tok-punctuation">(</span><span class="tok-variable">n</span> <span class="tok-operator">=&gt;</span> <span class="tok-variable">n</span> <span class="tok-operator">*</span> <span class="tok-number">2</span><span class="tok-punctuation">);</span></code></pre>
+                <h3>Objects</h3>
+                <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">person</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">name</span><span class="tok-operator">:</span> <span class="tok-string">"Alice"</span><span class="tok-punctuation">,</span>
+    <span class="tok-property">age</span><span class="tok-operator">:</span> <span class="tok-number">25</span><span class="tok-punctuation">,</span>
+    <span class="tok-method">greet</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span> <span class="tok-keyword">return</span> <span class="tok-string">`Hi, I'm ${this.name}`</span><span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">};</span>
+<span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-variable">person</span><span class="tok-punctuation">.</span><span class="tok-property">name</span><span class="tok-punctuation">);</span>
+<span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-variable">person</span><span class="tok-punctuation">[</span><span class="tok-string">"age"</span><span class="tok-punctuation">]);</span></code></pre>
+            </section>
+
+            <!-- 8. OOP: Prototypes & Classes -->
+            <section id="oop">
+                <h2>8. OOP: Prototypes & Classes</h2>
+                <h3>Constructor function (pre‑ES6)</h3>
+                <pre><code><span class="tok-keyword">function</span> <span class="tok-method">Car</span><span class="tok-punctuation">(</span><span class="tok-variable">brand</span><span class="tok-punctuation">,</span> <span class="tok-variable">year</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">this</span><span class="tok-punctuation">.</span><span class="tok-property">brand</span> <span class="tok-operator">=</span> <span class="tok-variable">brand</span><span class="tok-punctuation">;</span>
+    <span class="tok-keyword">this</span><span class="tok-punctuation">.</span><span class="tok-property">year</span> <span class="tok-operator">=</span> <span class="tok-variable">year</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-class">Car</span><span class="tok-punctuation">.</span><span class="tok-property">prototype</span><span class="tok-punctuation">.</span><span class="tok-method">drive</span> <span class="tok-operator">=</span> <span class="tok-keyword">function</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-string">`${this.brand} is driving`</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">};</span></code></pre>
+                <h3>ES6 Class</h3>
+                <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Car</span> <span class="tok-punctuation">{</span>
+    <span class="tok-method">constructor</span><span class="tok-punctuation">(</span><span class="tok-variable">brand</span><span class="tok-punctuation">,</span> <span class="tok-variable">year</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+        <span class="tok-keyword">this</span><span class="tok-punctuation">.</span><span class="tok-property">brand</span> <span class="tok-operator">=</span> <span class="tok-variable">brand</span><span class="tok-punctuation">;</span>
+        <span class="tok-keyword">this</span><span class="tok-punctuation">.</span><span class="tok-property">year</span> <span class="tok-operator">=</span> <span class="tok-variable">year</span><span class="tok-punctuation">;</span>
+    <span class="tok-punctuation">}</span>
+    <span class="tok-method">drive</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+        <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-string">`${this.brand} is driving`</span><span class="tok-punctuation">);</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">car</span> <span class="tok-operator">=</span> <span class="tok-keyword">new</span> <span class="tok-class">Car</span><span class="tok-punctuation">(</span><span class="tok-string">"Toyota"</span><span class="tok-punctuation">,</span> <span class="tok-number">2023</span><span class="tok-punctuation">);</span></code></pre>
+            </section>
+
+            <!-- 9. Inheritance & Prototype Chain -->
+            <section id="inheritance">
+                <h2>9. Inheritance & Prototype Chain</h2>
+                <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Animal</span> <span class="tok-punctuation">{</span>
+    <span class="tok-method">speak</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+        <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-string">"Animal sound"</span><span class="tok-punctuation">);</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">Dog</span> <span class="tok-keyword">extends</span> <span class="tok-class">Animal</span> <span class="tok-punctuation">{</span>
+    <span class="tok-method">speak</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+        <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-string">"Bark"</span><span class="tok-punctuation">);</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">const</span> <span class="tok-variable">d</span> <span class="tok-operator">=</span> <span class="tok-keyword">new</span> <span class="tok-class">Dog</span><span class="tok-punctuation">();</span>
+<span class="tok-variable">d</span><span class="tok-punctuation">.</span><span class="tok-method">speak</span><span class="tok-punctuation">();</span>  <span class="tok-comment">// "Bark"</span></code></pre>
+                <div class="note">Use <code class="inline">extends</code> and <code class="inline">super</code> to call parent constructor/methods.</div>
+            </section>
+
+            <!-- 10. Error Handling -->
+            <section id="errors">
+                <h2>10. Error Handling</h2>
+                <pre><code><span class="tok-keyword">try</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">throw</span> <span class="tok-keyword">new</span> <span class="tok-class">Error</span><span class="tok-punctuation">(</span><span class="tok-string">"Something went wrong"</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span> <span class="tok-keyword">catch</span> <span class="tok-punctuation">(</span><span class="tok-variable">err</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">error</span><span class="tok-punctuation">(</span><span class="tok-variable">err</span><span class="tok-punctuation">.</span><span class="tok-property">message</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span> <span class="tok-keyword">finally</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-string">"Always runs"</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span></code></pre>
+            </section>
+
+            <!-- 11. Collections (Set, Map) -->
+            <section id="collections">
+                <h2>11. Collections: Set & Map</h2>
+                <h3>Set</h3>
+                <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">set</span> <span class="tok-operator">=</span> <span class="tok-keyword">new</span> <span class="tok-class">Set</span><span class="tok-punctuation">([</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">]);</span>  <span class="tok-comment">// Set {1, 2}</span>
+<span class="tok-variable">set</span><span class="tok-punctuation">.</span><span class="tok-method">add</span><span class="tok-punctuation">(</span><span class="tok-number">3</span><span class="tok-punctuation">);</span>
+<span class="tok-variable">set</span><span class="tok-punctuation">.</span><span class="tok-method">has</span><span class="tok-punctuation">(</span><span class="tok-number">2</span><span class="tok-punctuation">);</span>  <span class="tok-comment">// true</span></code></pre>
+                <h3>Map</h3>
+                <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">map</span> <span class="tok-operator">=</span> <span class="tok-keyword">new</span> <span class="tok-class">Map</span><span class="tok-punctuation">();</span>
+<span class="tok-variable">map</span><span class="tok-punctuation">.</span><span class="tok-method">set</span><span class="tok-punctuation">(</span><span class="tok-string">"Alice"</span><span class="tok-punctuation">,</span> <span class="tok-number">25</span><span class="tok-punctuation">);</span>
+<span class="tok-variable">map</span><span class="tok-punctuation">.</span><span class="tok-method">get</span><span class="tok-punctuation">(</span><span class="tok-string">"Alice"</span><span class="tok-punctuation">);</span>  <span class="tok-comment">// 25</span></code></pre>
+            </section>
+
+            <!-- 12. Closures & Scope -->
+            <section id="closures">
+                <h2>12. Closures & Scope</h2>
+                <pre><code><span class="tok-keyword">function</span> <span class="tok-method">createCounter</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">let</span> <span class="tok-variable">count</span> <span class="tok-operator">=</span> <span class="tok-number">0</span><span class="tok-punctuation">;</span>
+    <span class="tok-keyword">return</span> <span class="tok-keyword">function</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+        <span class="tok-keyword">return</span> <span class="tok-operator">++</span><span class="tok-variable">count</span><span class="tok-punctuation">;</span>  <span class="tok-comment">// retains access to 'count'</span>
+    <span class="tok-punctuation">};</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">counter</span> <span class="tok-operator">=</span> <span class="tok-method">createCounter</span><span class="tok-punctuation">();</span>
+<span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-method">counter</span><span class="tok-punctuation">());</span> <span class="tok-comment">// 1</span>
+<span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-method">counter</span><span class="tok-punctuation">());</span> <span class="tok-comment">// 2</span></code></pre>
+                <p>Variables declared with <code class="inline">let</code> and <code class="inline">const</code> are block‑scoped; <code class="inline">var</code> is function‑scoped.</p>
+            </section>
+
+            <!-- 13. Callbacks & Promises -->
+            <section id="async">
+                <h2>13. Callbacks & Promises</h2>
+                <h3>Callback</h3>
+                <pre><code><span class="tok-keyword">function</span> <span class="tok-method">fetchData</span><span class="tok-punctuation">(</span><span class="tok-variable">callback</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-method">setTimeout</span><span class="tok-punctuation">(()</span> <span class="tok-operator">=&gt;</span> <span class="tok-punctuation">{</span>
+        <span class="tok-method">callback</span><span class="tok-punctuation">(</span><span class="tok-string">"Data ready"</span><span class="tok-punctuation">);</span>
+    <span class="tok-punctuation">},</span> <span class="tok-number">1000</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>Promise</h3>
+                <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">promise</span> <span class="tok-operator">=</span> <span class="tok-keyword">new</span> <span class="tok-class">Promise</span><span class="tok-punctuation">((</span><span class="tok-variable">resolve</span><span class="tok-punctuation">,</span> <span class="tok-variable">reject</span><span class="tok-punctuation">)</span> <span class="tok-operator">=&gt;</span> <span class="tok-punctuation">{</span>
+    <span class="tok-method">setTimeout</span><span class="tok-punctuation">(()</span> <span class="tok-operator">=&gt;</span> <span class="tok-method">resolve</span><span class="tok-punctuation">(</span><span class="tok-string">"Done"</span><span class="tok-punctuation">),</span> <span class="tok-number">500</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">});</span>
+<span class="tok-variable">promise</span><span class="tok-punctuation">.</span><span class="tok-method">then</span><span class="tok-punctuation">(</span><span class="tok-variable">result</span> <span class="tok-operator">=&gt;</span> <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-variable">result</span><span class="tok-punctuation">));</span>
+</code></pre>
+            </section>
+
+            <!-- 14. Async / Await -->
+            <section id="asyncawait">
+                <h2>14. Async / Await</h2>
+                <pre><code><span class="tok-keyword">async</span> <span class="tok-keyword">function</span> <span class="tok-method">fetchData</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">const</span> <span class="tok-variable">response</span> <span class="tok-operator">=</span> <span class="tok-keyword">await</span> <span class="tok-method">fetch</span><span class="tok-punctuation">(</span><span class="tok-string">"https://api.example.com"</span><span class="tok-punctuation">);</span>
+    <span class="tok-keyword">const</span> <span class="tok-variable">data</span> <span class="tok-operator">=</span> <span class="tok-keyword">await</span> <span class="tok-variable">response</span><span class="tok-punctuation">.</span><span class="tok-method">json</span><span class="tok-punctuation">();</span>
+    <span class="tok-keyword">return</span> <span class="tok-variable">data</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">result</span> <span class="tok-operator">=</span> <span class="tok-keyword">await</span> <span class="tok-method">fetchData</span><span class="tok-punctuation">();</span>  <span class="tok-comment">// inside async context</span></code></pre>
+                <div class="note">Always wrap <code class="inline">await</code> in a <code class="inline">try/catch</code> or handle errors with <code class="inline">.catch()</code>.</div>
+            </section>
+
+            <!-- 15. DOM Manipulation -->
+            <section id="dom">
+                <h2>15. DOM Manipulation</h2>
+                <pre><code><span class="tok-comment">// Selecting elements</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">el</span> <span class="tok-operator">=</span> <span class="tok-variable">document</span><span class="tok-punctuation">.</span><span class="tok-method">getElementById</span><span class="tok-punctuation">(</span><span class="tok-string">"myId"</span><span class="tok-punctuation">);</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">items</span> <span class="tok-operator">=</span> <span class="tok-variable">document</span><span class="tok-punctuation">.</span><span class="tok-method">querySelectorAll</span><span class="tok-punctuation">(</span><span class="tok-string">".class-name"</span><span class="tok-punctuation">);</span>
+
+<span class="tok-comment">// Changing content</span>
+<span class="tok-variable">el</span><span class="tok-punctuation">.</span><span class="tok-property">textContent</span> <span class="tok-operator">=</span> <span class="tok-string">"New text"</span><span class="tok-punctuation">;</span>
+<span class="tok-variable">el</span><span class="tok-punctuation">.</span><span class="tok-property">innerHTML</span> <span class="tok-operator">=</span> <span class="tok-string">"&lt;strong&gt;Bold&lt;/strong&gt;"</span><span class="tok-punctuation">;</span>
+
+<span class="tok-comment">// Creating & appending</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">newDiv</span> <span class="tok-operator">=</span> <span class="tok-variable">document</span><span class="tok-punctuation">.</span><span class="tok-method">createElement</span><span class="tok-punctuation">(</span><span class="tok-string">"div"</span><span class="tok-punctuation">);</span>
+<span class="tok-variable">newDiv</span><span class="tok-punctuation">.</span><span class="tok-property">textContent</span> <span class="tok-operator">=</span> <span class="tok-string">"Hello"</span><span class="tok-punctuation">;</span>
+<span class="tok-variable">document</span><span class="tok-punctuation">.</span><span class="tok-property">body</span><span class="tok-punctuation">.</span><span class="tok-method">appendChild</span><span class="tok-punctuation">(</span><span class="tok-variable">newDiv</span><span class="tok-punctuation">);</span></code></pre>
+            </section>
+
+            <!-- 16. Events -->
+            <section id="events">
+                <h2>16. Events</h2>
+                <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">btn</span> <span class="tok-operator">=</span> <span class="tok-variable">document</span><span class="tok-punctuation">.</span><span class="tok-method">getElementById</span><span class="tok-punctuation">(</span><span class="tok-string">"myButton"</span><span class="tok-punctuation">);</span>
+<span class="tok-variable">btn</span><span class="tok-punctuation">.</span><span class="tok-method">addEventListener</span><span class="tok-punctuation">(</span><span class="tok-string">"click"</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">(</span><span class="tok-variable">event</span><span class="tok-punctuation">)</span> <span class="tok-operator">=&gt;</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">console</span><span class="tok-punctuation">.</span><span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-string">"Clicked!"</span><span class="tok-punctuation">,</span> <span class="tok-variable">event</span><span class="tok-punctuation">.</span><span class="tok-property">target</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">});</span>
+
+<span class="tok-comment">// Event delegation</span>
+<span class="tok-variable">document</span><span class="tok-punctuation">.</span><span class="tok-method">addEventListener</span><span class="tok-punctuation">(</span><span class="tok-string">"click"</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">(</span><span class="tok-variable">e</span><span class="tok-punctuation">)</span> <span class="tok-operator">=&gt;</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">if</span> <span class="tok-punctuation">(</span><span class="tok-variable">e</span><span class="tok-punctuation">.</span><span class="tok-property">target</span><span class="tok-punctuation">.</span><span class="tok-property">matches</span><span class="tok-punctuation">(</span><span class="tok-string">".btn-class"</span><span class="tok-punctuation">))</span> <span class="tok-punctuation">{</span>
+        <span class="tok-comment">// handle</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">});</span></code></pre>
+            </section>
+
+            <!-- 17. Modern ES6+ Features -->
+            <section id="modern">
+                <h2>17. Modern ES6+ Features</h2>
+                <h3>Destructuring</h3>
+                <pre><code><span class="tok-keyword">const</span> <span class="tok-punctuation">{</span> <span class="tok-variable">name</span><span class="tok-punctuation">,</span> <span class="tok-variable">age</span> <span class="tok-punctuation">}</span> <span class="tok-operator">=</span> <span class="tok-variable">person</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">const</span> <span class="tok-punctuation">[</span><span class="tok-variable">first</span><span class="tok-punctuation">,</span> <span class="tok-variable">second</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-variable">numbers</span><span class="tok-punctuation">;</span></code></pre>
+                <h3>Spread / Rest</h3>
+                <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">arr</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-operator">...</span><span class="tok-variable">oldArr</span><span class="tok-punctuation">,</span> <span class="tok-number">4</span><span class="tok-punctuation">,</span> <span class="tok-number">5</span><span class="tok-punctuation">];</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">clone</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span> <span class="tok-operator">...</span><span class="tok-variable">obj</span><span class="tok-punctuation">,</span> <span class="tok-variable">newProp</span><span class="tok-operator">:</span> <span class="tok-keyword">true</span> <span class="tok-punctuation">};</span>
+<span class="tok-keyword">function</span> <span class="tok-method">sum</span><span class="tok-punctuation">(</span><span class="tok-operator">...</span><span class="tok-variable">nums</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span> <span class="tok-keyword">return</span> <span class="tok-variable">nums</span><span class="tok-punctuation">.</span><span class="tok-method">reduce</span><span class="tok-punctuation">((</span><span class="tok-variable">a</span><span class="tok-punctuation">,</span><span class="tok-variable">b</span><span class="tok-punctuation">)</span> <span class="tok-operator">=&gt;</span> <span class="tok-variable">a</span><span class="tok-operator">+</span><span class="tok-variable">b</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span><span class="tok-punctuation">);</span> <span class="tok-punctuation">}</span></code></pre>
+                <h3>Template literals</h3>
+                <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">msg</span> <span class="tok-operator">=</span> <span class="tok-string">`Hello, ${name}. You are ${age} years old.`</span><span class="tok-punctuation">;</span></code></pre>
+                <h3>Optional chaining & nullish coalescing</h3>
+                <pre><code><span class="tok-keyword">const</span> <span class="tok-variable">city</span> <span class="tok-operator">=</span> <span class="tok-variable">user</span><span class="tok-punctuation">?.</span><span class="tok-property">address</span><span class="tok-punctuation">?.</span><span class="tok-property">city</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">const</span> <span class="tok-variable">name</span> <span class="tok-operator">=</span> <span class="tok-variable">input</span> <span class="tok-operator">??</span> <span class="tok-string">"Default"</span><span class="tok-punctuation">;</span></code></pre>
+            </section>
+
+            <!-- 18. Quick Remember Tips -->
+            <section id="tips">
+                <h2>18. Quick Remember Tips</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Variables</h3>
+                        <p>Use <code class="inline">const</code> by default, <code class="inline">let</code> when reassignment is needed. Avoid <code class="inline">var</code>.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Functions</h3>
+                        <p>Arrow functions inherit <code class="inline">this</code> from the surrounding context; use regular functions when you need dynamic <code class="inline">this</code>.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Arrays</h3>
+                        <p>Use <code class="inline">map</code>, <code class="inline">filter</code>, <code class="inline">reduce</code> instead of loops for clarity.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Async</h3>
+                        <p>Prefer <code class="inline">async/await</code> over raw promises for better readability.</p>
+                    </div>
+                    <div class="card">
+                        <h3>DOM</h3>
+                        <p>Cache DOM references; avoid querying inside loops.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Errors</h3>
+                        <p>Always handle promise rejections (either <code class="inline">.catch()</code> or <code class="inline">try/catch</code> with await).</p>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common mistakes: using <code class="inline">==</code> instead of <code class="inline">===</code>, forgetting <code class="inline">this</code> binding in callbacks,
+                    mutating objects/arrays passed as props, and ignoring async error handling.
+                </div>
+            </section>
+        </main>
+    </div>
+
+
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+<!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

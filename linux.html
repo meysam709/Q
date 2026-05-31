@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linux/Unix – The Complete Reference</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p, li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword { color: var(--tok-keyword); }
+        .tok-type { color: var(--tok-type); }
+        .tok-string { color: var(--tok-string); }
+        .tok-number { color: var(--tok-number); }
+        .tok-comment { color: var(--tok-comment); font-style: italic; }
+        .tok-method { color: var(--tok-method); }
+        .tok-class { color: var(--tok-class); }
+        .tok-property { color: var(--tok-property); }
+        .tok-operator { color: var(--tok-operator); }
+        .tok-punctuation { color: var(--tok-punctuation); }
+        .tok-variable { color: var(--tok-variable); }
+        .tok-namespace { color: var(--tok-namespace); }
+        .tok-preproc { color: var(--tok-preproc); }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>Linux/Unix – The Complete Reference</h1>
+        <p>
+            An ultra‑comprehensive guide to Linux and Unix: commands, filesystem, processes,
+            permissions, networking, shell scripting, package management, and more.
+            Designed for learners, system administrators, and power users.
+        </p>
+    </header>
+
+    <div class="layout">
+        <main>
+            <!-- 1. Basics -->
+            <section id="basics">
+                <h2>1. Linux/Unix Fundamentals</h2>
+                <p>Linux is a Unix‑like, open‑source operating system kernel used by countless distributions (Ubuntu, Fedora, Arch, etc.). The command line interface (shell) is the most powerful way to interact with the system.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Key characteristics</h3>
+                        <ul>
+                            <li>Multi‑user, multi‑tasking</li>
+                            <li>Hierarchical filesystem</li>
+                            <li>Everything is a file</li>
+                            <li>Extensive CLI tools</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Common shells</h3>
+                        <ul>
+                            <li>Bash (Bourne Again SHell)</li>
+                            <li>Zsh, Fish, Ksh</li>
+                            <li>Default prompt: <code class="inline">user@host:~$</code></li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>First commands</h3>
+                        <pre><code><span class="tok-method">whoami</span>       <span class="tok-comment"># show current user</span>
+<span class="tok-method">pwd</span>          <span class="tok-comment"># print working directory</span>
+<span class="tok-method">ls</span>           <span class="tok-comment"># list files</span>
+<span class="tok-method">date</span>         <span class="tok-comment"># show date/time</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Filesystem Navigation -->
+            <section id="navigation">
+                <h2>2. Filesystem Navigation</h2>
+                <h3>Directory structure (FHS)</h3>
+                <table>
+                    <tr><th>Path</th><th>Purpose</th></tr>
+                    <tr><td>/</td><td>Root directory</td></tr>
+                    <tr><td>/bin</td><td>Essential user binaries</td></tr>
+                    <tr><td>/etc</td><td>Configuration files</td></tr>
+                    <tr><td>/home</td><td>User home directories</td></tr>
+                    <tr><td>/var</td><td>Variable data (logs, spool)</td></tr>
+                    <tr><td>/tmp</td><td>Temporary files (cleared on reboot)</td></tr>
+                    <tr><td>/dev</td><td>Device files</td></tr>
+                    <tr><td>/proc, /sys</td><td>Kernel & process info</td></tr>
+                </table>
+                <h3>Essential navigation commands</h3>
+                <pre><code><span class="tok-method">cd</span> <span class="tok-variable">/path/to/dir</span>    <span class="tok-comment"># change directory</span>
+<span class="tok-method">cd</span> <span class="tok-operator">..</span>               <span class="tok-comment"># up one level</span>
+<span class="tok-method">cd</span> <span class="tok-operator">~</span>                <span class="tok-comment"># home directory</span>
+<span class="tok-method">cd</span> <span class="tok-operator">-</span>                <span class="tok-comment"># previous directory</span>
+<span class="tok-method">pwd</span>                 <span class="tok-comment"># print current path</span>
+<span class="tok-method">ls</span> <span class="tok-operator">-</span><span class="tok-variable">lah</span>            <span class="tok-comment"># long listing with hidden files, human sizes</span>
+<span class="tok-method">tree</span> <span class="tok-variable">/path</span>          <span class="tok-comment"># display directory tree (if installed)</span></code></pre>
+            </section>
+
+            <!-- 3. File Operations -->
+            <section id="fileops">
+                <h2>3. File Operations</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Create & view</h3>
+                        <pre><code><span class="tok-method">touch</span> <span class="tok-variable">file.txt</span>         <span class="tok-comment"># create empty file</span>
+<span class="tok-method">mkdir</span> <span class="tok-variable">newdir</span>           <span class="tok-comment"># create directory</span>
+<span class="tok-method">mkdir</span> <span class="tok-operator">-</span><span class="tok-variable">p</span> <span class="tok-variable">a/b/c</span>       <span class="tok-comment"># create nested dirs</span>
+<span class="tok-method">cat</span> <span class="tok-variable">file</span>               <span class="tok-comment"># display entire file</span>
+<span class="tok-method">less</span> <span class="tok-variable">file</span>              <span class="tok-comment"># view with scrolling</span>
+<span class="tok-method">head</span> <span class="tok-operator">-</span><span class="tok-variable">n</span> <span class="tok-number">5</span> <span class="tok-variable">file</span>     <span class="tok-comment"># first 5 lines</span>
+<span class="tok-method">tail</span> <span class="tok-operator">-</span><span class="tok-variable">f</span> <span class="tok-variable">log</span>           <span class="tok-comment"># follow log file</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Copy, move, delete</h3>
+                        <pre><code><span class="tok-method">cp</span> <span class="tok-variable">src dest</span>          <span class="tok-comment"># copy file</span>
+<span class="tok-method">cp</span> <span class="tok-operator">-</span><span class="tok-variable">r</span> <span class="tok-variable">src/ dest/</span>    <span class="tok-comment"># copy directory recursively</span>
+<span class="tok-method">mv</span> <span class="tok-variable">old new</span>           <span class="tok-comment"># move / rename</span>
+<span class="tok-method">rm</span> <span class="tok-variable">file</span>               <span class="tok-comment"># delete file</span>
+<span class="tok-method">rm</span> <span class="tok-operator">-</span><span class="tok-variable">rf</span> <span class="tok-variable">dir/</span>         <span class="tok-comment"># force delete directory (danger!)</span></code></pre>
+                    </div>
+                </div>
+                <div class="danger">Double‑check <code class="inline">rm -rf</code> commands; there is no recycle bin.</div>
+            </section>
+
+            <!-- 4. Permissions -->
+            <section id="permissions">
+                <h2>4. File Permissions & Ownership</h2>
+                <p>Every file has an owner, a group, and three permission triads: r (read), w (write), x (execute).</p>
+                <pre><code><span class="tok-method">ls</span> <span class="tok-operator">-</span><span class="tok-variable">l</span>
+<span class="tok-comment"># output: -rwxr-xr-- 1 alice staff 4096 Jan 1 12:00 script.sh</span></code></pre>
+                <h3>Permission bits</h3>
+                <ul>
+                    <li><strong>User (u)</strong>: owner</li>
+                    <li><strong>Group (g)</strong>: group members</li>
+                    <li><strong>Others (o)</strong>: everyone else</li>
+                </ul>
+                <h3>chmod</h3>
+                <pre><code><span class="tok-method">chmod</span> <span class="tok-variable">u+x file</span>        <span class="tok-comment"># add execute for owner</span>
+<span class="tok-method">chmod</span> <span class="tok-number">755</span> <span class="tok-variable">script</span>        <span class="tok-comment"># numeric: rwxr-xr-x</span>
+<span class="tok-method">chmod</span> <span class="tok-operator">-</span><span class="tok-variable">R</span> <span class="tok-number">644</span> <span class="tok-variable">dir/</span>      <span class="tok-comment"># recursive, files become rw-r--r--</span></code></pre>
+                <h3>chown, chgrp</h3>
+                <pre><code><span class="tok-method">chown</span> <span class="tok-variable">user</span><span class="tok-operator">:</span><span class="tok-variable">group file</span>
+<span class="tok-method">chgrp</span> <span class="tok-variable">group file</span></code></pre>
+            </section>
+
+            <!-- 5. Text Processing -->
+            <section id="text">
+                <h2>5. Text Processing & Pipes</h2>
+                <p>Unix excels at combining simple tools via pipes (<code class="inline">|</code>) to process text streams.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>grep</h3>
+                        <pre><code><span class="tok-method">grep</span> <span class="tok-string">"pattern"</span> <span class="tok-variable">file</span>
+<span class="tok-method">grep</span> <span class="tok-operator">-</span><span class="tok-variable">r</span> <span class="tok-string">"text"</span> <span class="tok-variable">dir/</span>       <span class="tok-comment"># recursive</span>
+<span class="tok-method">grep</span> <span class="tok-operator">-</span><span class="tok-variable">i</span> <span class="tok-string">"TEXT"</span> <span class="tok-variable">file</span>    <span class="tok-comment"># ignore case</span>
+<span class="tok-method">grep</span> <span class="tok-operator">-</span><span class="tok-variable">v</span> <span class="tok-string">"pattern"</span> <span class="tok-variable">file</span> <span class="tok-comment"># invert match</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>sed</h3>
+                        <pre><code><span class="tok-method">sed</span> <span class="tok-string">'s/old/new/'</span> <span class="tok-variable">file</span>      <span class="tok-comment"># replace first occurrence</span>
+<span class="tok-method">sed</span> <span class="tok-operator">-</span><span class="tok-variable">i</span> <span class="tok-string">'s/old/new/g'</span> <span class="tok-variable">file</span> <span class="tok-comment"># in‑place replace all</span>
+<span class="tok-method">sed</span> <span class="tok-operator">-</span><span class="tok-variable">n</span> <span class="tok-string">'5,10p'</span> <span class="tok-variable">file</span>       <span class="tok-comment"># print lines 5‑10</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>awk</h3>
+                        <pre><code><span class="tok-method">awk</span> <span class="tok-string">'{print $1, $3}'</span> <span class="tok-variable">file</span>   <span class="tok-comment"># columns 1 & 3</span>
+<span class="tok-method">awk</span> <span class="tok-operator">-</span><span class="tok-variable">F</span><span class="tok-operator">:</span> <span class="tok-string">'{print $1}'</span> <span class="tok-variable">/etc/passwd</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Other essentials</h3>
+                        <pre><code><span class="tok-method">sort</span> <span class="tok-variable">file</span>             <span class="tok-comment"># sort lines</span>
+<span class="tok-method">uniq</span> <span class="tok-variable">file</span>             <span class="tok-comment"># remove duplicate lines</span>
+<span class="tok-method">wc</span> <span class="tok-operator">-</span><span class="tok-variable">l</span> <span class="tok-variable">file</span>          <span class="tok-comment"># line count</span>
+<span class="tok-method">tee</span> <span class="tok-variable">file</span>             <span class="tok-comment"># write to stdout and file</span>
+<span class="tok-method">cut</span> <span class="tok-operator">-</span><span class="tok-variable">d</span><span class="tok-operator">:</span> <span class="tok-operator">-</span><span class="tok-variable">f1</span> <span class="tok-variable">file</span>   <span class="tok-comment"># extract fields</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Redirection -->
+            <section id="redirection">
+                <h2>6. I/O Redirection</h2>
+                <table>
+                    <tr><th>Operator</th><th>Meaning</th></tr>
+                    <tr><td><code class="inline">command > file</code></td><td>Redirect stdout (overwrite)</td></tr>
+                    <tr><td><code class="inline">command >> file</code></td><td>Append stdout</td></tr>
+                    <tr><td><code class="inline">command 2> file</code></td><td>Redirect stderr</td></tr>
+                    <tr><td><code class="inline">command &> file</code></td><td>Redirect both stdout and stderr</td></tr>
+                    <tr><td><code class="inline">command < file</code></td><td>Redirect stdin</td></tr>
+                    <tr><td><code class="inline">command1 | command2</code></td><td>Pipe stdout of command1 to stdin of command2</td></tr>
+                </table>
+            </section>
+
+            <!-- 7. Processes -->
+            <section id="processes">
+                <h2>7. Process Management</h2>
+                <h3>Viewing processes</h3>
+                <pre><code><span class="tok-method">ps</span> <span class="tok-variable">aux</span>                   <span class="tok-comment"># all processes, BSD style</span>
+<span class="tok-method">ps</span> <span class="tok-operator">-</span><span class="tok-variable">ef</span>                   <span class="tok-comment"># all processes, Unix style</span>
+<span class="tok-method">top</span>                      <span class="tok-comment"># interactive process viewer</span>
+<span class="tok-method">htop</span>                     <span class="tok-comment"># nicer top (if installed)</span>
+<span class="tok-method">pgrep</span> <span class="tok-variable">firefox</span>           <span class="tok-comment"># find PID by name</span>
+<span class="tok-method">pidof</span> <span class="tok-variable">firefox</span></code></pre>
+                <h3>Controlling processes</h3>
+                <pre><code><span class="tok-method">kill</span> <span class="tok-variable">PID</span>                <span class="tok-comment"># send SIGTERM (graceful)</span>
+<span class="tok-method">kill</span> <span class="tok-operator">-</span><span class="tok-number">9</span> <span class="tok-variable">PID</span>            <span class="tok-comment"># SIGKILL (force)</span>
+<span class="tok-method">killall</span> <span class="tok-variable">process_name</span>   <span class="tok-comment"># kill by name</span>
+<span class="tok-method">pkill</span> <span class="tok-operator">-</span><span class="tok-variable">f</span> <span class="tok-variable">pattern</span>       <span class="tok-comment"># kill by pattern</span>
+<span class="tok-method">bg</span>                      <span class="tok-comment"># resume job in background</span>
+<span class="tok-method">fg</span>                      <span class="tok-comment"># bring job to foreground</span>
+<span class="tok-method">jobs</span>                    <span class="tok-comment"># list background jobs</span></code></pre>
+                <h3>Background execution</h3>
+                <pre><code><span class="tok-variable">command</span> <span class="tok-operator">&amp;</span>               <span class="tok-comment"># run in background</span>
+<span class="tok-variable">nohup command &amp;</span>         <span class="tok-comment"># keep running after logout</span></code></pre>
+            </section>
+
+            <!-- 8. Package Management -->
+            <section id="packages">
+                <h2>8. Package Management</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Debian/Ubuntu (apt)</h3>
+                        <pre><code><span class="tok-method">sudo</span> <span class="tok-variable">apt update</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">apt upgrade</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">apt install</span> <span class="tok-variable">pkg</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">apt remove</span> <span class="tok-variable">pkg</span>
+<span class="tok-method">apt search</span> <span class="tok-variable">keyword</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Red Hat/Fedora (dnf)</h3>
+                        <pre><code><span class="tok-method">sudo</span> <span class="tok-variable">dnf update</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">dnf install</span> <span class="tok-variable">pkg</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">dnf remove</span> <span class="tok-variable">pkg</span>
+<span class="tok-method">dnf search</span> <span class="tok-variable">keyword</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Arch (pacman)</h3>
+                        <pre><code><span class="tok-method">sudo</span> <span class="tok-variable">pacman</span> <span class="tok-operator">-</span><span class="tok-variable">Syu</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">pacman</span> <span class="tok-operator">-</span><span class="tok-variable">S</span> <span class="tok-variable">pkg</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">pacman</span> <span class="tok-operator">-</span><span class="tok-variable">R</span> <span class="tok-variable">pkg</span>
+<span class="tok-method">pacman</span> <span class="tok-operator">-</span><span class="tok-variable">Ss</span> <span class="tok-variable">keyword</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. Users & Groups -->
+            <section id="users">
+                <h2>9. Users & Groups</h2>
+                <pre><code><span class="tok-method">who</span>                     <span class="tok-comment"># who is logged in</span>
+<span class="tok-method">w</span>                       <span class="tok-comment"># more detailed who</span>
+<span class="tok-method">id</span>                      <span class="tok-comment"># current user & groups</span>
+<span class="tok-method">groups</span> <span class="tok-variable">username</span>        <span class="tok-comment"># groups of a user</span>
+<span class="tok-method">useradd</span> <span class="tok-variable">newuser</span>        <span class="tok-comment"># create user</span>
+<span class="tok-method">passwd</span> <span class="tok-variable">username</span>         <span class="tok-comment"># set password</span>
+<span class="tok-method">usermod</span> <span class="tok-operator">-</span><span class="tok-variable">aG</span> <span class="tok-variable">group user</span> <span class="tok-comment"># add user to group</span>
+<span class="tok-method">sudo</span>                     <span class="tok-comment"># execute command as root</span>
+<span class="tok-method">su</span> <span class="tok-operator">-</span> <span class="tok-variable">username</span>          <span class="tok-comment"># switch user</span></code></pre>
+            </section>
+
+            <!-- 10. System Info & Monitoring -->
+            <section id="system">
+                <h2>10. System Information & Monitoring</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>System info</h3>
+                        <pre><code><span class="tok-method">uname</span> <span class="tok-operator">-</span><span class="tok-variable">a</span>               <span class="tok-comment"># all system info</span>
+<span class="tok-method">hostname</span>                <span class="tok-comment"># host name</span>
+<span class="tok-method">uptime</span>                  <span class="tok-comment"># how long system has run</span>
+<span class="tok-method">lsb_release</span> <span class="tok-operator">-</span><span class="tok-variable">a</span>        <span class="tok-comment"># distribution info</span>
+<span class="tok-method">arch</span>                    <span class="tok-comment"># architecture (x86_64, aarch64)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Resource usage</h3>
+                        <pre><code><span class="tok-method">free</span> <span class="tok-operator">-</span><span class="tok-variable">h</span>                <span class="tok-comment"># memory usage (human)</span>
+<span class="tok-method">df</span> <span class="tok-operator">-</span><span class="tok-variable">h</span>                  <span class="tok-comment"># disk space of filesystems</span>
+<span class="tok-method">du</span> <span class="tok-operator">-</span><span class="tok-variable">sh</span> <span class="tok-variable">dir/</span>            <span class="tok-comment"># size of directory</span>
+<span class="tok-method">vmstat</span>                  <span class="tok-comment"># virtual memory stats</span>
+<span class="tok-method">iostat</span>                  <span class="tok-comment"># CPU & I/O stats</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 11. Networking Commands -->
+            <section id="network">
+                <h2>11. Networking Commands</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Connectivity</h3>
+                        <pre><code><span class="tok-method">ping</span> <span class="tok-operator">-</span><span class="tok-variable">c</span> <span class="tok-number">4</span> <span class="tok-variable">host</span>       <span class="tok-comment"># send 4 pings</span>
+<span class="tok-method">traceroute</span> <span class="tok-variable">host</span>       <span class="tok-comment"># trace path</span>
+<span class="tok-method">mtr</span> <span class="tok-variable">host</span>              <span class="tok-comment"># combine ping + traceroute</span>
+<span class="tok-method">ssh</span> <span class="tok-variable">user@host</span>         <span class="tok-comment"># secure shell</span>
+<span class="tok-method">scp</span> <span class="tok-variable">file user@host:path</span> <span class="tok-comment"># secure copy</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Network configuration</h3>
+                        <pre><code><span class="tok-method">ip</span> <span class="tok-variable">addr show</span>        <span class="tok-comment"># IP addresses</span>
+<span class="tok-method">ip</span> <span class="tok-variable">link set eth0 up</span>  <span class="tok-comment"># bring interface up</span>
+<span class="tok-method">ss</span> <span class="tok-operator">-</span><span class="tok-variable">tulpn</span>            <span class="tok-comment"># listening ports</span>
+<span class="tok-method">netstat</span> <span class="tok-operator">-</span><span class="tok-variable">tulpn</span>        <span class="tok-comment"># (older) same</span>
+<span class="tok-method">curl</span> <span class="tok-variable">url</span>              <span class="tok-comment"># transfer data</span>
+<span class="tok-method">wget</span> <span class="tok-variable">url</span>              <span class="tok-comment"># download</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 12. Archives & Compression -->
+            <section id="archives">
+                <h2>12. Archives & Compression</h2>
+                <pre><code><span class="tok-method">tar</span> <span class="tok-operator">-</span><span class="tok-variable">czf</span> <span class="tok-variable">archive.tar.gz dir/</span>    <span class="tok-comment"># create gzip archive</span>
+<span class="tok-method">tar</span> <span class="tok-operator">-</span><span class="tok-variable">xzf</span> <span class="tok-variable">archive.tar.gz</span>         <span class="tok-comment"># extract</span>
+<span class="tok-method">tar</span> <span class="tok-operator">-</span><span class="tok-variable">cjf</span> <span class="tok-variable">archive.tar.bz2 dir/</span>   <span class="tok-comment"># bzip2 archive</span>
+<span class="tok-method">gzip</span> <span class="tok-variable">file</span>                      <span class="tok-comment"># compress file → file.gz</span>
+<span class="tok-method">gunzip</span> <span class="tok-variable">file.gz</span>                <span class="tok-comment"># decompress</span>
+<span class="tok-method">zip</span> <span class="tok-operator">-</span><span class="tok-variable">r</span> <span class="tok-variable">archive.zip dir/</span>       <span class="tok-comment"># zip format</span>
+<span class="tok-method">unzip</span> <span class="tok-variable">archive.zip</span></code></pre>
+            </section>
+
+            <!-- 13. Shell Scripting -->
+            <section id="scripting">
+                <h2>13. Shell Scripting (Bash)</h2>
+                <h3>Basic script</h3>
+                <pre><code><span class="tok-preproc">#!/bin/bash</span>
+<span class="tok-comment"># my_script.sh</span>
+<span class="tok-builtin">echo</span> <span class="tok-string">"Hello, $USER"</span>
+<span class="tok-builtin">echo</span> <span class="tok-string">"Today is $(date)"</span>
+<span class="tok-builtin">read</span> <span class="tok-operator">-</span><span class="tok-variable">p</span> <span class="tok-string">"Enter name: "</span> <span class="tok-variable">name</span>
+<span class="tok-builtin">echo</span> <span class="tok-string">"Hi $name"</span></code></pre>
+                <h3>Variables & conditionals</h3>
+                <pre><code><span class="tok-variable">var</span><span class="tok-operator">=</span><span class="tok-string">"value"</span>         <span class="tok-comment"># no spaces around =</span>
+<span class="tok-variable">readonly VAR</span><span class="tok-operator">=</span><span class="tok-number">10</span>
+<span class="tok-keyword">if</span> <span class="tok-punctuation">[</span> <span class="tok-variable">$x</span> <span class="tok-operator">-</span><span class="tok-variable">gt</span> <span class="tok-number">10</span> <span class="tok-punctuation">];</span> <span class="tok-keyword">then</span>
+    <span class="tok-builtin">echo</span> <span class="tok-string">"Greater"</span>
+<span class="tok-keyword">elif</span> <span class="tok-punctuation">[</span> <span class="tok-variable">$x</span> <span class="tok-operator">-</span><span class="tok-variable">eq</span> <span class="tok-number">10</span> <span class="tok-punctuation">];</span> <span class="tok-keyword">then</span>
+    <span class="tok-builtin">echo</span> <span class="tok-string">"Equal"</span>
+<span class="tok-keyword">else</span>
+    <span class="tok-builtin">echo</span> <span class="tok-string">"Less"</span>
+<span class="tok-keyword">fi</span></code></pre>
+                <h3>Loops</h3>
+                <pre><code><span class="tok-keyword">for</span> <span class="tok-variable">i</span> <span class="tok-keyword">in</span> <span class="tok-variable">{1..5}</span>; <span class="tok-keyword">do</span> <span class="tok-builtin">echo</span> <span class="tok-variable">$i</span>; <span class="tok-keyword">done</span>
+<span class="tok-keyword">for</span> <span class="tok-variable">file</span> <span class="tok-keyword">in</span> <span class="tok-variable">*.txt</span>; <span class="tok-keyword">do</span> <span class="tok-builtin">echo</span> <span class="tok-string">"Processing $file"</span>; <span class="tok-keyword">done</span>
+<span class="tok-keyword">while</span> <span class="tok-punctuation">[</span> <span class="tok-variable">$x</span> <span class="tok-operator">-</span><span class="tok-variable">lt</span> <span class="tok-number">10</span> <span class="tok-punctuation">];</span> <span class="tok-keyword">do</span> <span class="tok-variable">((x++));</span> <span class="tok-keyword">done</span></code></pre>
+                <h3>Functions</h3>
+                <pre><code><span class="tok-keyword">function</span> <span class="tok-method">greet</span> <span class="tok-punctuation">{</span>
+    <span class="tok-builtin">echo</span> <span class="tok-string">"Hello, $1"</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-method">greet</span> <span class="tok-string">"Alice"</span></code></pre>
+            </section>
+
+            <!-- 14. Crontab & Automation -->
+            <section id="cron">
+                <h2>14. Task Scheduling (cron)</h2>
+                <p>Cron jobs run at scheduled times. Each user has a crontab.</p>
+                <pre><code><span class="tok-comment"># Edit crontab</span>
+<span class="tok-method">crontab</span> <span class="tok-operator">-</span><span class="tok-variable">e</span>
+<span class="tok-comment"># Format: min hour day month weekday command</span>
+<span class="tok-number">0</span> <span class="tok-number">2</span> <span class="tok-operator">*</span> <span class="tok-operator">*</span> <span class="tok-operator">*</span> <span class="tok-variable">/path/to/backup.sh</span>   <span class="tok-comment"># daily at 2 AM</span>
+<span class="tok-operator">*/</span><span class="tok-number">5</span> <span class="tok-operator">*</span> <span class="tok-operator">*</span> <span class="tok-operator">*</span> <span class="tok-operator">*</span> <span class="tok-variable">command</span>                 <span class="tok-comment"># every 5 minutes</span></code></pre>
+                <p>Use <code class="inline">@reboot</code> to run at startup. System‑wide cron: <code class="inline">/etc/crontab</code> and <code class="inline">/etc/cron.*/</code> directories.</p>
+            </section>
+
+            <!-- 15. System Services (systemd) -->
+            <section id="services">
+                <h2>15. Service Management (systemd)</h2>
+                <pre><code><span class="tok-method">systemctl</span> <span class="tok-variable">status</span> <span class="tok-variable">sshd</span>          <span class="tok-comment"># check service</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">systemctl</span> <span class="tok-variable">start</span> <span class="tok-variable">nginx</span>     <span class="tok-comment"># start service</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">systemctl</span> <span class="tok-variable">enable</span> <span class="tok-variable">nginx</span>    <span class="tok-comment"># enable at boot</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">journalctl</span> <span class="tok-operator">-</span><span class="tok-variable">u</span> <span class="tok-variable">nginx</span>     <span class="tok-comment"># view service logs</span></code></pre>
+                <p>Older SysV init: <code class="inline">service sshd restart</code>, <code class="inline">chkconfig</code>.</p>
+            </section>
+
+            <!-- 16. Environment Variables -->
+            <section id="env">
+                <h2>16. Environment Variables</h2>
+                <pre><code><span class="tok-method">echo</span> <span class="tok-variable">$HOME</span>              <span class="tok-comment"># home directory</span>
+<span class="tok-method">echo</span> <span class="tok-variable">$PATH</span>              <span class="tok-comment"># executable search path</span>
+<span class="tok-method">echo</span> <span class="tok-variable">$USER</span>              <span class="tok-comment"># current user</span>
+<span class="tok-builtin">export</span> <span class="tok-variable">VAR</span><span class="tok-operator">=</span><span class="tok-string">"value"</span>      <span class="tok-comment"># set environment variable</span>
+<span class="tok-method">printenv</span>               <span class="tok-comment"># list all env vars</span></code></pre>
+                <p>Persistent settings go in <code class="inline">~/.bashrc</code>, <code class="inline">~/.profile</code>, or <code class="inline">/etc/environment</code>.</p>
+            </section>
+
+            <!-- 17. Disk & Storage -->
+            <section id="storage">
+                <h2>17. Disk & Storage Management</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Disks & partitions</h3>
+                        <pre><code><span class="tok-method">lsblk</span>                  <span class="tok-comment"># list block devices</span>
+<span class="tok-method">fdisk</span> <span class="tok-operator">-</span><span class="tok-variable">l</span>              <span class="tok-comment"># list partitions</span>
+<span class="tok-method">df</span> <span class="tok-operator">-</span><span class="tok-variable">h</span>                  <span class="tok-comment"># file system disk space</span>
+<span class="tok-method">du</span> <span class="tok-operator">-</span><span class="tok-variable">sh</span> <span class="tok-variable">dir/</span>            <span class="tok-comment"># total size of directory</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Mounting</h3>
+                        <pre><code><span class="tok-method">mount</span>                  <span class="tok-comment"># list mounted filesystems</span>
+<span class="tok-method">mount</span> <span class="tok-variable">/dev/sdb1</span> <span class="tok-variable">/mnt</span>
+<span class="tok-method">umount</span> <span class="tok-variable">/mnt</span>
+<span class="tok-comment"># Edit /etc/fstab for permanent mounts</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 18. Keyboard Shortcuts & History -->
+            <section id="shortcuts">
+                <h2>18. Terminal Shortcuts & History</h2>
+                <h3>Bash shortcuts</h3>
+                <ul>
+                    <li><strong>Ctrl+C</strong> – kill foreground process</li>
+                    <li><strong>Ctrl+D</strong> – end of input (exit shell)</li>
+                    <li><strong>Ctrl+Z</strong> – suspend foreground job</li>
+                    <li><strong>Ctrl+R</strong> – search command history</li>
+                    <li><strong>!!</strong> – re‑run last command</li>
+                    <li><strong>Ctrl+L</strong> – clear screen</li>
+                </ul>
+                <h3>Command history</h3>
+                <pre><code><span class="tok-method">history</span>              <span class="tok-comment"># show command history</span>
+<span class="tok-method">history</span> <span class="tok-operator">|</span> <span class="tok-method">grep</span> <span class="tok-string">"pattern"</span>
+<span class="tok-operator">!</span><span class="tok-variable">N</span>                <span class="tok-comment"># execute command number N</span>
+<span class="tok-operator">!!</span>                <span class="tok-comment"># repeat last command</span>
+<span class="tok-operator">!$</span>                <span class="tok-comment"># last argument of previous command</span></code></pre>
+            </section>
+
+            <!-- 19. Security & Firewall -->
+            <section id="firewall">
+                <h2>19. Firewall & Security Basics</h2>
+                <h3>iptables / nftables</h3>
+                <pre><code><span class="tok-method">sudo</span> <span class="tok-variable">iptables</span> <span class="tok-operator">-</span><span class="tok-variable">L</span>            <span class="tok-comment"># list rules</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">iptables</span> <span class="tok-operator">-</span><span class="tok-variable">A</span> <span class="tok-variable">INPUT</span> <span class="tok-operator">-</span><span class="tok-variable">p</span> <span class="tok-variable">tcp</span> <span class="tok-operator">--</span><span class="tok-variable">dport</span> <span class="tok-number">22</span> <span class="tok-operator">-</span><span class="tok-variable">j</span> <span class="tok-variable">ACCEPT</span></code></pre>
+                <h3>UFW (Uncomplicated Firewall)</h3>
+                <pre><code><span class="tok-method">sudo</span> <span class="tok-variable">ufw</span> <span class="tok-variable">enable</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">ufw</span> <span class="tok-variable">allow</span> <span class="tok-number">22</span>/<span class="tok-variable">tcp</span>
+<span class="tok-method">sudo</span> <span class="tok-variable">ufw</span> <span class="tok-variable">status</span></code></pre>
+                <h3>fail2ban</h3>
+                <p>Blocks IPs after repeated failed login attempts. Edit <code class="inline">/etc/fail2ban/jail.local</code>.</p>
+            </section>
+
+            <!-- 20. Quick Reference Tables -->
+            <section id="cheatsheets">
+                <h2>20. Quick Reference Tables</h2>
+                <h3>File test operators</h3>
+                <table>
+                    <tr><th>Operator</th><th>True if</th></tr>
+                    <tr><td><code class="inline">-e</code></td><td>file exists</td></tr>
+                    <tr><td><code class="inline">-d</code></td><td>is directory</td></tr>
+                    <tr><td><code class="inline">-f</code></td><td>is regular file</td></tr>
+                    <tr><td><code class="inline">-r</code></td><td>is readable</td></tr>
+                    <tr><td><code class="inline">-w</code></td><td>is writable</td></tr>
+                    <tr><td><code class="inline">-x</code></td><td>is executable</td></tr>
+                    <tr><td><code class="inline">-s</code></td><td>file size > 0</td></tr>
+                </table>
+                <h3>Common signal numbers</h3>
+                <table>
+                    <tr><th>Signal</th><th>Number</th><th>Action</th></tr>
+                    <tr><td>SIGHUP</td><td>1</td><td>Hangup (reload config)</td></tr>
+                    <tr><td>SIGINT</td><td>2</td><td>Interrupt (Ctrl+C)</td></tr>
+                    <tr><td>SIGKILL</td><td>9</td><td>Kill (cannot be caught)</td></tr>
+                    <tr><td>SIGTERM</td><td>15</td><td>Terminate gracefully</td></tr>
+                    <tr><td>SIGSTOP</td><td>19</td><td>Stop process</td></tr>
+                </table>
+            </section>
+
+            <section id="tips">
+                <h2>21. Final Tips & Best Practices</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Good habits</h3>
+                        <ul>
+                            <li>Use <code class="inline">man</code> for command help</li>
+                            <li>Create aliases for frequent commands</li>
+                            <li>Back up config files before editing</li>
+                            <li>Keep system updated</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Danger zones</h3>
+                        <ul>
+                            <li>Avoid <code class="inline">rm -rf /</code> or <code class="inline">rm -rf *</code> without checking</li>
+                            <li>Don't run scripts from untrusted sources as root</li>
+                            <li>Be careful with <code class="inline">chmod -R 777</code></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common pitfalls: forgetting sudo, misplacing spaces in variable assignments, using
+                    <code class="inline">rm -rf</code> with a variable that might be empty, and not quoting variables containing spaces.
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+    <!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

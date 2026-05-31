@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C++ Complete Summary</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 290px 1fr;
+            gap: 24px;
+        }
+
+        nav {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            background: var(--nav-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        nav h2 {
+            margin-top: 0;
+            font-size: 1rem;
+        }
+
+        nav a {
+            display: block;
+            color: var(--muted);
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 10px;
+            transition: 0.25s;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            background: rgba(59,130,246,0.12);
+            color: var(--text);
+            transform: translateX(4px);
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p,
+        li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(59,130,246,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(59,130,246,0.2);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin: 4px 6px 4px 0;
+            font-weight: 600;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword {
+            color: var(--tok-keyword);
+        }
+        .tok-type {
+            color: var(--tok-type);
+        }
+        .tok-string {
+            color: var(--tok-string);
+        }
+        .tok-number {
+            color: var(--tok-number);
+        }
+        .tok-comment {
+            color: var(--tok-comment);
+            font-style: italic;
+        }
+        .tok-method {
+            color: var(--tok-method);
+        }
+        .tok-class {
+            color: var(--tok-class);
+        }
+        .tok-property {
+            color: var(--tok-property);
+        }
+        .tok-operator {
+            color: var(--tok-operator);
+        }
+        .tok-punctuation {
+            color: var(--tok-punctuation);
+        }
+        .tok-variable {
+            color: var(--tok-variable);
+        }
+        .tok-namespace {
+            color: var(--tok-namespace);
+        }
+        .tok-preproc {
+            color: var(--tok-preproc);
+        }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            nav {
+                position: relative;
+                top: 0;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>C++ Complete Summary</h1>
+        <p>
+            A comprehensive remembrance‑style C++ reference covering syntax, OOP, STL collections,
+            templates, lambdas, modern C++ features, and more – with VS Code‑like syntax coloring.
+        </p>
+    </header>
+
+    <div class="layout">
+        <nav>
+            <h2>Contents</h2>
+            <a href="#intro">1. C++ Basics</a>
+            <a href="#syntax">2. Syntax & Structure</a>
+            <a href="#variables">3. Variables & Data Types</a>
+            <a href="#operators">4. Operators</a>
+            <a href="#control">5. Control Flow</a>
+            <a href="#functions">6. Functions</a>
+            <a href="#arrays">7. Arrays & Strings</a>
+            <a href="#oop">8. OOP</a>
+            <a href="#inheritance">9. Inheritance & Polymorphism</a>
+            <a href="#abstraction">10. Abstract Classes & Interfaces</a>
+            <a href="#encapsulation">11. Encapsulation</a>
+            <a href="#exceptions">12. Exception Handling</a>
+            <a href="#collections">13. STL Collections</a>
+            <a href="#templates">14. Templates</a>
+            <a href="#lambdas">15. Lambdas & Function Objects</a>
+            <a href="#algorithms">16. STL Algorithms</a>
+            <a href="#files">17. File I/O</a>
+            <a href="#concurrency">18. Concurrency</a>
+            <a href="#modern">19. Modern C++ Features</a>
+            <a href="#tips">20. Quick Remember Tips</a>
+        </nav>
+
+        <main>
+            <!-- 1. Basics -->
+            <section id="intro">
+                <h2>1. C++ Basics</h2>
+                <p>
+                    C++ is a high‑performance, compiled language that supports procedural,
+                    object‑oriented, and generic programming. It is widely used for systems
+                    software, game engines, real‑time applications, and performance‑critical
+                    libraries.
+                </p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Main features</h3>
+                        <ul>
+                            <li>Object‑oriented</li>
+                            <li>Strongly typed</li>
+                            <li>Manual memory management + RAII</li>
+                            <li>Rich Standard Template Library (STL)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Common uses</h3>
+                        <ul>
+                            <li>Operating systems</li>
+                            <li>Game development (Unreal Engine)</li>
+                            <li>Embedded systems</li>
+                            <li>High‑frequency trading</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Compile & run</h3>
+                        <pre><code><span class="tok-comment">// using g++</span>
+g++ -std=c++20 -o program main.cpp
+./program</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Syntax & Structure -->
+            <section id="syntax">
+                <h2>2. Syntax & Structure</h2>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;iostream&gt;</span>
+
+<span class="tok-keyword">int</span> <span class="tok-method">main</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">"Hello, C++!"</span> <span class="tok-operator">&lt;&lt;</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-property">endl</span><span class="tok-punctuation">;</span>
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>Comments</h3>
+                <pre><code><span class="tok-comment">// single-line comment</span>
+<span class="tok-comment">/* multi-line
+   comment */</span></code></pre>
+            </section>
+
+            <!-- 3. Variables & Data Types -->
+            <section id="variables">
+                <h2>3. Variables & Data Types</h2>
+                <pre><code><span class="tok-keyword">int</span> age <span class="tok-operator">=</span> <span class="tok-number">25</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">double</span> price <span class="tok-operator">=</span> <span class="tok-number">19.99</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">char</span> grade <span class="tok-operator">=</span> <span class="tok-string">'A'</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">bool</span> isActive <span class="tok-operator">=</span> <span class="tok-keyword">true</span><span class="tok-punctuation">;</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">string</span> name <span class="tok-operator">=</span> <span class="tok-string">"Alice"</span><span class="tok-punctuation">;</span></code></pre>
+                <table>
+                    <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+                    <tr><td>int</td><td>Integer (typically 4 bytes)</td><td><code class="inline">int x = 5;</code></td></tr>
+                    <tr><td>long</td><td>Larger integer</td><td><code class="inline">long y = 10L;</code></td></tr>
+                    <tr><td>float</td><td>Single‑precision float</td><td><code class="inline">float f = 3.14f;</code></td></tr>
+                    <tr><td>double</td><td>Double‑precision float</td><td><code class="inline">double d = 3.14;</code></td></tr>
+                    <tr><td>char</td><td>Single character</td><td><code class="inline">char c = 'A';</code></td></tr>
+                    <tr><td>bool</td><td>True/false</td><td><code class="inline">bool ok = true;</code></td></tr>
+                    <tr><td>std::string</td><td>Dynamic string</td><td><code class="inline">std::string s = "Hi";</code></td></tr>
+                </table>
+                <pre><code><span class="tok-keyword">const</span> <span class="tok-keyword">double</span> PI <span class="tok-operator">=</span> <span class="tok-number">3.14159</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">auto</span> message <span class="tok-operator">=</span> <span class="tok-string">"Hello"</span><span class="tok-punctuation">;</span>   <span class="tok-comment">// C++11 type deduction</span></code></pre>
+            </section>
+
+            <!-- 4. Operators -->
+            <section id="operators">
+                <h2>4. Operators</h2>
+                <div class="grid">
+                    <div class="card"><h3>Arithmetic</h3><p><code class="inline">+ - * / % ++ --</code></p></div>
+                    <div class="card"><h3>Comparison</h3><p><code class="inline">== != > < >= <=</code></p></div>
+                    <div class="card"><h3>Logical</h3><p><code class="inline">&& || !</code></p></div>
+                    <div class="card"><h3>Assignment</h3><p><code class="inline">= += -= *= /= %=</code></p></div>
+                </div>
+            </section>
+
+            <!-- 5. Control Flow -->
+            <section id="control">
+                <h2>5. Control Flow</h2>
+                <h3>if / else</h3>
+                <pre><code><span class="tok-keyword">if</span> <span class="tok-punctuation">(</span>age <span class="tok-operator">&gt;=</span> <span class="tok-number">18</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">"Adult"</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span> <span class="tok-keyword">else</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">"Minor"</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>switch</h3>
+                <pre><code><span class="tok-keyword">switch</span> <span class="tok-punctuation">(</span>day<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">case</span> <span class="tok-number">1</span><span class="tok-punctuation">:</span>
+        <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">"Monday"</span><span class="tok-punctuation">;</span>
+        <span class="tok-keyword">break</span><span class="tok-punctuation">;</span>
+    <span class="tok-keyword">default</span><span class="tok-punctuation">:</span>
+        <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">"Unknown"</span><span class="tok-punctuation">;</span>
+        <span class="tok-keyword">break</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>Loops</h3>
+                <pre><code><span class="tok-keyword">for</span> <span class="tok-punctuation">(</span><span class="tok-keyword">int</span> i <span class="tok-operator">=</span> <span class="tok-number">0</span><span class="tok-punctuation">;</span> i <span class="tok-operator">&lt;</span> <span class="tok-number">5</span><span class="tok-punctuation">;</span> <span class="tok-operator">++</span>i<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> i <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">" "</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">for</span> <span class="tok-punctuation">(</span><span class="tok-keyword">int</span> n <span class="tok-operator">:</span> numbers<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>   <span class="tok-comment">// range‑based for (C++11)</span>
+    <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> n <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">" "</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">while</span> <span class="tok-punctuation">(</span>x <span class="tok-operator">&lt;</span> <span class="tok-number">3</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-operator">++</span>x<span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+            </section>
+
+            <!-- 6. Functions -->
+            <section id="functions">
+                <h2>6. Functions</h2>
+                <pre><code><span class="tok-keyword">int</span> <span class="tok-method">add</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span> a<span class="tok-punctuation">,</span> <span class="tok-keyword">int</span> b<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">return</span> a <span class="tok-operator">+</span> b<span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">void</span> <span class="tok-method">greet</span><span class="tok-punctuation">(</span><span class="tok-keyword">const</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">string</span><span class="tok-operator">&amp;</span> name<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">"Hello "</span> <span class="tok-operator">&lt;&lt;</span> name <span class="tok-operator">&lt;&lt;</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-property">endl</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-comment">// trailing return type (C++11)</span>
+<span class="tok-keyword">auto</span> <span class="tok-method">multiply</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span> a<span class="tok-punctuation">,</span> <span class="tok-keyword">int</span> b<span class="tok-punctuation">)</span> <span class="tok-operator">-&gt;</span> <span class="tok-keyword">int</span> <span class="tok-punctuation">{</span> <span class="tok-keyword">return</span> a <span class="tok-operator">*</span> b<span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span>
+<span class="tok-keyword">auto</span> <span class="tok-method">sum</span><span class="tok-punctuation">(</span><span class="tok-keyword">double</span> a<span class="tok-punctuation">,</span> <span class="tok-keyword">double</span> b<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span> <span class="tok-keyword">return</span> a <span class="tok-operator">+</span> b<span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span>  <span class="tok-comment">// return type deduced</span></code></pre>
+            </section>
+
+            <!-- 7. Arrays & Strings -->
+            <section id="arrays">
+                <h2>7. Arrays & Strings</h2>
+                <h3>C‑style Arrays</h3>
+                <pre><code><span class="tok-keyword">int</span> numbers<span class="tok-punctuation">[</span><span class="tok-number">4</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">,</span> <span class="tok-number">4</span><span class="tok-punctuation">};</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> numbers<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">];</span></code></pre>
+                <h3>std::array (C++11)</h3>
+                <pre><code><span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">array</span><span class="tok-operator">&lt;</span><span class="tok-keyword">int</span><span class="tok-punctuation">,</span> <span class="tok-number">4</span><span class="tok-operator">&gt;</span> arr <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">,</span> <span class="tok-number">4</span><span class="tok-punctuation">};</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> arr<span class="tok-punctuation">.</span><span class="tok-method">size</span><span class="tok-punctuation">();</span></code></pre>
+                <h3>std::string</h3>
+                <pre><code><span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">string</span> text <span class="tok-operator">=</span> <span class="tok-string">"CPlusPlus"</span><span class="tok-punctuation">;</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> text<span class="tok-punctuation">.</span><span class="tok-method">length</span><span class="tok-punctuation">();</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> text<span class="tok-punctuation">.</span><span class="tok-method">find</span><span class="tok-punctuation">(</span><span class="tok-string">"Plus"</span><span class="tok-punctuation">);</span></code></pre>
+            </section>
+
+            <!-- 8. OOP -->
+            <section id="oop">
+                <h2>8. OOP</h2>
+                <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Car</span> <span class="tok-punctuation">{</span>
+<span class="tok-keyword">public</span><span class="tok-operator">:</span>
+    <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">string</span> brand<span class="tok-punctuation">;</span>
+    <span class="tok-keyword">int</span> year<span class="tok-punctuation">;</span>
+
+    <span class="tok-keyword">void</span> <span class="tok-method">drive</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+        <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> brand <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">" is driving"</span><span class="tok-punctuation">;</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">};</span></code></pre>
+                <h3>Constructor</h3>
+                <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Person</span> <span class="tok-punctuation">{</span>
+<span class="tok-keyword">public</span><span class="tok-operator">:</span>
+    <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">string</span> name<span class="tok-punctuation">;</span>
+    <span class="tok-keyword">int</span> age<span class="tok-punctuation">;</span>
+
+    <span class="tok-method">Person</span><span class="tok-punctuation">(</span><span class="tok-keyword">const</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">string</span><span class="tok-operator">&amp;</span> n<span class="tok-punctuation">,</span> <span class="tok-keyword">int</span> a<span class="tok-punctuation">)</span>
+        <span class="tok-operator">:</span> <span class="tok-method">name</span><span class="tok-punctuation">(</span>n<span class="tok-punctuation">),</span> <span class="tok-method">age</span><span class="tok-punctuation">(</span>a<span class="tok-punctuation">)</span> <span class="tok-punctuation">{}</span>
+<span class="tok-punctuation">};</span></code></pre>
+                <div class="note">Member initializer lists are preferred for efficiency.</div>
+            </section>
+
+            <!-- 9. Inheritance & Polymorphism -->
+            <section id="inheritance">
+                <h2>9. Inheritance & Polymorphism</h2>
+                <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Animal</span> <span class="tok-punctuation">{</span>
+<span class="tok-keyword">public</span><span class="tok-operator">:</span>
+    <span class="tok-keyword">virtual</span> <span class="tok-keyword">void</span> <span class="tok-method">sound</span><span class="tok-punctuation">()</span> <span class="tok-keyword">const</span> <span class="tok-punctuation">{</span>
+        <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">"Animal sound"</span><span class="tok-punctuation">;</span>
+    <span class="tok-punctuation">}</span>
+    <span class="tok-keyword">virtual</span> <span class="tok-operator">~</span><span class="tok-method">Animal</span><span class="tok-punctuation">()</span> <span class="tok-operator">=</span> <span class="tok-keyword">default</span><span class="tok-punctuation">;</span>  <span class="tok-comment">// virtual destructor</span>
+<span class="tok-punctuation">};</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">Dog</span> <span class="tok-operator">:</span> <span class="tok-keyword">public</span> <span class="tok-class">Animal</span> <span class="tok-punctuation">{</span>
+<span class="tok-keyword">public</span><span class="tok-operator">:</span>
+    <span class="tok-keyword">void</span> <span class="tok-method">sound</span><span class="tok-punctuation">()</span> <span class="tok-keyword">const</span> <span class="tok-keyword">override</span> <span class="tok-punctuation">{</span>   <span class="tok-comment">// 'override' keyword (C++11)</span>
+        <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">"Bark"</span><span class="tok-punctuation">;</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">};</span></code></pre>
+            </section>
+
+            <!-- 10. Abstract Classes & Interfaces -->
+            <section id="abstraction">
+                <h2>10. Abstract Classes & Interfaces</h2>
+                <h3>Abstract class (pure virtual)</h3>
+                <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Shape</span> <span class="tok-punctuation">{</span>
+<span class="tok-keyword">public</span><span class="tok-operator">:</span>
+    <span class="tok-keyword">virtual</span> <span class="tok-keyword">double</span> <span class="tok-method">area</span><span class="tok-punctuation">()</span> <span class="tok-keyword">const</span> <span class="tok-operator">=</span> <span class="tok-number">0</span><span class="tok-punctuation">;</span>  <span class="tok-comment">// pure virtual</span>
+    <span class="tok-keyword">virtual</span> <span class="tok-operator">~</span><span class="tok-method">Shape</span><span class="tok-punctuation">()</span> <span class="tok-operator">=</span> <span class="tok-keyword">default</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">};</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">Circle</span> <span class="tok-operator">:</span> <span class="tok-keyword">public</span> <span class="tok-class">Shape</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">double</span> radius<span class="tok-punctuation">;</span>
+<span class="tok-keyword">public</span><span class="tok-operator">:</span>
+    <span class="tok-method">Circle</span><span class="tok-punctuation">(</span><span class="tok-keyword">double</span> r<span class="tok-punctuation">)</span> <span class="tok-operator">:</span> <span class="tok-method">radius</span><span class="tok-punctuation">(</span>r<span class="tok-punctuation">)</span> <span class="tok-punctuation">{}</span>
+    <span class="tok-keyword">double</span> <span class="tok-method">area</span><span class="tok-punctuation">()</span> <span class="tok-keyword">const</span> <span class="tok-keyword">override</span> <span class="tok-punctuation">{</span>
+        <span class="tok-keyword">return</span> <span class="tok-number">3.14159</span> <span class="tok-operator">*</span> radius <span class="tok-operator">*</span> radius<span class="tok-punctuation">;</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">};</span></code></pre>
+                <div class="note">C++ has no formal <code class="inline">interface</code> keyword. Use abstract classes with only pure virtual functions and a virtual destructor to mimic interfaces.</div>
+            </section>
+
+            <!-- 11. Encapsulation -->
+            <section id="encapsulation">
+                <h2>11. Encapsulation</h2>
+                <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Student</span> <span class="tok-punctuation">{</span>
+<span class="tok-keyword">private</span><span class="tok-operator">:</span>
+    <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">string</span> name<span class="tok-punctuation">;</span>
+<span class="tok-keyword">public</span><span class="tok-operator">:</span>
+    <span class="tok-keyword">const</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">string</span><span class="tok-operator">&amp;</span> <span class="tok-method">getName</span><span class="tok-punctuation">()</span> <span class="tok-keyword">const</span> <span class="tok-punctuation">{</span> <span class="tok-keyword">return</span> name<span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span>
+    <span class="tok-keyword">void</span> <span class="tok-method">setName</span><span class="tok-punctuation">(</span><span class="tok-keyword">const</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">string</span><span class="tok-operator">&amp;</span> n<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span> name <span class="tok-operator">=</span> n<span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">};</span></code></pre>
+                <div class="note">Modern C++ often uses simple public members when no invariant is needed, but getters/setters remain common.</div>
+            </section>
+
+            <!-- 12. Exception Handling -->
+            <section id="exceptions">
+                <h2>12. Exception Handling</h2>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;stdexcept&gt;</span>
+
+<span class="tok-keyword">try</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">throw</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">runtime_error</span><span class="tok-punctuation">(</span><span class="tok-string">"Something went wrong"</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span> <span class="tok-keyword">catch</span> <span class="tok-punctuation">(</span><span class="tok-keyword">const</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">exception</span><span class="tok-operator">&amp;</span> e<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cerr</span> <span class="tok-operator">&lt;&lt;</span> e<span class="tok-punctuation">.</span><span class="tok-method">what</span><span class="tok-punctuation">();</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <p>Standard exceptions: <code class="inline">std::runtime_error</code>, <code class="inline">std::logic_error</code>, <code class="inline">std::out_of_range</code>, etc.</p>
+            </section>
+
+            <!-- 13. STL Collections -->
+            <section id="collections">
+                <h2>13. STL Collections</h2>
+                <h3>std::vector (dynamic array)</h3>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;vector&gt;</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">vector</span><span class="tok-operator">&lt;</span><span class="tok-keyword">int</span><span class="tok-operator">&gt;</span> v <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">};</span>
+v<span class="tok-punctuation">.</span><span class="tok-method">push_back</span><span class="tok-punctuation">(</span><span class="tok-number">4</span><span class="tok-punctuation">);</span></code></pre>
+                <h3>std::map (ordered key‑value)</h3>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;map&gt;</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">map</span><span class="tok-operator">&lt;</span><span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">string</span><span class="tok-punctuation">,</span> <span class="tok-keyword">int</span><span class="tok-operator">&gt;</span> ages<span class="tok-punctuation">;</span>
+ages<span class="tok-punctuation">[</span><span class="tok-string">"Alice"</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-number">25</span><span class="tok-punctuation">;</span></code></pre>
+                <h3>std::unordered_set (hash set)</h3>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;unordered_set&gt;</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">unordered_set</span><span class="tok-operator">&lt;</span><span class="tok-keyword">int</span><span class="tok-operator">&gt;</span> s<span class="tok-punctuation">;</span>
+s<span class="tok-punctuation">.</span><span class="tok-method">insert</span><span class="tok-punctuation">(</span><span class="tok-number">5</span><span class="tok-punctuation">);</span></code></pre>
+                <div class="grid">
+                    <div class="card"><strong>vector</strong> – dynamic array, fast random access</div>
+                    <div class="card"><strong>list</strong> – doubly linked list</div>
+                    <div class="card"><strong>map / set</strong> – ordered by key</div>
+                    <div class="card"><strong>unordered_map / unordered_set</strong> – hash‑based (C++11)</div>
+                </div>
+            </section>
+
+            <!-- 14. Templates -->
+            <section id="templates">
+                <h2>14. Templates</h2>
+                <pre><code><span class="tok-keyword">template</span> <span class="tok-operator">&lt;</span><span class="tok-keyword">typename</span> T<span class="tok-operator">&gt;</span>
+<span class="tok-keyword">class</span> <span class="tok-class">Box</span> <span class="tok-punctuation">{</span>
+    T value<span class="tok-punctuation">;</span>
+<span class="tok-keyword">public</span><span class="tok-operator">:</span>
+    <span class="tok-keyword">void</span> <span class="tok-method">set</span><span class="tok-punctuation">(</span><span class="tok-keyword">const</span> T<span class="tok-operator">&amp;</span> v<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span> value <span class="tok-operator">=</span> v<span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span>
+    T <span class="tok-method">get</span><span class="tok-punctuation">()</span> <span class="tok-keyword">const</span> <span class="tok-punctuation">{</span> <span class="tok-keyword">return</span> value<span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">};</span>
+
+<span class="tok-class">Box</span><span class="tok-operator">&lt;</span><span class="tok-keyword">int</span><span class="tok-operator">&gt;</span> intBox<span class="tok-punctuation">;</span>
+intBox<span class="tok-punctuation">.</span><span class="tok-method">set</span><span class="tok-punctuation">(</span><span class="tok-number">42</span><span class="tok-punctuation">);</span></code></pre>
+                <h3>Function template</h3>
+                <pre><code><span class="tok-keyword">template</span> <span class="tok-operator">&lt;</span><span class="tok-keyword">typename</span> T<span class="tok-operator">&gt;</span>
+T <span class="tok-method">max</span><span class="tok-punctuation">(</span>T a<span class="tok-punctuation">,</span> T b<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">return</span> <span class="tok-punctuation">(</span>a <span class="tok-operator">&gt;</span> b<span class="tok-punctuation">)</span> <span class="tok-operator">?</span> a <span class="tok-operator">:</span> b<span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+            </section>
+
+            <!-- 15. Lambdas & Function Objects -->
+            <section id="lambdas">
+                <h2>15. Lambdas & Function Objects</h2>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;functional&gt;</span>
+
+<span class="tok-comment">// lambda expression</span>
+<span class="tok-keyword">auto</span> square <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-punctuation">](</span><span class="tok-keyword">int</span> x<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span> <span class="tok-keyword">return</span> x <span class="tok-operator">*</span> x<span class="tok-punctuation">;</span> <span class="tok-punctuation">};</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> <span class="tok-method">square</span><span class="tok-punctuation">(</span><span class="tok-number">5</span><span class="tok-punctuation">);</span>
+
+<span class="tok-comment">// std::function can hold any callable</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">function</span><span class="tok-operator">&lt;</span><span class="tok-keyword">int</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span><span class="tok-punctuation">)</span><span class="tok-operator">&gt;</span> func <span class="tok-operator">=</span> square<span class="tok-punctuation">;</span></code></pre>
+                <h3>Callback example</h3>
+                <pre><code><span class="tok-keyword">void</span> <span class="tok-method">process</span><span class="tok-punctuation">(</span><span class="tok-keyword">const</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">function</span><span class="tok-operator">&lt;</span><span class="tok-keyword">void</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span><span class="tok-punctuation">)</span><span class="tok-operator">&gt;</span><span class="tok-operator">&amp;</span> callback<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-method">callback</span><span class="tok-punctuation">(</span><span class="tok-number">10</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-method">process</span><span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-punctuation">](</span><span class="tok-keyword">int</span> v<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> v<span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span><span class="tok-punctuation">);</span></code></pre>
+            </section>
+
+            <!-- 16. STL Algorithms -->
+            <section id="algorithms">
+                <h2>16. STL Algorithms</h2>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;algorithm&gt;</span>
+<span class="tok-preproc">#include</span> <span class="tok-string">&lt;vector&gt;</span>
+<span class="tok-preproc">#include</span> <span class="tok-string">&lt;numeric&gt;</span>
+
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">vector</span><span class="tok-operator">&lt;</span><span class="tok-keyword">int</span><span class="tok-operator">&gt;</span> nums <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">,</span> <span class="tok-number">4</span><span class="tok-punctuation">,</span> <span class="tok-number">5</span><span class="tok-punctuation">,</span> <span class="tok-number">6</span><span class="tok-punctuation">};</span>
+
+<span class="tok-comment">// filter: copy_if</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">vector</span><span class="tok-operator">&lt;</span><span class="tok-keyword">int</span><span class="tok-operator">&gt;</span> evens<span class="tok-punctuation">;</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-method">copy_if</span><span class="tok-punctuation">(</span>nums<span class="tok-punctuation">.</span><span class="tok-method">begin</span><span class="tok-punctuation">(),</span> nums<span class="tok-punctuation">.</span><span class="tok-method">end</span><span class="tok-punctuation">(),</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-method">back_inserter</span><span class="tok-punctuation">(</span>evens<span class="tok-punctuation">),</span>
+                  <span class="tok-punctuation">[</span><span class="tok-punctuation">](</span><span class="tok-keyword">int</span> n<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span> <span class="tok-keyword">return</span> n <span class="tok-operator">%</span> <span class="tok-number">2</span> <span class="tok-operator">==</span> <span class="tok-number">0</span><span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span><span class="tok-punctuation">);</span>
+
+<span class="tok-comment">// transform (map)</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">vector</span><span class="tok-operator">&lt;</span><span class="tok-keyword">int</span><span class="tok-operator">&gt;</span> squares<span class="tok-punctuation">;</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-method">transform</span><span class="tok-punctuation">(</span>nums<span class="tok-punctuation">.</span><span class="tok-method">begin</span><span class="tok-punctuation">(),</span> nums<span class="tok-punctuation">.</span><span class="tok-method">end</span><span class="tok-punctuation">(),</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-method">back_inserter</span><span class="tok-punctuation">(</span>squares<span class="tok-punctuation">),</span>
+                   <span class="tok-punctuation">[</span><span class="tok-punctuation">](</span><span class="tok-keyword">int</span> n<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span> <span class="tok-keyword">return</span> n <span class="tok-operator">*</span> n<span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span><span class="tok-punctuation">);</span>
+
+<span class="tok-comment">// sum</span>
+<span class="tok-keyword">int</span> sum <span class="tok-operator">=</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-method">accumulate</span><span class="tok-punctuation">(</span>nums<span class="tok-punctuation">.</span><span class="tok-method">begin</span><span class="tok-punctuation">(),</span> nums<span class="tok-punctuation">.</span><span class="tok-method">end</span><span class="tok-punctuation">(),</span> <span class="tok-number">0</span><span class="tok-punctuation">);</span></code></pre>
+                <table>
+                    <tr><th>Algorithm</th><th>Use</th></tr>
+                    <tr><td>std::copy_if</td><td>Filter elements</td></tr>
+                    <tr><td>std::transform</td><td>Transform elements</td></tr>
+                    <tr><td>std::sort</td><td>Sort a range</td></tr>
+                    <tr><td>std::find / find_if</td><td>Find an element</td></tr>
+                    <tr><td>std::count / count_if</td><td>Count matching elements</td></tr>
+                    <tr><td>std::accumulate</td><td>Sum / reduce</td></tr>
+                </table>
+            </section>
+
+            <!-- 17. File I/O -->
+            <section id="files">
+                <h2>17. File I/O</h2>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;fstream&gt;</span>
+<span class="tok-preproc">#include</span> <span class="tok-string">&lt;iostream&gt;</span>
+
+<span class="tok-comment">// write</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">ofstream</span> out<span class="tok-punctuation">(</span><span class="tok-string">"data.txt"</span><span class="tok-punctuation">);</span>
+out <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">"Hello File"</span> <span class="tok-operator">&lt;&lt;</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-property">endl</span><span class="tok-punctuation">;</span>
+out<span class="tok-punctuation">.</span><span class="tok-method">close</span><span class="tok-punctuation">();</span>
+
+<span class="tok-comment">// read</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">ifstream</span> in<span class="tok-punctuation">(</span><span class="tok-string">"data.txt"</span><span class="tok-punctuation">);</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">string</span> content<span class="tok-punctuation">;</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-method">getline</span><span class="tok-punctuation">(</span>in<span class="tok-punctuation">,</span> content<span class="tok-punctuation">);</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> content<span class="tok-punctuation">;</span></code></pre>
+            </section>
+
+            <!-- 18. Concurrency -->
+            <section id="concurrency">
+                <h2>18. Concurrency</h2>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;thread&gt;</span>
+<span class="tok-preproc">#include</span> <span class="tok-string">&lt;future&gt;</span>
+
+<span class="tok-comment">// thread</span>
+<span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">thread</span> t<span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-punctuation">]</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-class">cout</span> <span class="tok-operator">&lt;&lt;</span> <span class="tok-string">"Hello from thread"</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span><span class="tok-punctuation">);</span>
+t<span class="tok-punctuation">.</span><span class="tok-method">join</span><span class="tok-punctuation">();</span>
+
+<span class="tok-comment">// async / future (similar to async/await)</span>
+<span class="tok-keyword">auto</span> future <span class="tok-operator">=</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-method">async</span><span class="tok-punctuation">(</span><span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-property">launch</span><span class="tok-operator">::</span><span class="tok-property">async</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-punctuation">]</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">return</span> <span class="tok-number">42</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span><span class="tok-punctuation">);</span>
+<span class="tok-keyword">int</span> result <span class="tok-operator">=</span> future<span class="tok-punctuation">.</span><span class="tok-method">get</span><span class="tok-punctuation">();</span>   <span class="tok-comment">// blocks until ready</span></code></pre>
+                <div class="note">C++20 introduces coroutines (<code class="inline">co_await</code>, <code class="inline">co_return</code>) for more advanced async patterns.</div>
+            </section>
+
+            <!-- 19. Modern C++ Features -->
+            <section id="modern">
+                <h2>19. Modern C++ Features</h2>
+                <h3>Smart pointers</h3>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;memory&gt;</span>
+<span class="tok-keyword">auto</span> ptr <span class="tok-operator">=</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-method">make_unique</span><span class="tok-operator">&lt;</span><span class="tok-keyword">int</span><span class="tok-operator">&gt;</span><span class="tok-punctuation">(</span><span class="tok-number">10</span><span class="tok-punctuation">);</span>     <span class="tok-comment">// unique_ptr (C++14)</span>
+<span class="tok-keyword">auto</span> shared <span class="tok-operator">=</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-method">make_shared</span><span class="tok-operator">&lt;</span><span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-type">string</span><span class="tok-operator">&gt;</span><span class="tok-punctuation">(</span><span class="tok-string">"Hello"</span><span class="tok-punctuation">);</span></code></pre>
+                <h3>Range‑based for</h3>
+                <pre><code><span class="tok-keyword">for</span> <span class="tok-punctuation">(</span><span class="tok-keyword">const</span> <span class="tok-keyword">auto</span><span class="tok-operator">&amp;</span> item <span class="tok-operator">:</span> container<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span> <span class="tok-comment">/* ... */</span> <span class="tok-punctuation">}</span></code></pre>
+                <h3>auto type deduction</h3>
+                <pre><code><span class="tok-keyword">auto</span> x <span class="tok-operator">=</span> <span class="tok-number">5</span><span class="tok-punctuation">;</span>               <span class="tok-comment">// int</span>
+<span class="tok-keyword">auto</span> s <span class="tok-operator">=</span> <span class="tok-string">"text"</span><span class="tok-punctuation">;</span>         <span class="tok-comment">// const char*</span></code></pre>
+                <h3>nullptr</h3>
+                <pre><code><span class="tok-keyword">int</span><span class="tok-operator">*</span> p <span class="tok-operator">=</span> <span class="tok-keyword">nullptr</span><span class="tok-punctuation">;</span>   <span class="tok-comment">// instead of NULL</span></code></pre>
+                <h3>Structured bindings (C++17)</h3>
+                <pre><code><span class="tok-keyword">auto</span> <span class="tok-punctuation">[</span>a<span class="tok-punctuation">,</span> b<span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-namespace">std</span><span class="tok-operator">::</span><span class="tok-method">make_pair</span><span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2.5</span><span class="tok-punctuation">);</span></code></pre>
+            </section>
+
+            <!-- 20. Quick Remember Tips -->
+            <section id="tips">
+                <h2>20. Quick Remember Tips</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Classes</h3>
+                        <p>Use <code class="inline">class</code> or <code class="inline">struct</code> (default public). Always provide a virtual destructor for polymorphic base classes.</p>
+                    </div>
+                    <div class="card">
+                        <h3>RAII</h3>
+                        <p>Acquire resources in constructors and release them in destructors. Use smart pointers instead of manual <code class="inline">new</code>/<code class="inline">delete</code>.</p>
+                    </div>
+                    <div class="card">
+                        <h3>STL</h3>
+                        <p>Prefer <code class="inline">std::vector</code>, <code class="inline">std::map</code>, and <code class="inline">std::string</code> over C‑style arrays and char pointers.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Algorithms</h3>
+                        <p>Use <code class="inline">&lt;algorithm&gt;</code> functions instead of writing raw loops when possible.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Exceptions</h3>
+                        <p>Catch exceptions by const reference. Throw by value.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Modern C++</h3>
+                        <p>Embrace <code class="inline">auto</code>, range‑for, lambdas, and smart pointers for safer, more readable code.</p>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common pitfalls: forgetting virtual destructors, slicing objects, using raw <code class="inline">new</code>/<code class="inline">delete</code>,
+                    mixing signed/unsigned integers, and ignoring rule of three/five.
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+    <!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

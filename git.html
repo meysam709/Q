@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git – The Complete Reference</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p, li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword { color: var(--tok-keyword); }
+        .tok-type { color: var(--tok-type); }
+        .tok-string { color: var(--tok-string); }
+        .tok-number { color: var(--tok-number); }
+        .tok-comment { color: var(--tok-comment); font-style: italic; }
+        .tok-method { color: var(--tok-method); }
+        .tok-class { color: var(--tok-class); }
+        .tok-property { color: var(--tok-property); }
+        .tok-operator { color: var(--tok-operator); }
+        .tok-punctuation { color: var(--tok-punctuation); }
+        .tok-variable { color: var(--tok-variable); }
+        .tok-namespace { color: var(--tok-namespace); }
+        .tok-preproc { color: var(--tok-preproc); }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>Git – The Complete Reference</h1>
+        <p>
+            The most comprehensive Git guide you'll ever need. Covers configuration, core workflows,
+            branching, merging, rebasing, remotes, advanced techniques, plumbing, hooks, and
+            troubleshooting – with countless real‑world command examples.
+        </p>
+    </header>
+
+    <div class="layout">
+        <main>
+            <!-- 1. Git Basics -->
+            <section id="basics">
+                <h2>1. Git Fundamentals</h2>
+                <p>Git is a distributed version control system that tracks changes in files and coordinates work among multiple people. It stores snapshots of a mini filesystem, not diffs.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Key concepts</h3>
+                        <ul>
+                            <li><strong>Repository</strong>: directory with .git</li>
+                            <li><strong>Commit</strong>: snapshot of tracked files</li>
+                            <li><strong>Branch</strong>: movable pointer to a commit</li>
+                            <li><strong>HEAD</strong>: current branch/commit</li>
+                            <li><strong>Index (staging area)</strong>: what will go into next commit</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>First‑time setup</h3>
+                        <pre><code><span class="tok-method">git</span> <span class="tok-variable">config</span> <span class="tok-operator">--</span><span class="tok-variable">global</span> <span class="tok-variable">user</span><span class="tok-punctuation">.</span><span class="tok-variable">name</span> <span class="tok-string">"Your Name"</span>
+<span class="tok-method">git</span> <span class="tok-variable">config</span> <span class="tok-operator">--</span><span class="tok-variable">global</span> <span class="tok-variable">user</span><span class="tok-punctuation">.</span><span class="tok-variable">email</span> <span class="tok-string">"you@example.com"</span>
+<span class="tok-method">git</span> <span class="tok-variable">config</span> <span class="tok-operator">--</span><span class="tok-variable">global</span> <span class="tok-variable">init</span><span class="tok-punctuation">.</span><span class="tok-variable">defaultBranch</span> <span class="tok-variable">main</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Repositories & Basic Commands -->
+            <section id="repo">
+                <h2>2. Creating & Cloning Repos</h2>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">init</span> <span class="tok-variable">project</span>            <span class="tok-comment"># new repo in 'project' folder</span>
+<span class="tok-method">git</span> <span class="tok-variable">clone</span> <span class="tok-variable">https</span><span class="tok-operator">:</span><span class="tok-comment">//github.com/user/repo.git</span>
+<span class="tok-method">git</span> <span class="tok-variable">clone</span> <span class="tok-operator">-</span><span class="tok-variable">b</span> <span class="tok-variable">branch</span> <span class="tok-variable">url</span>       <span class="tok-comment"># clone specific branch</span>
+<span class="tok-method">git</span> <span class="tok-variable">clone</span> <span class="tok-operator">--</span><span class="tok-variable">depth</span> <span class="tok-number">1</span> <span class="tok-variable">url</span>       <span class="tok-comment"># shallow clone (latest only)</span></code></pre>
+                <h3>Checking status & history</h3>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">status</span>                    <span class="tok-comment"># see what's staged, modified, untracked</span>
+<span class="tok-method">git</span> <span class="tok-variable">log</span> <span class="tok-operator">--</span><span class="tok-variable">oneline</span> <span class="tok-operator">--</span><span class="tok-variable">graph</span> <span class="tok-operator">--</span><span class="tok-variable">decorate</span> <span class="tok-operator">--</span><span class="tok-variable">all</span>  <span class="tok-comment"># beautiful history</span>
+<span class="tok-method">git</span> <span class="tok-variable">diff</span>                      <span class="tok-comment"># unstaged changes</span>
+<span class="tok-method">git</span> <span class="tok-variable">diff</span> <span class="tok-operator">--</span><span class="tok-variable">staged</span>             <span class="tok-comment"># changes in staging area</span>
+<span class="tok-method">git</span> <span class="tok-variable">show</span> <span class="tok-variable">COMMIT</span>                <span class="tok-comment"># inspect a commit</span></code></pre>
+            </section>
+
+            <!-- 3. Staging & Committing -->
+            <section id="stage">
+                <h2>3. Staging, Committing, & Undoing</h2>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">add</span> <span class="tok-variable">file</span>               <span class="tok-comment"># stage single file</span>
+<span class="tok-method">git</span> <span class="tok-variable">add</span> <span class="tok-punctuation">.</span>                  <span class="tok-comment"># stage all changes</span>
+<span class="tok-method">git</span> <span class="tok-variable">add</span> <span class="tok-operator">-</span><span class="tok-variable">u</span>               <span class="tok-comment"># stage modifications & deletions (not untracked)</span>
+<span class="tok-method">git</span> <span class="tok-variable">add</span> <span class="tok-operator">-</span><span class="tok-variable">p</span>               <span class="tok-comment"># interactively stage hunks</span>
+
+<span class="tok-method">git</span> <span class="tok-variable">commit</span> <span class="tok-operator">-</span><span class="tok-variable">m</span> <span class="tok-string">"message"</span>    <span class="tok-comment"># commit with message</span>
+<span class="tok-method">git</span> <span class="tok-variable">commit</span> <span class="tok-operator">-</span><span class="tok-variable">am</span> <span class="tok-string">"message"</span>   <span class="tok-comment"># stage tracked files & commit (skip add)</span>
+<span class="tok-method">git</span> <span class="tok-variable">commit</span> <span class="tok-operator">--</span><span class="tok-variable">amend</span>       <span class="tok-comment"># fix last commit (add to it, change msg)</span></code></pre>
+                <h3>Undoing changes</h3>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">restore</span> <span class="tok-variable">file</span>           <span class="tok-comment"># discard working tree changes</span>
+<span class="tok-method">git</span> <span class="tok-variable">restore</span> <span class="tok-operator">--</span><span class="tok-variable">staged</span> <span class="tok-variable">file</span>  <span class="tok-comment"># unstage</span>
+<span class="tok-method">git</span> <span class="tok-variable">reset</span> <span class="tok-variable">HEAD</span> <span class="tok-variable">file</span>          <span class="tok-comment"># older way to unstage</span>
+<span class="tok-method">git</span> <span class="tok-variable">revert</span> <span class="tok-variable">COMMIT</span>          <span class="tok-comment"># create new commit that undoes a previous commit</span></code></pre>
+            </section>
+
+            <!-- 4. Branches -->
+            <section id="branches">
+                <h2>4. Branching & Navigation</h2>
+                <p>Branches are lightweight pointers to commits. Create, switch, merge, and delete branches freely.</p>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">branch</span>                     <span class="tok-comment"># list local branches</span>
+<span class="tok-method">git</span> <span class="tok-variable">branch</span> <span class="tok-operator">-</span><span class="tok-variable">a</span>                <span class="tok-comment"># list all (local + remote)</span>
+<span class="tok-method">git</span> <span class="tok-variable">branch</span> <span class="tok-variable">feature</span>           <span class="tok-comment"># create branch 'feature'</span>
+<span class="tok-method">git</span> <span class="tok-variable">switch</span> <span class="tok-variable">feature</span>           <span class="tok-comment"># switch to branch (new command)</span>
+<span class="tok-method">git</span> <span class="tok-variable">checkout</span> <span class="tok-variable">feature</span>        <span class="tok-comment"># older way to switch</span>
+<span class="tok-method">git</span> <span class="tok-variable">switch</span> <span class="tok-operator">-</span><span class="tok-variable">c</span> <span class="tok-variable">feature</span>      <span class="tok-comment"># create and switch in one step</span>
+<span class="tok-method">git</span> <span class="tok-variable">branch</span> <span class="tok-operator">-</span><span class="tok-variable">d</span> <span class="tok-variable">feature</span>         <span class="tok-comment"># delete merged branch</span>
+<span class="tok-method">git</span> <span class="tok-variable">branch</span> <span class="tok-operator">-</span><span class="tok-variable">D</span> <span class="tok-variable">feature</span>         <span class="tok-comment"># force delete unmerged branch</span></code></pre>
+                <div class="note">Good practice: use short‑lived topic branches and merge them via pull requests.</div>
+            </section>
+
+            <!-- 5. Merging & Rebasing -->
+            <section id="merge">
+                <h2>5. Merging vs. Rebasing</h2>
+                <h3>Merge</h3>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">merge</span> <span class="tok-variable">feature</span>             <span class="tok-comment"># merge 'feature' into current branch</span>
+<span class="tok-method">git</span> <span class="tok-variable">merge</span> <span class="tok-operator">--</span><span class="tok-variable">no</span><span class="tok-operator">-</span><span class="tok-variable">ff</span> <span class="tok-variable">feature</span>   <span class="tok-comment"># create merge commit even if fast‑forward possible</span></code></pre>
+                <h3>Rebase</h3>
+                <p>Re‑apply commits on top of another base tip. Rewrites history – never rebase public commits.</p>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">rebase</span> <span class="tok-variable">main</span>              <span class="tok-comment"># rebase current branch onto main</span>
+<span class="tok-method">git</span> <span class="tok-variable">rebase</span> <span class="tok-operator">-</span><span class="tok-variable">i</span> <span class="tok-variable">HEAD~3</span>      <span class="tok-comment"># interactive rebase last 3 commits (squash, reword…)</span></code></pre>
+                <h3>Cherry‑pick</h3>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">cherry</span><span class="tok-operator">-</span><span class="tok-variable">pick</span> <span class="tok-variable">COMMIT</span>   <span class="tok-comment"># apply a specific commit to current branch</span></code></pre>
+            </section>
+
+            <!-- 6. Remotes -->
+            <section id="remotes">
+                <h2>6. Working with Remotes</h2>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">remote</span> <span class="tok-operator">-</span><span class="tok-variable">v</span>                    <span class="tok-comment"># list remote repositories</span>
+<span class="tok-method">git</span> <span class="tok-variable">remote</span> <span class="tok-variable">add</span> <span class="tok-variable">origin</span> <span class="tok-variable">url</span>     <span class="tok-comment"># add remote named 'origin'</span>
+<span class="tok-method">git</span> <span class="tok-variable">fetch</span> <span class="tok-variable">origin</span>                <span class="tok-comment"># download objects/refs from remote (no merge)</span>
+<span class="tok-method">git</span> <span class="tok-variable">pull</span>                         <span class="tok-comment"># fetch + merge (or rebase with --rebase)</span>
+<span class="tok-method">git</span> <span class="tok-variable">pull</span> <span class="tok-operator">--</span><span class="tok-variable">rebase</span>               <span class="tok-comment"># fetch + rebase (cleaner history)</span>
+<span class="tok-method">git</span> <span class="tok-variable">push</span> <span class="tok-variable">origin</span> <span class="tok-variable">main</span>           <span class="tok-comment"># push branch to remote</span>
+<span class="tok-method">git</span> <span class="tok-variable">push</span> <span class="tok-operator">-</span><span class="tok-variable">u</span> <span class="tok-variable">origin</span> <span class="tok-variable">feature</span>   <span class="tok-comment"># set upstream tracking</span>
+<span class="tok-method">git</span> <span class="tok-variable">push</span> <span class="tok-operator">--</span><span class="tok-variable">delete</span> <span class="tok-variable">origin</span> <span class="tok-variable">feature</span>  <span class="tok-comment"># delete remote branch</span></code></pre>
+            </section>
+
+            <!-- 7. Stashing -->
+            <section id="stash">
+                <h2>7. Stashing Changes</h2>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">stash</span>                        <span class="tok-comment"># save uncommitted changes & revert to HEAD</span>
+<span class="tok-method">git</span> <span class="tok-variable">stash</span> <span class="tok-variable">pop</span>                    <span class="tok-comment"># apply most recent stash & remove it</span>
+<span class="tok-method">git</span> <span class="tok-variable">stash</span> <span class="tok-variable">apply</span> <span class="tok-variable">stash</span><span class="tok-operator">@{</span><span class="tok-number">2</span><span class="tok-operator">}</span>    <span class="tok-comment"># apply specific stash without dropping</span>
+<span class="tok-method">git</span> <span class="tok-variable">stash</span> <span class="tok-variable">list</span>                    <span class="tok-comment"># list stashes</span>
+<span class="tok-method">git</span> <span class="tok-variable">stash</span> <span class="tok-variable">drop</span> <span class="tok-variable">stash</span><span class="tok-operator">@{</span><span class="tok-number">0</span><span class="tok-operator">}</span>      <span class="tok-comment"># delete a stash</span></code></pre>
+                <div class="note">Stashing is perfect when you need to switch branches quickly but aren't ready to commit.</div>
+            </section>
+
+            <!-- 8. Tags & Releases -->
+            <section id="tags">
+                <h2>8. Tags & Releases</h2>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">tag</span> <span class="tok-variable">v1</span><span class="tok-number">.0</span><span class="tok-number">.0</span>                   <span class="tok-comment"># lightweight tag</span>
+<span class="tok-method">git</span> <span class="tok-variable">tag</span> <span class="tok-operator">-</span><span class="tok-variable">a</span> <span class="tok-variable">v1</span><span class="tok-number">.0</span><span class="tok-number">.0</span> <span class="tok-operator">-</span><span class="tok-variable">m</span> <span class="tok-string">"Release 1.0.0"</span>   <span class="tok-comment"># annotated tag</span>
+<span class="tok-method">git</span> <span class="tok-variable">push</span> <span class="tok-variable">origin</span> <span class="tok-operator">--</span><span class="tok-variable">tags</span>        <span class="tok-comment"># push all tags</span>
+<span class="tok-method">git</span> <span class="tok-variable">push</span> <span class="tok-variable">origin</span> <span class="tok-variable">v1</span><span class="tok-number">.0</span><span class="tok-number">.0</span>       <span class="tok-comment"># push single tag</span></code></pre>
+            </section>
+
+            <!-- 9. Advanced Tools -->
+            <section id="advanced">
+                <h2>9. Advanced Git Commands & Techniques</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Bisect</h3>
+                        <pre><code><span class="tok-method">git</span> <span class="tok-variable">bisect</span> <span class="tok-variable">start</span>
+<span class="tok-method">git</span> <span class="tok-variable">bisect</span> <span class="tok-variable">bad</span>             <span class="tok-comment"># current commit is bad</span>
+<span class="tok-method">git</span> <span class="tok-variable">bisect</span> <span class="tok-variable">good</span> <span class="tok-variable">v1</span><span class="tok-number">.0</span>   <span class="tok-comment"># known good commit</span>
+<span class="tok-comment"># Git checks out midpoint; test & mark good/bad until culprit found</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Reflog</h3>
+                        <pre><code><span class="tok-method">git</span> <span class="tok-variable">reflog</span>                 <span class="tok-comment"># show log of HEAD movements (undo lost commits)</span>
+<span class="tok-method">git</span> <span class="tok-variable">reset</span> <span class="tok-operator">--</span><span class="tok-variable">hard</span> <span class="tok-variable">HEAD</span><span class="tok-operator">@{</span><span class="tok-number">1</span><span class="tok-operator">}</span>  <span class="tok-comment"># go back to previous HEAD (careful!)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Submodules</h3>
+                        <pre><code><span class="tok-method">git</span> <span class="tok-variable">submodule</span> <span class="tok-variable">add</span> <span class="tok-variable">url</span> <span class="tok-variable">path</span>
+<span class="tok-method">git</span> <span class="tok-variable">submodule</span> <span class="tok-variable">update</span> <span class="tok-operator">--</span><span class="tok-variable">init</span> <span class="tok-operator">--</span><span class="tok-variable">recursive</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Worktrees</h3>
+                        <pre><code><span class="tok-method">git</span> <span class="tok-variable">worktree</span> <span class="tok-variable">add</span> <span class="tok-operator">../</span><span class="tok-variable">hotfix</span> <span class="tok-variable">main</span>   <span class="tok-comment"># check out branch in separate folder</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. Git Hooks -->
+            <section id="hooks">
+                <h2>10. Git Hooks</h2>
+                <p>Scripts that run automatically on certain events. Located in <code class="inline">.git/hooks/</code> (rename sample files removing <code class="inline">.sample</code>).</p>
+                <h3>Common hooks</h3>
+                <ul>
+                    <li><strong>pre‑commit</strong>: before commit msg, can lint/format</li>
+                    <li><strong>commit‑msg</strong>: validate commit message pattern</li>
+                    <li><strong>pre‑push</strong>: run tests before pushing</li>
+                    <li><strong>post‑receive</strong>: server‑side, after push (deploy)</li>
+                </ul>
+                <pre><code><span class="tok-comment"># Example pre-commit hook (bash)</span>
+<span class="tok-preproc">#!/bin/sh</span>
+<span class="tok-keyword">if</span> <span class="tok-variable">grep</span> <span class="tok-operator">-</span><span class="tok-variable">r</span> <span class="tok-string">"TODO"</span> <span class="tok-variable">.</span> <span class="tok-operator">--</span><span class="tok-variable">exclude</span><span class="tok-operator">-</span><span class="tok-variable">dir</span><span class="tok-operator">=</span><span class="tok-punctuation">.</span><span class="tok-variable">git</span><span class="tok-punctuation">;</span> <span class="tok-keyword">then</span>
+    <span class="tok-builtin">echo</span> <span class="tok-string">"Found TODO – please remove before committing"</span>
+    <span class="tok-builtin">exit</span> <span class="tok-number">1</span>
+<span class="tok-keyword">fi</span></code></pre>
+            </section>
+
+            <!-- 11. Git Internals (Plumbing) -->
+            <section id="plumbing">
+                <h2>11. Git Internals (Plumbing Commands)</h2>
+                <p>Git stores data as objects: blobs (file content), trees (directory listing), commits (snapshot), tags.</p>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">cat</span><span class="tok-operator">-</span><span class="tok-variable">file</span> <span class="tok-operator">-</span><span class="tok-variable">p</span> <span class="tok-variable">COMMIT</span>        <span class="tok-comment"># inspect commit object</span>
+<span class="tok-method">git</span> <span class="tok-variable">ls</span><span class="tok-operator">-</span><span class="tok-variable">tree</span> <span class="tok-variable">TREE_SHA</span>           <span class="tok-comment"># list tree contents</span>
+<span class="tok-method">git</span> <span class="tok-variable">count</span><span class="tok-operator">-</span><span class="tok-variable">objects</span>                <span class="tok-comment"># see object statistics</span>
+<span class="tok-method">git</span> <span class="tok-variable">gc</span>                          <span class="tok-comment"># garbage collection, optimize repo</span></code></pre>
+                <p>Objects are content‑addressed by SHA‑1 hash. The <code class="inline">.git/objects</code> directory stores them.</p>
+            </section>
+
+            <!-- 12. Reset Demystified -->
+            <section id="reset">
+                <h2>12. Git Reset – The Big Three</h2>
+                <table>
+                    <tr><th>Mode</th><th>HEAD</th><th>Index</th><th>Working Dir</th></tr>
+                    <tr><td><code class="inline">--soft</code></td><td>moved</td><td>unchanged</td><td>unchanged</td></tr>
+                    <tr><td><code class="inline">--mixed</code> (default)</td><td>moved</td><td>reset</td><td>unchanged</td></tr>
+                    <tr><td><code class="inline">--hard</code></td><td>moved</td><td>reset</td><td>reset (DANGER!)</td></tr>
+                </table>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">reset</span> <span class="tok-operator">--</span><span class="tok-variable">soft</span> <span class="tok-variable">HEAD~1</span>   <span class="tok-comment"># undo last commit, keep changes staged</span>
+<span class="tok-method">git</span> <span class="tok-variable">reset</span> <span class="tok-operator">--</span><span class="tok-variable">mixed</span> <span class="tok-variable">HEAD~1</span>  <span class="tok-comment"># undo last commit, unstage changes</span>
+<span class="tok-method">git</span> <span class="tok-variable">reset</span> <span class="tok-operator">--</span><span class="tok-variable">hard</span> <span class="tok-variable">HEAD~1</span>   <span class="tok-comment"># completely discard last commit and changes</span></code></pre>
+            </section>
+
+            <!-- 13. Collaboration Workflows -->
+            <section id="workflows">
+                <h2>13. Common Git Workflows</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>GitHub Flow</h3>
+                        <ul>
+                            <li>Feature branch → open PR → review → merge → delete branch</li>
+                            <li>Simple, perfect for continuous deployment</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Git Flow</h3>
+                        <ul>
+                            <li>Long‑lived branches: main, develop</li>
+                            <li>Feature branches, release branches, hotfix branches</li>
+                            <li>More complex, suited for scheduled releases</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Trunk‑Based Development</h3>
+                        <ul>
+                            <li>Direct commits to main, short‑lived branches</li>
+                            <li>Feature flags, high discipline, fast feedback</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 14. Troubleshooting & Recovery -->
+            <section id="trouble">
+                <h2>14. Troubleshooting & Recovery</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Lost commits</h3>
+                        <pre><code><span class="tok-method">git</span> <span class="tok-variable">reflog</span>                 <span class="tok-comment"># find the lost commit</span>
+<span class="tok-method">git</span> <span class="tok-variable">checkout</span> <span class="tok-variable">COMMIT</span>       <span class="tok-comment"># inspect it</span>
+<span class="tok-method">git</span> <span class="tok-variable">branch</span> <span class="tok-variable">recover</span> <span class="tok-variable">COMMIT</span> <span class="tok-comment"># create a branch at that commit</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Undo a bad merge</h3>
+                        <pre><code><span class="tok-method">git</span> <span class="tok-variable">reset</span> <span class="tok-operator">--</span><span class="tok-variable">hard</span> <span class="tok-variable">HEAD~1</span>    <span class="tok-comment"># if merge not yet pushed</span>
+<span class="tok-method">git</span> <span class="tok-variable">revert</span> <span class="tok-operator">-</span><span class="tok-variable">m</span> <span class="tok-number">1</span> <span class="tok-variable">MERGE_COMMIT</span>  <span class="tok-comment"># if already pushed</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Remove sensitive data</h3>
+                        <pre><code><span class="tok-method">git</span> <span class="tok-variable">filter</span><span class="tok-operator">-</span><span class="tok-variable">branch</span> <span class="tok-operator">--</span><span class="tok-variable">force</span> <span class="tok-operator">--</span><span class="tok-variable">index</span><span class="tok-operator">-</span><span class="tok-variable">filter</span> \
+ <span class="tok-string">'git rm --cached --ignore-unmatch secret.txt'</span> <span class="tok-operator">--</span><span class="tok-variable">prune</span><span class="tok-operator">-</span><span class="tok-variable">empty</span> <span class="tok-operator">--</span> <span class="tok-operator">--</span><span class="tok-variable">all</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 15. Git Configuration Deep Dive -->
+            <section id="config">
+                <h2>15. Configuration Options</h2>
+                <pre><code><span class="tok-method">git</span> <span class="tok-variable">config</span> <span class="tok-operator">--</span><span class="tok-variable">list</span>                   <span class="tok-comment"># show all settings</span>
+<span class="tok-method">git</span> <span class="tok-variable">config</span> <span class="tok-operator">--</span><span class="tok-variable">global</span> <span class="tok-variable">alias</span><span class="tok-punctuation">.</span><span class="tok-variable">co</span> <span class="tok-variable">checkout</span>
+<span class="tok-method">git</span> <span class="tok-variable">config</span> <span class="tok-operator">--</span><span class="tok-variable">global</span> <span class="tok-variable">core</span><span class="tok-punctuation">.</span><span class="tok-variable">editor</span> <span class="tok-string">"code --wait"</span>
+<span class="tok-method">git</span> <span class="tok-variable">config</span> <span class="tok-operator">--</span><span class="tok-variable">global</span> <span class="tok-variable">pull</span><span class="tok-punctuation">.</span><span class="tok-variable">rebase</span> <span class="tok-variable">true</span>   <span class="tok-comment"># always rebase on pull</span></code></pre>
+            </section>
+
+            <!-- 16. Useful Git Ignore Patterns -->
+            <section id="ignore">
+                <h2>16. .gitignore Best Practices</h2>
+                <pre><code><span class="tok-comment"># Dependencies</span>
+<span class="tok-variable">node_modules/</span>
+<span class="tok-variable">vendor/</span>
+<span class="tok-comment"># Build artifacts</span>
+<span class="tok-variable">dist/</span>
+<span class="tok-variable">build/</span>
+<span class="tok-comment"># IDE & OS files</span>
+<span class="tok-variable">.vscode/</span>
+<span class="tok-variable">.DS_Store</span>
+<span class="tok-variable">Thumbs.db</span>
+<span class="tok-comment"># Environment files (but keep .env.example)</span>
+<span class="tok-variable">.env</span></code></pre>
+            </section>
+
+            <!-- 17. Quick Reference Tables -->
+            <section id="cheatsheet">
+                <h2>17. Quick Reference Cheat Sheet</h2>
+                <h3>Common commands</h3>
+                <table>
+                    <tr><th>Task</th><th>Command</th></tr>
+                    <tr><td>Create repo</td><td><code class="inline">git init</code></td></tr>
+                    <tr><td>Clone repo</td><td><code class="inline">git clone url</code></td></tr>
+                    <tr><td>Stage file</td><td><code class="inline">git add file</code></td></tr>
+                    <tr><td>Commit</td><td><code class="inline">git commit -m "msg"</code></td></tr>
+                    <tr><td>Show status</td><td><code class="inline">git status</code></td></tr>
+                    <tr><td>View history</td><td><code class="inline">git log --oneline</code></td></tr>
+                    <tr><td>Create branch</td><td><code class="inline">git branch name</code></td></tr>
+                    <tr><td>Switch branch</td><td><code class="inline">git switch name</code></td></tr>
+                    <tr><td>Merge branch</td><td><code class="inline">git merge name</code></td></tr>
+                    <tr><td>Push to remote</td><td><code class="inline">git push origin main</code></td></tr>
+                    <tr><td>Pull from remote</td><td><code class="inline">git pull</code></td></tr>
+                    <tr><td>Stash changes</td><td><code class="inline">git stash</code></td></tr>
+                    <tr><td>Undo commit (soft)</td><td><code class="inline">git reset --soft HEAD~1</code></td></tr>
+                </table>
+            </section>
+
+            <section id="tips">
+                <h2>18. Final Tips & Best Practices</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Commit messages</h3>
+                        <ul>
+                            <li>Imperative mood ("Add feature" not "Added")</li>
+                            <li>Limit subject line to 50 chars</li>
+                            <li>Separate subject from body with blank line</li>
+                            <li>Explain what & why, not how</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Branch hygiene</h3>
+                        <ul>
+                            <li>Delete merged branches</li>
+                            <li>Keep branches focused (one feature/bug per branch)</li>
+                            <li>Regularly fetch/pull to stay updated</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common pitfalls: committing sensitive data, force pushing to shared branches,
+                    amending public commits, using <code class="inline">git add .</code> blindly, and not setting up a proper .gitignore.
+                </div>
+            </section>
+        </main>
+    </div>
+
+
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+    <!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

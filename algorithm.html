@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Structures & Algorithms – The Complete Reference</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p, li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword { color: var(--tok-keyword); }
+        .tok-type { color: var(--tok-type); }
+        .tok-string { color: var(--tok-string); }
+        .tok-number { color: var(--tok-number); }
+        .tok-comment { color: var(--tok-comment); font-style: italic; }
+        .tok-method { color: var(--tok-method); }
+        .tok-class { color: var(--tok-class); }
+        .tok-property { color: var(--tok-property); }
+        .tok-operator { color: var(--tok-operator); }
+        .tok-punctuation { color: var(--tok-punctuation); }
+        .tok-variable { color: var(--tok-variable); }
+        .tok-namespace { color: var(--tok-namespace); }
+        .tok-preproc { color: var(--tok-preproc); }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>Data Structures & Algorithms – The Complete Reference</h1>
+        <p>
+            An ultra‑comprehensive guide to DSA: algorithm analysis, sorting, searching,
+            every fundamental data structure, graph algorithms, dynamic programming, and more.
+            Packed with code examples, complexity tables, and problem‑solving patterns.
+        </p>
+    </header>
+
+    <div class="layout">
+        <main>
+            <!-- 1. Algorithm Analysis -->
+            <section id="analysis">
+                <h2>1. Algorithm Analysis & Big‑O</h2>
+                <p>Measuring an algorithm’s efficiency uses <strong>time complexity</strong> (how fast) and <strong>space complexity</strong> (memory).</p>
+                <h3>Asymptotic Notations</h3>
+                <ul>
+                    <li><strong>Big O (O)</strong> – upper bound (worst‑case)</li>
+                    <li><strong>Big Omega (Ω)</strong> – lower bound (best‑case)</li>
+                    <li><strong>Big Theta (Θ)</strong> – tight bound (average‑case)</li>
+                </ul>
+                <h3>Common Complexities (in order of growth)</h3>
+                <table>
+                    <tr><th>Notation</th><th>Name</th><th>Example</th></tr>
+                    <tr><td>O(1)</td><td>Constant</td><td>Array access</td></tr>
+                    <tr><td>O(log n)</td><td>Logarithmic</td><td>Binary search</td></tr>
+                    <tr><td>O(n)</td><td>Linear</td><td>Single loop</td></tr>
+                    <tr><td>O(n log n)</td><td>Linearithmic</td><td>Merge sort</td></tr>
+                    <tr><td>O(n²)</td><td>Quadratic</td><td>Bubble sort</td></tr>
+                    <tr><td>O(2ⁿ)</td><td>Exponential</td><td>Recursive Fibonacci</td></tr>
+                    <tr><td>O(n!)</td><td>Factorial</td><td>Travelling salesman (brute)</td></tr>
+                </table>
+                <div class="note">Drop constants and non‑dominant terms: O(2n² + 3n) → O(n²).</div>
+            </section>
+
+            <!-- 2. Sorting Algorithms -->
+            <section id="sorting">
+                <h2>2. Sorting Algorithms</h2>
+                <h3>Comparison‑based sorts</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Bubble Sort</h3>
+                        <p>Repeatedly swap adjacent elements if wrong order. <strong>O(n²)</strong> time, O(1) space. Stable.</p>
+                        <pre><code><span class="tok-keyword">def</span> <span class="tok-method">bubble_sort</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">):</span>
+    <span class="tok-keyword">for</span> <span class="tok-variable">i</span> <span class="tok-keyword">in</span> <span class="tok-method">range</span><span class="tok-punctuation">(</span><span class="tok-method">len</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">)):</span>
+        <span class="tok-keyword">for</span> <span class="tok-variable">j</span> <span class="tok-keyword">in</span> <span class="tok-method">range</span><span class="tok-punctuation">(</span><span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-method">len</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">)</span> <span class="tok-operator">-</span> <span class="tok-variable">i</span> <span class="tok-operator">-</span> <span class="tok-number">1</span><span class="tok-punctuation">):</span>
+            <span class="tok-keyword">if</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">j</span><span class="tok-punctuation">]</span> <span class="tok-operator">&gt;</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">j</span><span class="tok-operator">+</span><span class="tok-number">1</span><span class="tok-punctuation">]:</span>
+                <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">j</span><span class="tok-punctuation">],</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">j</span><span class="tok-operator">+</span><span class="tok-number">1</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">j</span><span class="tok-operator">+</span><span class="tok-number">1</span><span class="tok-punctuation">],</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">j</span><span class="tok-punctuation">]</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Selection Sort</h3>
+                        <p>Find min element, swap with first; repeat. <strong>O(n²)</strong> time, O(1) space. Not stable.</p>
+                        <pre><code><span class="tok-keyword">def</span> <span class="tok-method">selection_sort</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">):</span>
+    <span class="tok-keyword">for</span> <span class="tok-variable">i</span> <span class="tok-keyword">in</span> <span class="tok-method">range</span><span class="tok-punctuation">(</span><span class="tok-method">len</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">)):</span>
+        <span class="tok-variable">min_idx</span> <span class="tok-operator">=</span> <span class="tok-variable">i</span>
+        <span class="tok-keyword">for</span> <span class="tok-variable">j</span> <span class="tok-keyword">in</span> <span class="tok-method">range</span><span class="tok-punctuation">(</span><span class="tok-variable">i</span><span class="tok-operator">+</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-method">len</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">)):</span>
+            <span class="tok-keyword">if</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">j</span><span class="tok-punctuation">]</span> <span class="tok-operator">&lt;</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">min_idx</span><span class="tok-punctuation">]:</span>
+                <span class="tok-variable">min_idx</span> <span class="tok-operator">=</span> <span class="tok-variable">j</span>
+        <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">i</span><span class="tok-punctuation">],</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">min_idx</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">min_idx</span><span class="tok-punctuation">],</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">i</span><span class="tok-punctuation">]</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Insertion Sort</h3>
+                        <p>Build sorted array one element at a time. <strong>O(n²)</strong> time, but O(n) on nearly sorted. O(1) space. Stable.</p>
+                        <pre><code><span class="tok-keyword">def</span> <span class="tok-method">insertion_sort</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">):</span>
+    <span class="tok-keyword">for</span> <span class="tok-variable">i</span> <span class="tok-keyword">in</span> <span class="tok-method">range</span><span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-method">len</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">)):</span>
+        <span class="tok-variable">key</span> <span class="tok-operator">=</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">i</span><span class="tok-punctuation">]</span>
+        <span class="tok-variable">j</span> <span class="tok-operator">=</span> <span class="tok-variable">i</span> <span class="tok-operator">-</span> <span class="tok-number">1</span>
+        <span class="tok-keyword">while</span> <span class="tok-variable">j</span> <span class="tok-operator">&gt;=</span> <span class="tok-number">0</span> <span class="tok-keyword">and</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">j</span><span class="tok-punctuation">]</span> <span class="tok-operator">&gt;</span> <span class="tok-variable">key</span><span class="tok-punctuation">:</span>
+            <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">j</span><span class="tok-operator">+</span><span class="tok-number">1</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">j</span><span class="tok-punctuation">]</span>
+            <span class="tok-variable">j</span> <span class="tok-operator">-=</span> <span class="tok-number">1</span>
+        <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">j</span><span class="tok-operator">+</span><span class="tok-number">1</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-variable">key</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Merge Sort</h3>
+                        <p>Divide & conquer. <strong>O(n log n)</strong> time, O(n) space. Stable.</p>
+                        <pre><code><span class="tok-keyword">def</span> <span class="tok-method">merge_sort</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">):</span>
+    <span class="tok-keyword">if</span> <span class="tok-method">len</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">)</span> <span class="tok-operator">&lt;=</span> <span class="tok-number">1</span><span class="tok-punctuation">:</span> <span class="tok-keyword">return</span> <span class="tok-variable">arr</span>
+    <span class="tok-variable">mid</span> <span class="tok-operator">=</span> <span class="tok-method">len</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">)</span> <span class="tok-operator">//</span> <span class="tok-number">2</span>
+    <span class="tok-variable">left</span> <span class="tok-operator">=</span> <span class="tok-method">merge_sort</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">[:</span><span class="tok-variable">mid</span><span class="tok-punctuation">])</span>
+    <span class="tok-variable">right</span> <span class="tok-operator">=</span> <span class="tok-method">merge_sort</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">mid</span><span class="tok-punctuation">:])</span>
+    <span class="tok-keyword">return</span> <span class="tok-method">merge</span><span class="tok-punctuation">(</span><span class="tok-variable">left</span><span class="tok-punctuation">,</span> <span class="tok-variable">right</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Quick Sort</h3>
+                        <p>Pivot partitioning. <strong>O(n log n)</strong> average, O(n²) worst. O(log n) space (recursion). Not stable.</p>
+                        <pre><code><span class="tok-keyword">def</span> <span class="tok-method">quick_sort</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">,</span> <span class="tok-variable">low</span><span class="tok-punctuation">,</span> <span class="tok-variable">high</span><span class="tok-punctuation">):</span>
+    <span class="tok-keyword">if</span> <span class="tok-variable">low</span> <span class="tok-operator">&lt;</span> <span class="tok-variable">high</span><span class="tok-punctuation">:</span>
+        <span class="tok-variable">pivot</span> <span class="tok-operator">=</span> <span class="tok-method">partition</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">,</span> <span class="tok-variable">low</span><span class="tok-punctuation">,</span> <span class="tok-variable">high</span><span class="tok-punctuation">)</span>
+        <span class="tok-method">quick_sort</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">,</span> <span class="tok-variable">low</span><span class="tok-punctuation">,</span> <span class="tok-variable">pivot</span><span class="tok-operator">-</span><span class="tok-number">1</span><span class="tok-punctuation">)</span>
+        <span class="tok-method">quick_sort</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">,</span> <span class="tok-variable">pivot</span><span class="tok-operator">+</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-variable">high</span><span class="tok-punctuation">)</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Heap Sort</h3>
+                        <p>Build max‑heap, repeatedly extract max. <strong>O(n log n)</strong> time, O(1) space. Not stable.</p>
+                        <pre><code><span class="tok-keyword">import</span> <span class="tok-namespace">heapq</span>
+<span class="tok-keyword">def</span> <span class="tok-method">heap_sort</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">):</span>
+    <span class="tok-namespace">heapq</span><span class="tok-punctuation">.</span><span class="tok-method">heapify</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">)</span>
+    <span class="tok-keyword">return</span> <span class="tok-punctuation">[</span><span class="tok-namespace">heapq</span><span class="tok-punctuation">.</span><span class="tok-method">heappop</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">)</span> <span class="tok-keyword">for</span> <span class="tok-variable">_</span> <span class="tok-keyword">in</span> <span class="tok-method">range</span><span class="tok-punctuation">(</span><span class="tok-method">len</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">))]</span></code></pre>
+                    </div>
+                </div>
+                <h3>Non‑comparison sorts (integer keys)</h3>
+                <ul>
+                    <li><strong>Counting Sort</strong> – O(n + k), stable, good for small range</li>
+                    <li><strong>Radix Sort</strong> – O(d·(n+b)), sorts digit by digit</li>
+                    <li><strong>Bucket Sort</strong> – uniform distribution, average O(n + k)</li>
+                </ul>
+            </section>
+
+            <!-- 3. Searching Algorithms -->
+            <section id="searching">
+                <h2>3. Searching Algorithms</h2>
+                <h3>Linear Search</h3>
+                <p>O(n) time, O(1) space. Works on unsorted data.</p>
+                <h3>Binary Search</h3>
+                <p>Requires sorted array. O(log n) time, O(1) space (iterative).</p>
+                <pre><code><span class="tok-keyword">def</span> <span class="tok-method">binary_search</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">,</span> <span class="tok-variable">target</span><span class="tok-punctuation">):</span>
+    <span class="tok-variable">l</span><span class="tok-punctuation">,</span> <span class="tok-variable">r</span> <span class="tok-operator">=</span> <span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-method">len</span><span class="tok-punctuation">(</span><span class="tok-variable">arr</span><span class="tok-punctuation">)</span> <span class="tok-operator">-</span> <span class="tok-number">1</span>
+    <span class="tok-keyword">while</span> <span class="tok-variable">l</span> <span class="tok-operator">&lt;=</span> <span class="tok-variable">r</span><span class="tok-punctuation">:</span>
+        <span class="tok-variable">m</span> <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-variable">l</span> <span class="tok-operator">+</span> <span class="tok-variable">r</span><span class="tok-punctuation">)</span> <span class="tok-operator">//</span> <span class="tok-number">2</span>
+        <span class="tok-keyword">if</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">m</span><span class="tok-punctuation">]</span> <span class="tok-operator">==</span> <span class="tok-variable">target</span><span class="tok-punctuation">:</span> <span class="tok-keyword">return</span> <span class="tok-variable">m</span>
+        <span class="tok-keyword">elif</span> <span class="tok-variable">arr</span><span class="tok-punctuation">[</span><span class="tok-variable">m</span><span class="tok-punctuation">]</span> <span class="tok-operator">&lt;</span> <span class="tok-variable">target</span><span class="tok-punctuation">:</span> <span class="tok-variable">l</span> <span class="tok-operator">=</span> <span class="tok-variable">m</span> <span class="tok-operator">+</span> <span class="tok-number">1</span>
+        <span class="tok-keyword">else</span><span class="tok-punctuation">:</span> <span class="tok-variable">r</span> <span class="tok-operator">=</span> <span class="tok-variable">m</span> <span class="tok-operator">-</span> <span class="tok-number">1</span>
+    <span class="tok-keyword">return</span> <span class="tok-operator">-</span><span class="tok-number">1</span></code></pre>
+                <h3>Interpolation Search</h3>
+                <p>Improved binary search for uniformly distributed data. O(log log n) average.</p>
+            </section>
+
+            <!-- 4. Arrays & Linked Lists -->
+            <section id="linear">
+                <h2>4. Arrays & Linked Lists</h2>
+                <h3>Arrays</h3>
+                <p>Contiguous memory, O(1) random access. Insert/delete at end O(1) amortized, middle O(n).</p>
+                <h3>Linked List</h3>
+                <p>Nodes with data + pointer. <strong>Singly</strong>: one direction. <strong>Doubly</strong>: previous + next. <strong>Circular</strong>.</p>
+                <ul>
+                    <li>Access by index: O(n)</li>
+                    <li>Insert/delete at head: O(1)</li>
+                    <li>Insert/delete at tail: O(n) singly, O(1) doubly</li>
+                    <li>No wasted capacity, but more memory per element (pointers)</li>
+                </ul>
+                <pre><code><span class="tok-keyword">class</span> <span class="tok-class">ListNode</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">def</span> <span class="tok-method">__init__</span><span class="tok-punctuation">(</span><span class="tok-variable">self</span><span class="tok-punctuation">,</span> <span class="tok-variable">val</span><span class="tok-operator">=</span><span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-variable">next</span><span class="tok-operator">=</span><span class="tok-keyword">None</span><span class="tok-punctuation">):</span>
+        <span class="tok-variable">self</span><span class="tok-punctuation">.</span><span class="tok-property">val</span> <span class="tok-operator">=</span> <span class="tok-variable">val</span>
+        <span class="tok-variable">self</span><span class="tok-punctuation">.</span><span class="tok-property">next</span> <span class="tok-operator">=</span> <span class="tok-variable">next</span></code></pre>
+            </section>
+
+            <!-- 5. Stacks & Queues -->
+            <section id="stackqueue">
+                <h2>5. Stacks & Queues</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Stack (LIFO)</h3>
+                        <p>Push/pop O(1). Used for function calls, undo, expression evaluation.</p>
+                        <pre><code><span class="tok-variable">stack</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[]</span>
+<span class="tok-variable">stack</span><span class="tok-punctuation">.</span><span class="tok-method">append</span><span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">)</span>   <span class="tok-comment"># push</span>
+<span class="tok-variable">stack</span><span class="tok-punctuation">.</span><span class="tok-method">pop</span><span class="tok-punctuation">()</span>        <span class="tok-comment"># pop</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Queue (FIFO)</h3>
+                        <p>Enqueue/dequeue O(1). BFS, scheduling.</p>
+                        <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">collections</span> <span class="tok-keyword">import</span> <span class="tok-variable">deque</span>
+<span class="tok-variable">q</span> <span class="tok-operator">=</span> <span class="tok-variable">deque</span><span class="tok-punctuation">()</span>
+<span class="tok-variable">q</span><span class="tok-punctuation">.</span><span class="tok-method">append</span><span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">)</span>       <span class="tok-comment"># enqueue</span>
+<span class="tok-variable">q</span><span class="tok-punctuation">.</span><span class="tok-method">popleft</span><span class="tok-punctuation">()</span>      <span class="tok-comment"># dequeue</span></code></pre>
+                    </div>
+                </div>
+                <h3>Deque (Double‑ended queue)</h3>
+                <p>Insert/delete at both ends O(1). Used for sliding window maximum.</p>
+                <h3>Priority Queue (Heap)</h3>
+                <p>Min‑heap / max‑heap. Insert O(log n), extract min O(log n). Implemented via <code class="inline">heapq</code>.</p>
+            </section>
+
+            <!-- 6. Hash Tables -->
+            <section id="hash">
+                <h2>6. Hash Tables (Dictionaries)</h2>
+                <p>Key → value mapping via hash function. Average O(1) for search/insert/delete. Worst O(n) due to collisions.</p>
+                <ul>
+                    <li><strong>Hash function</strong> maps key to bucket index</li>
+                    <li><strong>Collision resolution</strong>: chaining (linked list) or open addressing (linear probing, quadratic probing, double hashing)</li>
+                    <li><strong>Load factor</strong>: entries / buckets. Resize when exceeding threshold (e.g., 0.75)</li>
+                </ul>
+                <pre><code><span class="tok-variable">hashmap</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{}</span>          <span class="tok-comment"># Python dict</span>
+<span class="tok-variable">hashmap</span><span class="tok-punctuation">[</span><span class="tok-string">'key'</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-number">42</span></code></pre>
+            </section>
+
+            <!-- 7. Trees -->
+            <section id="trees">
+                <h2>7. Trees</h2>
+                <h3>Binary Tree Basics</h3>
+                <p>Each node has up to 2 children. <strong>Full</strong>: 0 or 2 children. <strong>Complete</strong>: all levels filled except possibly last, left‑filled. <strong>Perfect</strong>: all internal nodes have 2 children, leaves at same level.</p>
+                <h3>Binary Search Tree (BST)</h3>
+                <p>Left subtree ≤ node < right subtree. O(h) operations, h = height. Balanced (AVL, Red‑Black) → O(log n).</p>
+                <pre><code><span class="tok-keyword">class</span> <span class="tok-class">TreeNode</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">def</span> <span class="tok-method">__init__</span><span class="tok-punctuation">(</span><span class="tok-variable">self</span><span class="tok-punctuation">,</span> <span class="tok-variable">val</span><span class="tok-operator">=</span><span class="tok-number">0</span><span class="tok-punctuation">,</span> <span class="tok-variable">left</span><span class="tok-operator">=</span><span class="tok-keyword">None</span><span class="tok-punctuation">,</span> <span class="tok-variable">right</span><span class="tok-operator">=</span><span class="tok-keyword">None</span><span class="tok-punctuation">):</span>
+        <span class="tok-variable">self</span><span class="tok-punctuation">.</span><span class="tok-property">val</span> <span class="tok-operator">=</span> <span class="tok-variable">val</span>
+        <span class="tok-variable">self</span><span class="tok-punctuation">.</span><span class="tok-property">left</span> <span class="tok-operator">=</span> <span class="tok-variable">left</span>
+        <span class="tok-variable">self</span><span class="tok-punctuation">.</span><span class="tok-property">right</span> <span class="tok-operator">=</span> <span class="tok-variable">right</span></code></pre>
+                <h3>Tree Traversals</h3>
+                <ul>
+                    <li><strong>In‑order</strong>: left → root → right (sorted for BST)</li>
+                    <li><strong>Pre‑order</strong>: root → left → right (copy, prefix)</li>
+                    <li><strong>Post‑order</strong>: left → right → root (delete, postfix)</li>
+                    <li><strong>Level‑order</strong>: BFS using queue</li>
+                </ul>
+                <h3>Balanced Trees</h3>
+                <ul>
+                    <li><strong>AVL Tree</strong>: strictly balanced (|BF| ≤ 1), rotations after insert/delete</li>
+                    <li><strong>Red‑Black Tree</strong>: looser balance, faster insertions; used in many languages</li>
+                    <li><strong>B‑Tree</strong>: multi‑way search tree, used in databases/file systems; all leaves at same depth</li>
+                </ul>
+            </section>
+
+            <!-- 8. Heaps -->
+            <section id="heaps">
+                <h2>8. Heaps</h2>
+                <p>A <strong>binary heap</strong> is a complete binary tree satisfying the heap property: min‑heap (parent ≤ children), max‑heap (parent ≥ children).</p>
+                <ul>
+                    <li>Insert: O(log n)</li>
+                    <li>Extract min/max: O(log n)</li>
+                    <li>Peek: O(1)</li>
+                    <li>Build heap: O(n)</li>
+                </ul>
+                <pre><code><span class="tok-keyword">import</span> <span class="tok-namespace">heapq</span>
+<span class="tok-variable">heap</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[]</span>
+<span class="tok-namespace">heapq</span><span class="tok-punctuation">.</span><span class="tok-method">heappush</span><span class="tok-punctuation">(</span><span class="tok-variable">heap</span><span class="tok-punctuation">,</span> <span class="tok-number">5</span><span class="tok-punctuation">)</span>
+<span class="tok-namespace">heapq</span><span class="tok-punctuation">.</span><span class="tok-method">heappush</span><span class="tok-punctuation">(</span><span class="tok-variable">heap</span><span class="tok-punctuation">,</span> <span class="tok-number">1</span><span class="tok-punctuation">)</span>
+<span class="tok-keyword">print</span><span class="tok-punctuation">(</span><span class="tok-namespace">heapq</span><span class="tok-punctuation">.</span><span class="tok-method">heappop</span><span class="tok-punctuation">(</span><span class="tok-variable">heap</span><span class="tok-punctuation">))</span>  <span class="tok-comment"># 1</span></code></pre>
+                <p><strong>Priority queue</strong> = heap. <strong>Heap sort</strong>: build max‑heap → repeated extract.</p>
+            </section>
+
+            <!-- 9. Graphs -->
+            <section id="graphs">
+                <h2>9. Graphs</h2>
+                <p>A graph G = (V, E). <strong>Directed</strong> (one‑way) or <strong>undirected</strong>. <strong>Weighted</strong> edges.</p>
+                <h3>Representations</h3>
+                <ul>
+                    <li><strong>Adjacency Matrix</strong> – O(V²) space, O(1) edge check</li>
+                    <li><strong>Adjacency List</strong> – O(V + E) space, faster for sparse graphs</li>
+                </ul>
+                <pre><code><span class="tok-variable">graph</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{}</span>  <span class="tok-comment"># adjacency list</span>
+<span class="tok-variable">graph</span><span class="tok-punctuation">[</span><span class="tok-string">'A'</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-punctuation">(</span><span class="tok-string">'B'</span><span class="tok-punctuation">,</span> <span class="tok-number">5</span><span class="tok-punctuation">),</span> <span class="tok-punctuation">(</span><span class="tok-string">'C'</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">)]</span>  <span class="tok-comment"># weighted edges</span></code></pre>
+                <h3>Traversals</h3>
+                <ul>
+                    <li><strong>BFS (Breadth‑First Search)</strong> – O(V+E), queue, shortest path (unweighted)</li>
+                    <li><strong>DFS (Depth‑First Search)</strong> – O(V+E), recursion/stack, cycles, topological sort, connected components</li>
+                </ul>
+                <pre><code><span class="tok-keyword">def</span> <span class="tok-method">bfs</span><span class="tok-punctuation">(</span><span class="tok-variable">graph</span><span class="tok-punctuation">,</span> <span class="tok-variable">start</span><span class="tok-punctuation">):</span>
+    <span class="tok-variable">visited</span> <span class="tok-operator">=</span> <span class="tok-method">set</span><span class="tok-punctuation">()</span>
+    <span class="tok-variable">queue</span> <span class="tok-operator">=</span> <span class="tok-variable">deque</span><span class="tok-punctuation">([</span><span class="tok-variable">start</span><span class="tok-punctuation">])</span>
+    <span class="tok-keyword">while</span> <span class="tok-variable">queue</span><span class="tok-punctuation">:</span>
+        <span class="tok-variable">node</span> <span class="tok-operator">=</span> <span class="tok-variable">queue</span><span class="tok-punctuation">.</span><span class="tok-method">popleft</span><span class="tok-punctuation">()</span>
+        <span class="tok-keyword">if</span> <span class="tok-variable">node</span> <span class="tok-keyword">not</span> <span class="tok-keyword">in</span> <span class="tok-variable">visited</span><span class="tok-punctuation">:</span>
+            <span class="tok-variable">visited</span><span class="tok-punctuation">.</span><span class="tok-method">add</span><span class="tok-punctuation">(</span><span class="tok-variable">node</span><span class="tok-punctuation">)</span>
+            <span class="tok-variable">queue</span><span class="tok-punctuation">.</span><span class="tok-method">extend</span><span class="tok-punctuation">(</span><span class="tok-variable">graph</span><span class="tok-punctuation">[</span><span class="tok-variable">node</span><span class="tok-punctuation">])</span>
+    <span class="tok-keyword">return</span> <span class="tok-variable">visited</span></code></pre>
+                <h3>Shortest Path</h3>
+                <ul>
+                    <li><strong>Dijkstra</strong> – O((V+E) log V) using heap, non‑negative weights only</li>
+                    <li><strong>Bellman‑Ford</strong> – O(VE), handles negative weights, detects negative cycles</li>
+                    <li><strong>Floyd‑Warshall</strong> – O(V³), all‑pairs shortest path, dynamic programming</li>
+                </ul>
+                <h3>Minimum Spanning Tree</h3>
+                <ul>
+                    <li><strong>Kruskal</strong> – O(E log E), sorts edges, union‑find</li>
+                    <li><strong>Prim</strong> – O(E log V), grows tree from a start node</li>
+                </ul>
+                <h3>Topological Sort</h3>
+                <p>Linear ordering of DAG vertices. DFS post‑order or Kahn's algorithm (in‑degree).</p>
+                <h3>Union‑Find (Disjoint Set)</h3>
+                <p>Quickly detect cycles in Kruskal. Path compression + union by rank: nearly O(1) per operation.</p>
+            </section>
+
+            <!-- 10. Dynamic Programming -->
+            <section id="dp">
+                <h2>10. Dynamic Programming</h2>
+                <p>Break problem into overlapping subproblems, store results. Two approaches:</p>
+                <ul>
+                    <li><strong>Top‑down (memoization)</strong> – recursion + cache</li>
+                    <li><strong>Bottom‑up (tabulation)</strong> – iterative array filling</li>
+                </ul>
+                <h3>Classic problems</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Fibonacci</h3>
+                        <pre><code><span class="tok-keyword">def</span> <span class="tok-method">fib</span><span class="tok-punctuation">(</span><span class="tok-variable">n</span><span class="tok-punctuation">,</span> <span class="tok-variable">memo</span><span class="tok-operator">=</span><span class="tok-punctuation">{})</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">if</span> <span class="tok-variable">n</span> <span class="tok-operator">&lt;=</span> <span class="tok-number">1</span><span class="tok-punctuation">:</span> <span class="tok-keyword">return</span> <span class="tok-variable">n</span>
+    <span class="tok-keyword">if</span> <span class="tok-variable">n</span> <span class="tok-keyword">not</span> <span class="tok-keyword">in</span> <span class="tok-variable">memo</span><span class="tok-punctuation">:</span>
+        <span class="tok-variable">memo</span><span class="tok-punctuation">[</span><span class="tok-variable">n</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-method">fib</span><span class="tok-punctuation">(</span><span class="tok-variable">n</span><span class="tok-operator">-</span><span class="tok-number">1</span><span class="tok-punctuation">)</span> <span class="tok-operator">+</span> <span class="tok-method">fib</span><span class="tok-punctuation">(</span><span class="tok-variable">n</span><span class="tok-operator">-</span><span class="tok-number">2</span><span class="tok-punctuation">)</span>
+    <span class="tok-keyword">return</span> <span class="tok-variable">memo</span><span class="tok-punctuation">[</span><span class="tok-variable">n</span><span class="tok-punctuation">]</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Knapsack 0/1</h3>
+                        <p>dp[i][w] = max(dp[i‑1][w], dp[i‑1][w‑wt[i]] + val[i])</p>
+                    </div>
+                    <div class="card">
+                        <h3>Longest Common Subsequence</h3>
+                        <p>dp[i][j] from dp[i‑1][j‑1] +1 if match, else max(dp[i‑1][j], dp[i][j‑1])</p>
+                    </div>
+                    <div class="card">
+                        <h3>Coin Change</h3>
+                        <p>Minimum coins or number of ways. dp[amount] = min(dp[amount - coin] + 1).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 11. Algorithmic Paradigms -->
+            <section id="paradigms">
+                <h2>11. Algorithmic Paradigms</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Greedy</h3>
+                        <p>Make locally optimal choice at each step. Works for matroid problems. Examples: activity selection, Huffman coding, Prim's/Kruskal's.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Divide & Conquer</h3>
+                        <p>Break into sub‑problems, solve recursively, combine. Examples: merge sort, quick sort, binary search, Strassen's matrix multiplication.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Backtracking</h3>
+                        <p>Explore all possibilities, prune branches. Examples: N‑Queens, Sudoku, subset sum.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Branch & Bound</h3>
+                        <p>Like backtracking with bounds to skip suboptimal branches. Used for optimization (TSP).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 12. Tries -->
+            <section id="trie">
+                <h2>12. Tries (Prefix Trees)</h2>
+                <p>Tree‑based data structure for strings. Each node represents a character. Fast prefix‑based operations: insert, search, delete – O(m) where m = word length.</p>
+                <pre><code><span class="tok-keyword">class</span> <span class="tok-class">TrieNode</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">def</span> <span class="tok-method">__init__</span><span class="tok-punctuation">(</span><span class="tok-variable">self</span><span class="tok-punctuation">):</span>
+        <span class="tok-variable">self</span><span class="tok-punctuation">.</span><span class="tok-property">children</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{}</span>
+        <span class="tok-variable">self</span><span class="tok-punctuation">.</span><span class="tok-property">is_end</span> <span class="tok-operator">=</span> <span class="tok-keyword">False</span></code></pre>
+                <p>Applications: autocomplete, spell checker, IP routing (longest prefix match).</p>
+            </section>
+
+            <!-- 13. Segment Tree & Fenwick Tree -->
+            <section id="advanced_ds">
+                <h2>13. Advanced Data Structures</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Segment Tree</h3>
+                        <p>Range queries (sum, min, max) and point updates in O(log n). Lazy propagation for range updates.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Fenwick Tree (BIT)</h3>
+                        <p>Prefix sums and point updates O(log n). Less memory than segment tree.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Disjoint Set Union (DSU)</h3>
+                        <p>Union‑find with path compression. O(α(n)) per operation.</p>
+                    </div>
+                    <div class="card">
+                        <h3>LRU Cache</h3>
+                        <p>Hash map + doubly linked list. O(1) get/put.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 14. Pattern Matching & String Algorithms -->
+            <section id="strings">
+                <h2>14. String Algorithms</h2>
+                <ul>
+                    <li><strong>KMP (Knuth‑Morris‑Pratt)</strong> – O(n+m) pattern matching using LPS array</li>
+                    <li><strong>Rabin‑Karp</strong> – rolling hash, O(n+m) average</li>
+                    <li><strong>Z‑Algorithm</strong> – O(n+m) pattern matching</li>
+                    <li><strong>Manacher's</strong> – longest palindromic substring O(n)</li>
+                    <li><strong>Suffix Array / Suffix Tree</strong> – advanced substring queries</li>
+                </ul>
+            </section>
+
+            <!-- 15. Important Complexity Tables -->
+            <section id="complexity">
+                <h2>15. Complexity Cheat Sheets</h2>
+                <h3>Sorting algorithms</h3>
+                <table>
+                    <tr><th>Algorithm</th><th>Best</th><th>Average</th><th>Worst</th><th>Space</th><th>Stable</th></tr>
+                    <tr><td>Bubble</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Yes</td></tr>
+                    <tr><td>Insertion</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Yes</td></tr>
+                    <tr><td>Selection</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>No</td></tr>
+                    <tr><td>Merge</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>Yes</td></tr>
+                    <tr><td>Quick</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>No</td></tr>
+                    <tr><td>Heap</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>No</td></tr>
+                    <tr><td>Counting</td><td>O(n+k)</td><td>O(n+k)</td><td>O(n+k)</td><td>O(k)</td><td>Yes</td></tr>
+                </table>
+                <h3>Graph algorithms</h3>
+                <table>
+                    <tr><th>Algorithm</th><th>Time</th><th>Space</th></tr>
+                    <tr><td>BFS / DFS</td><td>O(V+E)</td><td>O(V)</td></tr>
+                    <tr><td>Dijkstra</td><td>O((V+E) log V)</td><td>O(V)</td></tr>
+                    <tr><td>Bellman‑Ford</td><td>O(VE)</td><td>O(V)</td></tr>
+                    <tr><td>Floyd‑Warshall</td><td>O(V³)</td><td>O(V²)</td></tr>
+                    <tr><td>Kruskal</td><td>O(E log E)</td><td>O(V)</td></tr>
+                    <tr><td>Prim</td><td>O(E log V)</td><td>O(V)</td></tr>
+                </table>
+            </section>
+
+            <!-- 16. Problem‑Solving Patterns -->
+            <section id="patterns">
+                <h2>16. Common Problem‑Solving Patterns</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Sliding Window</h3>
+                        <p>Maintain a window over contiguous data. Optimize O(n²) to O(n). Example: max subarray sum, longest substring without repeating chars.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Two Pointers</h3>
+                        <p>Use two indices to traverse an array from ends or at different speeds. Sorted array problems, pair sum, palindrome check.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Fast & Slow Pointers</h3>
+                        <p>Floyd's cycle detection in linked list, middle of list.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Merge Intervals</h3>
+                        <p>Sort by start time, then merge overlapping intervals.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Binary Search on Answer</h3>
+                        <p>When search space is monotonic, binary search the possible answer value.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Top‑K Elements</h3>
+                        <p>Use heap of size K to find K largest/smallest/frequent elements.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 17. Bit Manipulation -->
+            <section id="bit">
+                <h2>17. Bit Manipulation Tricks</h2>
+                <ul>
+                    <li><strong>Get bit</strong>: <code class="inline">(num >> i) & 1</code></li>
+                    <li><strong>Set bit</strong>: <code class="inline">num | (1 << i)</code></li>
+                    <li><strong>Clear bit</strong>: <code class="inline">num & ~(1 << i)</code></li>
+                    <li><strong>Toggle bit</strong>: <code class="inline">num ^ (1 << i)</code></li>
+                    <li><strong>Check power of two</strong>: <code class="inline">n > 0 and (n & (n-1)) == 0</code></li>
+                    <li><strong>Count set bits</strong>: Brian Kernighan's algorithm O(k) where k = number of 1s</li>
+                </ul>
+            </section>
+
+            <section id="tips">
+                <h2>18. Final Tips & Interview Wisdom</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Practice</h3>
+                        <ul>
+                            <li>LeetCode, HackerRank, CodeSignal</li>
+                            <li>Master the fundamentals first</li>
+                            <li>Time yourself</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>During an interview</h3>
+                        <ul>
+                            <li>Clarify problem & constraints</li>
+                            <li>Think out loud</li>
+                            <li>Start with brute force, then optimize</li>
+                            <li>Write clean, bug‑free code</li>
+                            <li>Test with examples</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common pitfalls: ignoring edge cases (null, empty, negative numbers), using wrong data structure,
+                    not considering space/time trade‑offs, forgetting to handle integer overflow (in languages like C++/Java),
+                    and miscomputing binary search mid (use <code class="inline">left + (right - left) // 2</code> to avoid overflow).
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+    <!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

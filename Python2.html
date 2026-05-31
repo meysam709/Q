@@ -1,0 +1,1095 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Python Complete Summary (Single-File Reference)</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --panel:#0f1a2e;
+      --panel2:#0c1528;
+      --text:#e7eefc;
+      --muted:#a9b7d6;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 14px 40px rgba(0,0,0,.35);
+      --link:#88b4ff;
+      --accent:#4da3ff;
+      --accent2:#8a5bff;
+
+      --code-bg:#0b1324;
+      --code-border:rgba(255,255,255,.10);
+
+      /* VS Code-ish tokens */
+      --tok-keyword:#c792ea;
+      --tok-type:#82aaff;
+      --tok-class:#82aaff;
+      --tok-namespace:#b4f9f8;
+      --tok-method:#82aaff;
+      --tok-function:#82aaff;
+      --tok-property:#b8c7e0;
+      --tok-variable:#d7e3ff;
+      --tok-number:#f78c6c;
+      --tok-string:#c3e88d;
+      --tok-comment:#546e7a;
+      --tok-operator:#89ddff;
+      --tok-punctuation:#89ddff;
+      --tok-builtin:#ffcb6b;
+      --tok-constant:#ffcb6b;
+      --tok-decorator:#ffcb6b;
+      --tok-exception:#ff5370;
+
+      --warn-bg: rgba(255, 186, 64, .12);
+      --warn-border: rgba(255, 186, 64, .35);
+      --danger-bg: rgba(255, 83, 112, .12);
+      --danger-border: rgba(255, 83, 112, .35);
+      --ok-bg: rgba(105, 240, 174, .12);
+      --ok-border: rgba(105, 240, 174, .35);
+    }
+
+    body.light{
+      --bg:#f6f8ff;
+      --panel:#ffffff;
+      --panel2:#f2f5ff;
+      --text:#0b1220;
+      --muted:#4a5875;
+      --border:rgba(0,0,0,.10);
+      --shadow: 0 14px 40px rgba(15, 25, 50, .12);
+      --link:#1d57ff;
+      --accent:#1d57ff;
+      --accent2:#7a3cff;
+
+      --code-bg:#0b1324;
+      --code-border:rgba(255,255,255,.10);
+
+      /* keep code dark for consistency */
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      background: radial-gradient(1200px 700px at 20% 0%, rgba(77,163,255,.25), transparent 55%),
+                  radial-gradient(900px 600px at 80% 0%, rgba(138,91,255,.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+
+    a{color:var(--link); text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .wrap{
+      max-width:1500px;
+      margin:0 auto;
+      padding:24px 18px 60px;
+    }
+
+    .hero{
+      position:relative;
+      border:1px solid var(--border);
+      background: linear-gradient(135deg, rgba(77,163,255,.22), rgba(138,91,255,.18));
+      border-radius:18px;
+      padding:22px 20px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hero h1{
+      margin:0 0 6px;
+      font-size:28px;
+      letter-spacing:.2px;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      max-width: 1000px;
+    }
+    .hero .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:14px;
+    }
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(15,26,46,.55);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    body.light .btn{ background: rgba(255,255,255,.65); }
+    .btn:hover{ border-color: rgba(255,255,255,.22); }
+
+    .layout{
+      display:grid;
+      grid-template-columns: 340px 1fr;
+      gap:16px;
+      margin-top:16px;
+      align-items:start;
+    }
+
+    @media (max-width: 980px){
+      .layout{ grid-template-columns: 1fr; }
+    }
+
+    nav{
+      position:sticky;
+      top:14px;
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(15,26,46,.70), rgba(12,21,40,.70));
+      border-radius:16px;
+      padding:14px 12px;
+      box-shadow: var(--shadow);
+      max-height: calc(100vh - 28px);
+      overflow:auto;
+    }
+    body.light nav{
+      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(242,245,255,.85));
+    }
+
+    nav h2{
+      font-size:14px;
+      margin:4px 8px 10px;
+      color:var(--muted);
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    .nav-group{ margin: 10px 0 14px; }
+    .nav-group .label{
+      font-size:12px;
+      color:var(--muted);
+      margin: 8px 8px 6px;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    nav a{
+      display:block;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid transparent;
+      color:var(--text);
+      font-weight:600;
+      font-size:13px;
+    }
+    nav a:hover{
+      background: rgba(77,163,255,.12);
+      border-color: rgba(77,163,255,.18);
+      text-decoration:none;
+    }
+
+    main{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(15,26,46,.50), rgba(12,21,40,.50));
+      border-radius:16px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+    body.light main{
+      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(242,245,255,.85));
+    }
+
+    section{
+      border:1px solid var(--border);
+      background: rgba(0,0,0,.10);
+      border-radius:16px;
+      padding:16px;
+      margin: 14px 0;
+    }
+    body.light section{ background: rgba(255,255,255,.55); }
+
+    section h2{
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing:.2px;
+    }
+    section h3{
+      margin: 14px 0 8px;
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing:.06em;
+      text-transform: uppercase;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+    .card{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      background: rgba(0,0,0,.10);
+    }
+    body.light .card{ background: rgba(255,255,255,.55); }
+    .card h3{
+      margin: 0 0 6px;
+      text-transform:none;
+      letter-spacing:0;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .card p{ margin:0; color:var(--muted); font-size:13px; }
+
+    pre{
+      margin:10px 0 0;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--code-border);
+      background: var(--code-bg);
+      overflow:auto;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+    }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+      color:#d7e3ff;
+      white-space: pre;
+    }
+    code.inline{
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      white-space: nowrap;
+    }
+    body.light code.inline{ background: rgba(255,255,255,.65); }
+
+    .tag{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.10);
+      color: var(--muted);
+      font-size: 12px;
+      margin: 2px 6px 2px 0;
+    }
+    body.light .tag{ background: rgba(255,255,255,.55); }
+
+    .warn, .danger, .ok{
+      margin-top: 10px;
+      border-radius: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .warn{ background: var(--warn-bg); border-color: var(--warn-border); }
+    .danger{ background: var(--danger-bg); border-color: var(--danger-border); }
+    .ok{ background: var(--ok-bg); border-color: var(--ok-border); }
+
+    .footer{
+      margin-top: 18px;
+      text-align:center;
+      color:var(--muted);
+      font-size: 12px;
+    }
+
+    .top-btn{
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 50;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(15,26,46,.85);
+      color: var(--text);
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+    body.light .top-btn{ background: rgba(255,255,255,.85); }
+    .top-btn:hover{ border-color: rgba(255,255,255,.22); }
+
+    /* token classes */
+    .tok-keyword{color:var(--tok-keyword)}
+    .tok-type{color:var(--tok-type)}
+    .tok-class{color:var(--tok-class)}
+    .tok-namespace{color:var(--tok-namespace)}
+    .tok-method{color:var(--tok-method)}
+    .tok-function{color:var(--tok-function)}
+    .tok-property{color:var(--tok-property)}
+    .tok-variable{color:var(--tok-variable)}
+    .tok-number{color:var(--tok-number)}
+    .tok-string{color:var(--tok-string)}
+    .tok-comment{color:var(--tok-comment)}
+    .tok-operator{color:var(--tok-operator)}
+    .tok-punctuation{color:var(--tok-punctuation)}
+    .tok-builtin{color:var(--tok-builtin)}
+    .tok-constant{color:var(--tok-constant)}
+    .tok-decorator{color:var(--tok-decorator)}
+    .tok-exception{color:var(--tok-exception)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>Python Complete Summary</h1>
+      <p>
+        Single-file HTML Python reference with sticky navigation, dark/light theme toggle (persisted via localStorage),
+        and IDE-like syntax coloring. Covers core syntax, data structures, OOP, exceptions, files, typing, async, and common libraries.
+      </p>
+      <div class="row">
+        <button class="btn" onclick="toggleTheme()">Toggle theme</button>
+        <a class="btn" href="#basics" style="display:inline-block">Jump to Basics</a>
+        <a class="btn" href="#oop" style="display:inline-block">Jump to OOP</a>
+        <a class="btn" href="#async" style="display:inline-block">Jump to Async</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <nav>
+        <h2>Python Index</h2>
+
+        <div class="nav-group">
+          <div class="label">Core</div>
+          <a href="#basics">1. Basics & Running Code</a>
+          <a href="#syntax">2. Syntax & Indentation</a>
+          <a href="#types">3. Types, Variables, Conversions</a>
+          <a href="#operators">4. Operators</a>
+          <a href="#control">5. Control Flow</a>
+          <a href="#functions">6. Functions</a>
+          <a href="#collections">7. Collections (list/tuple/set/dict)</a>
+          <a href="#strings">8. Strings</a>
+          <a href="#comprehensions">9. Comprehensions</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="label">OOP & Structure</div>
+          <a href="#oop">10. OOP (classes/objects)</a>
+          <a href="#dataclasses">11. dataclasses</a>
+          <a href="#modules">12. Modules & Packages</a>
+          <a href="#typing">13. Type Hints (typing)</a>
+        </div>
+
+        <div class="nav-group">
+          <div class="label">Advanced</div>
+          <a href="#exceptions">14. Exceptions</a>
+          <a href="#iterators">15. Iterators & Generators</a>
+          <a href="#contextmanagers">16. Context Managers</a>
+          <a href="#decorators">17. Decorators</a>
+          <a href="#async">18. Async/Await</a>
+          <a href="#stdlib">19. Standard Library Essentials</a>
+          <a href="#files">20. Files & Paths</a>
+          <a href="#testing">21. Testing</a>
+          <a href="#tips">22. Quick Remember Tips</a>
+        </div>
+      </nav>
+
+      <main>
+        <section id="basics">
+          <h2>1. Basics & Running Code</h2>
+          <div class="grid">
+            <div class="card">
+              <h3>Run a file</h3>
+              <p>Execute a script from terminal.</p>
+              <pre><code><span class="tok-comment"># terminal</span>
+<span class="tok-builtin">python</span> <span class="tok-variable">app</span><span class="tok-punctuation">.</span><span class="tok-variable">py</span></code></pre>
+            </div>
+            <div class="card">
+              <h3>REPL</h3>
+              <p>Interactive mode for quick tests.</p>
+              <pre><code><span class="tok-builtin">python</span>
+<span class="tok-comment"># then type Python code</span></code></pre>
+            </div>
+          </div>
+
+          <h3>Hello world</h3>
+          <pre><code><span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">"Hello, world!"</span><span class="tok-punctuation">)</span></code></pre>
+
+          <div class="ok">
+            Python uses <code class="inline">#</code> for comments and relies on indentation (whitespace) for blocks.
+          </div>
+        </section>
+
+        <section id="syntax">
+          <h2>2. Syntax & Indentation</h2>
+
+          <h3>Blocks</h3>
+          <pre><code><span class="tok-keyword">if</span> <span class="tok-variable">x</span> <span class="tok-operator">&gt;</span> <span class="tok-number">0</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">"positive"</span><span class="tok-punctuation">)</span>
+<span class="tok-keyword">else</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">"not positive"</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Common conventions</h3>
+          <div class="grid">
+            <div class="card"><h3>snake_case</h3><p>Functions/variables: <code class="inline">total_count</code></p></div>
+            <div class="card"><h3>PascalCase</h3><p>Classes: <code class="inline">HttpClient</code></p></div>
+            <div class="card"><h3>UPPER_SNAKE_CASE</h3><p>Constants: <code class="inline">MAX_SIZE</code></p></div>
+            <div class="card"><h3>PEP 8</h3><p>Style guide; use 4 spaces for indentation.</p></div>
+          </div>
+
+          <div class="warn">
+            Mixing tabs and spaces can break indentation. Prefer spaces.
+          </div>
+        </section>
+
+        <section id="types">
+          <h2>3. Types, Variables, Conversions</h2>
+
+          <h3>Basic types</h3>
+          <p>
+            <span class="tag">int</span>
+            <span class="tag">float</span>
+            <span class="tag">bool</span>
+            <span class="tag">str</span>
+            <span class="tag">None</span>
+          </p>
+
+          <pre><code><span class="tok-variable">age</span> <span class="tok-operator">=</span> <span class="tok-number">20</span>
+<span class="tok-variable">pi</span> <span class="tok-operator">=</span> <span class="tok-number">3.14</span>
+<span class="tok-variable">ok</span> <span class="tok-operator">=</span> <span class="tok-keyword">True</span>
+<span class="tok-variable">name</span> <span class="tok-operator">=</span> <span class="tok-string">"Ada"</span>
+<span class="tok-variable">missing</span> <span class="tok-operator">=</span> <span class="tok-keyword">None</span></code></pre>
+
+          <h3>Dynamic typing</h3>
+          <pre><code><span class="tok-variable">x</span> <span class="tok-operator">=</span> <span class="tok-number">10</span>
+<span class="tok-variable">x</span> <span class="tok-operator">=</span> <span class="tok-string">"now a string"</span></code></pre>
+
+          <h3>Conversions</h3>
+          <pre><code><span class="tok-variable">n</span> <span class="tok-operator">=</span> <span class="tok-builtin">int</span><span class="tok-punctuation">(</span><span class="tok-string">"42"</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">f</span> <span class="tok-operator">=</span> <span class="tok-builtin">float</span><span class="tok-punctuation">(</span><span class="tok-string">"3.5"</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">s</span> <span class="tok-operator">=</span> <span class="tok-builtin">str</span><span class="tok-punctuation">(</span><span class="tok-number">99</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">b</span> <span class="tok-operator">=</span> <span class="tok-builtin">bool</span><span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">)</span>  <span class="tok-comment"># True</span></code></pre>
+
+          <h3>Truthiness</h3>
+          <pre><code><span class="tok-keyword">if</span> <span class="tok-keyword">not</span> <span class="tok-variable">items</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">"empty"</span><span class="tok-punctuation">)</span></code></pre>
+
+          <div class="ok">
+            Empty containers (<code class="inline">[]</code>, <code class="inline">{}</code>, <code class="inline">set()</code>, <code class="inline">""</code>) are falsy; non-empty are truthy.
+          </div>
+        </section>
+
+        <section id="operators">
+          <h2>4. Operators</h2>
+
+          <div class="grid">
+            <div class="card">
+              <h3>Arithmetic</h3>
+              <pre><code><span class="tok-number">7</span> <span class="tok-operator">+</span> <span class="tok-number">2</span>   <span class="tok-comment"># 9</span>
+<span class="tok-number">7</span> <span class="tok-operator">-</span> <span class="tok-number">2</span>   <span class="tok-comment"># 5</span>
+<span class="tok-number">7</span> <span class="tok-operator">*</span> <span class="tok-number">2</span>   <span class="tok-comment"># 14</span>
+<span class="tok-number">7</span> <span class="tok-operator">/</span> <span class="tok-number">2</span>   <span class="tok-comment"># 3.5</span>
+<span class="tok-number">7</span> <span class="tok-operator">//</span> <span class="tok-number">2</span>  <span class="tok-comment"># 3 (floor division)</span>
+<span class="tok-number">7</span> <span class="tok-operator">%</span> <span class="tok-number">2</span>   <span class="tok-comment"># 1</span>
+<span class="tok-number">2</span> <span class="tok-operator">**</span> <span class="tok-number">3</span>  <span class="tok-comment"># 8</span></code></pre>
+            </div>
+            <div class="card">
+              <h3>Comparison & boolean</h3>
+              <pre><code><span class="tok-variable">a</span> <span class="tok-operator">&lt;</span> <span class="tok-variable">b</span>
+<span class="tok-variable">a</span> <span class="tok-operator">&lt;=</span> <span class="tok-variable">b</span>
+<span class="tok-variable">a</span> <span class="tok-operator">==</span> <span class="tok-variable">b</span>
+<span class="tok-variable">a</span> <span class="tok-operator">!=</span> <span class="tok-variable">b</span>
+<span class="tok-variable">a</span> <span class="tok-operator">&gt;=</span> <span class="tok-variable">b</span>
+<span class="tok-variable">a</span> <span class="tok-operator">&gt;</span> <span class="tok-variable">b</span>
+
+<span class="tok-keyword">and</span> <span class="tok-keyword">or</span> <span class="tok-keyword">not</span></code></pre>
+            </div>
+          </div>
+
+          <h3>Identity vs equality</h3>
+          <pre><code><span class="tok-variable">a</span> <span class="tok-operator">==</span> <span class="tok-variable">b</span>   <span class="tok-comment"># value equality</span>
+<span class="tok-variable">a</span> <span class="tok-keyword">is</span> <span class="tok-variable">b</span>   <span class="tok-comment"># same object</span></code></pre>
+
+          <div class="warn">
+            Use <code class="inline">is</code> for singletons like <code class="inline">None</code>: <code class="inline">x is None</code>.
+          </div>
+        </section>
+
+        <section id="control">
+          <h2>5. Control Flow</h2>
+
+          <h3>if / elif / else</h3>
+          <pre><code><span class="tok-keyword">if</span> <span class="tok-variable">score</span> <span class="tok-operator">&gt;=</span> <span class="tok-number">90</span><span class="tok-punctuation">:</span>
+    <span class="tok-variable">grade</span> <span class="tok-operator">=</span> <span class="tok-string">"A"</span>
+<span class="tok-keyword">elif</span> <span class="tok-variable">score</span> <span class="tok-operator">&gt;=</span> <span class="tok-number">80</span><span class="tok-punctuation">:</span>
+    <span class="tok-variable">grade</span> <span class="tok-operator">=</span> <span class="tok-string">"B"</span>
+<span class="tok-keyword">else</span><span class="tok-punctuation">:</span>
+    <span class="tok-variable">grade</span> <span class="tok-operator">=</span> <span class="tok-string">"C"</span></code></pre>
+
+          <h3>while</h3>
+          <pre><code><span class="tok-variable">i</span> <span class="tok-operator">=</span> <span class="tok-number">0</span>
+<span class="tok-keyword">while</span> <span class="tok-variable">i</span> <span class="tok-operator">&lt;</span> <span class="tok-number">3</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-variable">i</span><span class="tok-punctuation">)</span>
+    <span class="tok-variable">i</span> <span class="tok-operator">+=</span> <span class="tok-number">1</span></code></pre>
+
+          <h3>for</h3>
+          <pre><code><span class="tok-keyword">for</span> <span class="tok-variable">x</span> <span class="tok-keyword">in</span> <span class="tok-variable">items</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-variable">x</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>range</h3>
+          <pre><code><span class="tok-keyword">for</span> <span class="tok-variable">i</span> <span class="tok-keyword">in</span> <span class="tok-builtin">range</span><span class="tok-punctuation">(</span><span class="tok-number">5</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-variable">i</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>match/case (Python 3.10+)</h3>
+          <pre><code><span class="tok-keyword">match</span> <span class="tok-variable">command</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">case</span> <span class="tok-string">"start"</span><span class="tok-punctuation">:</span>
+        <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">"starting"</span><span class="tok-punctuation">)</span>
+    <span class="tok-keyword">case</span> <span class="tok-string">"stop"</span><span class="tok-punctuation">:</span>
+        <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">"stopping"</span><span class="tok-punctuation">)</span>
+    <span class="tok-keyword">case</span> <span class="tok-keyword">_</span><span class="tok-punctuation">:</span>
+        <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">"unknown"</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>break / continue</h3>
+          <pre><code><span class="tok-keyword">for</span> <span class="tok-variable">x</span> <span class="tok-keyword">in</span> <span class="tok-builtin">range</span><span class="tok-punctuation">(</span><span class="tok-number">10</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">if</span> <span class="tok-variable">x</span> <span class="tok-operator">==</span> <span class="tok-number">3</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">continue</span>
+    <span class="tok-keyword">if</span> <span class="tok-variable">x</span> <span class="tok-operator">==</span> <span class="tok-number">6</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">break</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-variable">x</span><span class="tok-punctuation">)</span></code></pre>
+        </section>
+
+        <section id="functions">
+          <h2>6. Functions</h2>
+
+          <h3>Define and call</h3>
+          <pre><code><span class="tok-keyword">def</span> <span class="tok-function">add</span><span class="tok-punctuation">(</span><span class="tok-variable">a</span><span class="tok-punctuation">,</span> <span class="tok-variable">b</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">return</span> <span class="tok-variable">a</span> <span class="tok-operator">+</span> <span class="tok-variable">b</span>
+
+<span class="tok-variable">result</span> <span class="tok-operator">=</span> <span class="tok-function">add</span><span class="tok-punctuation">(</span><span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Default parameters</h3>
+          <pre><code><span class="tok-keyword">def</span> <span class="tok-function">greet</span><span class="tok-punctuation">(</span><span class="tok-variable">name</span><span class="tok-operator">=</span><span class="tok-string">"world"</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">f"Hello {name}"</span><span class="tok-punctuation">)</span></code></pre>
+
+          <div class="warn">
+            Avoid using mutable defaults like <code class="inline">[]</code> or <code class="inline">{}</code>.
+          </div>
+
+          <h3>*args and **kwargs</h3>
+          <pre><code><span class="tok-keyword">def</span> <span class="tok-function">sum_all</span><span class="tok-punctuation">(</span><span class="tok-operator">*</span><span class="tok-variable">nums</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">return</span> <span class="tok-builtin">sum</span><span class="tok-punctuation">(</span><span class="tok-variable">nums</span><span class="tok-punctuation">)</span>
+
+<span class="tok-keyword">def</span> <span class="tok-function">show</span><span class="tok-punctuation">(</span><span class="tok-operator">**</span><span class="tok-variable">info</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-variable">info</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Keyword-only parameters</h3>
+          <pre><code><span class="tok-keyword">def</span> <span class="tok-function">connect</span><span class="tok-punctuation">(</span><span class="tok-variable">host</span><span class="tok-punctuation">,</span> <span class="tok-operator">*</span><span class="tok-punctuation">,</span> <span class="tok-variable">timeout</span><span class="tok-operator">=</span><span class="tok-number">5</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">return</span> <span class="tok-variable">host</span><span class="tok-punctuation">,</span> <span class="tok-variable">timeout</span>
+
+<span class="tok-function">connect</span><span class="tok-punctuation">(</span><span class="tok-string">"example.com"</span><span class="tok-punctuation">,</span> <span class="tok-variable">timeout</span><span class="tok-operator">=</span><span class="tok-number">10</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Lambda</h3>
+          <pre><code><span class="tok-variable">nums</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">]</span>
+<span class="tok-variable">squares</span> <span class="tok-operator">=</span> <span class="tok-builtin">list</span><span class="tok-punctuation">(</span><span class="tok-builtin">map</span><span class="tok-punctuation">(</span><span class="tok-keyword">lambda</span> <span class="tok-variable">x</span><span class="tok-punctuation">:</span> <span class="tok-variable">x</span><span class="tok-operator">*</span><span class="tok-variable">x</span><span class="tok-punctuation">,</span> <span class="tok-variable">nums</span><span class="tok-punctuation">))</span></code></pre>
+        </section>
+
+        <section id="collections">
+          <h2>7. Collections (list/tuple/set/dict)</h2>
+
+          <h3>List</h3>
+          <pre><code><span class="tok-variable">nums</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">]</span>
+<span class="tok-variable">nums</span><span class="tok-punctuation">.</span><span class="tok-method">append</span><span class="tok-punctuation">(</span><span class="tok-number">4</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">nums</span><span class="tok-punctuation">.</span><span class="tok-method">remove</span><span class="tok-punctuation">(</span><span class="tok-number">2</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">first</span> <span class="tok-operator">=</span> <span class="tok-variable">nums</span><span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span></code></pre>
+
+          <h3>Tuple (immutable)</h3>
+          <pre><code><span class="tok-variable">point</span> <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-number">10</span><span class="tok-punctuation">,</span> <span class="tok-number">20</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Set</h3>
+          <pre><code><span class="tok-variable">ids</span> <span class="tok-operator">=</span> <span class="tok-builtin">set</span><span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span><span class="tok-number">1</span><span class="tok-punctuation">,</span><span class="tok-number">2</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span>  <span class="tok-comment"># {1, 2}</span>
+<span class="tok-variable">ids</span><span class="tok-punctuation">.</span><span class="tok-method">add</span><span class="tok-punctuation">(</span><span class="tok-number">3</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Dict</h3>
+          <pre><code><span class="tok-variable">user</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-string">"name"</span><span class="tok-punctuation">:</span> <span class="tok-string">"Ada"</span><span class="tok-punctuation">,</span> <span class="tok-string">"age"</span><span class="tok-punctuation">:</span> <span class="tok-number">20</span><span class="tok-punctuation">}</span>
+<span class="tok-variable">user</span><span class="tok-punctuation">[</span><span class="tok-string">"age"</span><span class="tok-punctuation">]</span> <span class="tok-operator">+=</span> <span class="tok-number">1</span>
+<span class="tok-variable">keys</span> <span class="tok-operator">=</span> <span class="tok-variable">user</span><span class="tok-punctuation">.</span><span class="tok-method">keys</span><span class="tok-punctuation">()</span>
+<span class="tok-variable">items</span> <span class="tok-operator">=</span> <span class="tok-variable">user</span><span class="tok-punctuation">.</span><span class="tok-method">items</span><span class="tok-punctuation">()</span></code></pre>
+
+          <h3>Unpacking</h3>
+          <pre><code><span class="tok-variable">a</span><span class="tok-punctuation">,</span> <span class="tok-variable">b</span> <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">first</span><span class="tok-punctuation">,</span> <span class="tok-operator">*</span><span class="tok-variable">rest</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span><span class="tok-number">2</span><span class="tok-punctuation">,</span><span class="tok-number">3</span><span class="tok-punctuation">]</span></code></pre>
+        </section>
+
+        <section id="strings">
+          <h2>8. Strings</h2>
+
+          <h3>Basics</h3>
+          <pre><code><span class="tok-variable">s</span> <span class="tok-operator">=</span> <span class="tok-string">"hello"</span>
+<span class="tok-variable">t</span> <span class="tok-operator">=</span> <span class="tok-string">'world'</span></code></pre>
+
+          <h3>f-strings</h3>
+          <pre><code><span class="tok-variable">name</span> <span class="tok-operator">=</span> <span class="tok-string">"Ada"</span>
+<span class="tok-variable">age</span> <span class="tok-operator">=</span> <span class="tok-number">20</span>
+<span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">f"{name} is {age}"</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Common methods</h3>
+          <div class="grid">
+            <div class="card"><h3>split/join</h3><p><code class="inline">"a,b".split(",")</code>, <code class="inline">",".join(list)</code></p></div>
+            <div class="card"><h3>strip</h3><p>Trim whitespace: <code class="inline">s.strip()</code></p></div>
+            <div class="card"><h3>replace</h3><p><code class="inline">s.replace("a","b")</code></p></div>
+            <div class="card"><h3>startswith/endswith</h3><p><code class="inline">s.startswith("he")</code></p></div>
+          </div>
+
+          <h3>Slicing</h3>
+          <pre><code><span class="tok-variable">s</span> <span class="tok-operator">=</span> <span class="tok-string">"abcdef"</span>
+<span class="tok-variable">s</span><span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span>      <span class="tok-comment"># 'a'</span>
+<span class="tok-variable">s</span><span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">:</span><span class="tok-number">4</span><span class="tok-punctuation">]</span>    <span class="tok-comment"># 'bcd'</span>
+<span class="tok-variable">s</span><span class="tok-punctuation">[</span><span class="tok-punctuation">:</span><span class="tok-number">3</span><span class="tok-punctuation">]</span>     <span class="tok-comment"># 'abc'</span>
+<span class="tok-variable">s</span><span class="tok-punctuation">[</span><span class="tok-number">3</span><span class="tok-punctuation">:</span><span class="tok-punctuation">]</span>     <span class="tok-comment"># 'def'</span>
+<span class="tok-variable">s</span><span class="tok-punctuation">[</span><span class="tok-punctuation">:</span><span class="tok-punctuation">:</span><span class="tok-number">2</span><span class="tok-punctuation">]</span>    <span class="tok-comment"># 'ace'</span>
+<span class="tok-variable">s</span><span class="tok-punctuation">[</span><span class="tok-punctuation">:</span><span class="tok-punctuation">:</span><span class="tok-number">-1</span><span class="tok-punctuation">]</span>   <span class="tok-comment"># reverse</span></code></pre>
+        </section>
+
+        <section id="comprehensions">
+          <h2>9. Comprehensions</h2>
+
+          <h3>List comprehension</h3>
+          <pre><code><span class="tok-variable">squares</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-variable">x</span><span class="tok-operator">*</span><span class="tok-variable">x</span> <span class="tok-keyword">for</span> <span class="tok-variable">x</span> <span class="tok-keyword">in</span> <span class="tok-builtin">range</span><span class="tok-punctuation">(</span><span class="tok-number">6</span><span class="tok-punctuation">)</span><span class="tok-punctuation">]</span></code></pre>
+
+          <h3>With condition</h3>
+          <pre><code><span class="tok-variable">evens</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-variable">n</span> <span class="tok-keyword">for</span> <span class="tok-variable">n</span> <span class="tok-keyword">in</span> <span class="tok-builtin">range</span><span class="tok-punctuation">(</span><span class="tok-number">10</span><span class="tok-punctuation">)</span> <span class="tok-keyword">if</span> <span class="tok-variable">n</span> <span class="tok-operator">%</span> <span class="tok-number">2</span> <span class="tok-operator">==</span> <span class="tok-number">0</span><span class="tok-punctuation">]</span></code></pre>
+
+          <h3>Dict comprehension</h3>
+          <pre><code><span class="tok-variable">m</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-variable">x</span><span class="tok-punctuation">:</span> <span class="tok-variable">x</span><span class="tok-operator">*</span><span class="tok-variable">x</span> <span class="tok-keyword">for</span> <span class="tok-variable">x</span> <span class="tok-keyword">in</span> <span class="tok-builtin">range</span><span class="tok-punctuation">(</span><span class="tok-number">5</span><span class="tok-punctuation">)</span><span class="tok-punctuation">}</span></code></pre>
+
+          <h3>Set comprehension</h3>
+          <pre><code><span class="tok-variable">unique_lengths</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-builtin">len</span><span class="tok-punctuation">(</span><span class="tok-variable">s</span><span class="tok-punctuation">)</span> <span class="tok-keyword">for</span> <span class="tok-variable">s</span> <span class="tok-keyword">in</span> <span class="tok-variable">words</span><span class="tok-punctuation">}</span></code></pre>
+
+          <h3>Generator expression</h3>
+          <pre><code><span class="tok-variable">total</span> <span class="tok-operator">=</span> <span class="tok-builtin">sum</span><span class="tok-punctuation">(</span><span class="tok-variable">x</span><span class="tok-operator">*</span><span class="tok-variable">x</span> <span class="tok-keyword">for</span> <span class="tok-variable">x</span> <span class="tok-keyword">in</span> <span class="tok-builtin">range</span><span class="tok-punctuation">(</span><span class="tok-number">100</span><span class="tok-punctuation">)</span><span class="tok-punctuation">)</span></code></pre>
+        </section>
+
+        <section id="oop">
+          <h2>10. OOP (classes/objects)</h2>
+
+          <h3>Define a class</h3>
+          <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Car</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">def</span> <span class="tok-function">__init__</span><span class="tok-punctuation">(</span><span class="tok-keyword">self</span><span class="tok-punctuation">,</span> <span class="tok-variable">brand</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">self</span><span class="tok-punctuation">.</span><span class="tok-property">brand</span> <span class="tok-operator">=</span> <span class="tok-variable">brand</span>
+
+    <span class="tok-keyword">def</span> <span class="tok-function">drive</span><span class="tok-punctuation">(</span><span class="tok-keyword">self</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">f"Driving {self.brand}"</span><span class="tok-punctuation">)</span>
+
+<span class="tok-variable">c</span> <span class="tok-operator">=</span> <span class="tok-class">Car</span><span class="tok-punctuation">(</span><span class="tok-string">"Toyota"</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">c</span><span class="tok-punctuation">.</span><span class="tok-method">drive</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Inheritance</h3>
+          <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Animal</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">def</span> <span class="tok-function">speak</span><span class="tok-punctuation">(</span><span class="tok-keyword">self</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">raise</span> <span class="tok-exception">NotImplementedError</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">Dog</span><span class="tok-punctuation">(</span><span class="tok-class">Animal</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">def</span> <span class="tok-function">speak</span><span class="tok-punctuation">(</span><span class="tok-keyword">self</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">return</span> <span class="tok-string">"woof"</span></code></pre>
+
+          <h3>Classmethod and staticmethod</h3>
+          <pre><code><span class="tok-keyword">class</span> <span class="tok-class">User</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">def</span> <span class="tok-function">__init__</span><span class="tok-punctuation">(</span><span class="tok-keyword">self</span><span class="tok-punctuation">,</span> <span class="tok-variable">name</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">self</span><span class="tok-punctuation">.</span><span class="tok-property">name</span> <span class="tok-operator">=</span> <span class="tok-variable">name</span>
+
+    <span class="tok-decorator">@classmethod</span>
+    <span class="tok-keyword">def</span> <span class="tok-function">from_email</span><span class="tok-punctuation">(</span><span class="tok-class">cls</span><span class="tok-punctuation">,</span> <span class="tok-variable">email</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-variable">name</span> <span class="tok-operator">=</span> <span class="tok-variable">email</span><span class="tok-punctuation">.</span><span class="tok-method">split</span><span class="tok-punctuation">(</span><span class="tok-string">"@"</span><span class="tok-punctuation">)</span><span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]</span>
+        <span class="tok-keyword">return</span> <span class="tok-class">cls</span><span class="tok-punctuation">(</span><span class="tok-variable">name</span><span class="tok-punctuation">)</span>
+
+    <span class="tok-decorator">@staticmethod</span>
+    <span class="tok-keyword">def</span> <span class="tok-function">is_valid_name</span><span class="tok-punctuation">(</span><span class="tok-variable">name</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">return</span> <span class="tok-builtin">len</span><span class="tok-punctuation">(</span><span class="tok-variable">name</span><span class="tok-punctuation">)</span> <span class="tok-operator">&gt;=</span> <span class="tok-number">2</span></code></pre>
+
+          <h3>Properties</h3>
+          <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Circle</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">def</span> <span class="tok-function">__init__</span><span class="tok-punctuation">(</span><span class="tok-keyword">self</span><span class="tok-punctuation">,</span> <span class="tok-variable">r</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">self</span><span class="tok-punctuation">.</span><span class="tok-property">_r</span> <span class="tok-operator">=</span> <span class="tok-variable">r</span>
+
+    <span class="tok-decorator">@property</span>
+    <span class="tok-keyword">def</span> <span class="tok-function">radius</span><span class="tok-punctuation">(</span><span class="tok-keyword">self</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">return</span> <span class="tok-keyword">self</span><span class="tok-punctuation">.</span><span class="tok-property">_r</span>
+
+    <span class="tok-decorator">@radius.setter</span>
+    <span class="tok-keyword">def</span> <span class="tok-function">radius</span><span class="tok-punctuation">(</span><span class="tok-keyword">self</span><span class="tok-punctuation">,</span> <span class="tok-variable">value</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">if</span> <span class="tok-variable">value</span> <span class="tok-operator">&lt;=</span> <span class="tok-number">0</span><span class="tok-punctuation">:</span>
+            <span class="tok-keyword">raise</span> <span class="tok-exception">ValueError</span><span class="tok-punctuation">(</span><span class="tok-string">"radius must be positive"</span><span class="tok-punctuation">)</span>
+        <span class="tok-keyword">self</span><span class="tok-punctuation">.</span><span class="tok-property">_r</span> <span class="tok-operator">=</span> <span class="tok-variable">value</span></code></pre>
+
+          <div class="ok">
+            Use <code class="inline">@property</code> to expose computed/validated attributes with attribute syntax.
+          </div>
+        </section>
+
+        <section id="dataclasses">
+          <h2>11. dataclasses</h2>
+          <p>Generate boilerplate like <code class="inline">__init__</code>, <code class="inline">__repr__</code>, comparisons.</p>
+
+          <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">dataclasses</span> <span class="tok-keyword">import</span> <span class="tok-class">dataclass</span>
+
+<span class="tok-decorator">@dataclass</span>
+<span class="tok-keyword">class</span> <span class="tok-class">Point</span><span class="tok-punctuation">:</span>
+    <span class="tok-variable">x</span><span class="tok-punctuation">:</span> <span class="tok-type">int</span>
+    <span class="tok-variable">y</span><span class="tok-punctuation">:</span> <span class="tok-type">int</span>
+
+<span class="tok-variable">p</span> <span class="tok-operator">=</span> <span class="tok-class">Point</span><span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">)</span></code></pre>
+        </section>
+
+        <section id="modules">
+          <h2>12. Modules & Packages</h2>
+
+          <h3>Import</h3>
+          <pre><code><span class="tok-keyword">import</span> <span class="tok-namespace">math</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">math</span> <span class="tok-keyword">import</span> <span class="tok-function">sqrt</span>
+<span class="tok-keyword">import</span> <span class="tok-namespace">numpy</span> <span class="tok-keyword">as</span> <span class="tok-variable">np</span></code></pre>
+
+          <h3>Package structure</h3>
+          <pre><code><span class="tok-comment"># mypkg/</span>
+<span class="tok-comment">#   __init__.py</span>
+<span class="tok-comment">#   utils.py</span>
+<span class="tok-comment">#   core/</span>
+<span class="tok-comment">#     __init__.py</span>
+<span class="tok-comment">#     engine.py</span></code></pre>
+
+          <div class="warn">
+            For local imports, ensure your working directory and package layout are correct (or use a virtual environment + installed package).
+          </div>
+        </section>
+
+        <section id="typing">
+          <h2>13. Type Hints (typing)</h2>
+
+          <h3>Function annotations</h3>
+          <pre><code><span class="tok-keyword">def</span> <span class="tok-function">area</span><span class="tok-punctuation">(</span><span class="tok-variable">r</span><span class="tok-punctuation">:</span> <span class="tok-type">float</span><span class="tok-punctuation">)</span> <span class="tok-operator">-&gt;</span> <span class="tok-type">float</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">return</span> <span class="tok-number">3.14159</span> <span class="tok-operator">*</span> <span class="tok-variable">r</span> <span class="tok-operator">*</span> <span class="tok-variable">r</span></code></pre>
+
+          <h3>Common typing tools</h3>
+          <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">typing</span> <span class="tok-keyword">import</span> <span class="tok-class">Optional</span><span class="tok-punctuation">,</span> <span class="tok-class">List</span><span class="tok-punctuation">,</span> <span class="tok-class">Dict</span><span class="tok-punctuation">,</span> <span class="tok-class">Tuple</span>
+
+<span class="tok-variable">name</span><span class="tok-punctuation">:</span> <span class="tok-class">Optional</span><span class="tok-punctuation">[</span><span class="tok-type">str</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-keyword">None</span>
+<span class="tok-variable">nums</span><span class="tok-punctuation">:</span> <span class="tok-class">List</span><span class="tok-punctuation">[</span><span class="tok-type">int</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span><span class="tok-number">2</span><span class="tok-punctuation">]</span>
+<span class="tok-variable">m</span><span class="tok-punctuation">:</span> <span class="tok-class">Dict</span><span class="tok-punctuation">[</span><span class="tok-type">str</span><span class="tok-punctuation">,</span> <span class="tok-type">int</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-string">"a"</span><span class="tok-punctuation">:</span><span class="tok-number">1</span><span class="tok-punctuation">}</span></code></pre>
+
+          <h3>Modern built-in generics (Python 3.9+)</h3>
+          <pre><code><span class="tok-variable">nums</span><span class="tok-punctuation">:</span> <span class="tok-builtin">list</span><span class="tok-punctuation">[</span><span class="tok-type">int</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">]</span>
+<span class="tok-variable">m</span><span class="tok-punctuation">:</span> <span class="tok-builtin">dict</span><span class="tok-punctuation">[</span><span class="tok-type">str</span><span class="tok-punctuation">,</span> <span class="tok-type">int</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-string">"x"</span><span class="tok-punctuation">:</span><span class="tok-number">1</span><span class="tok-punctuation">}</span></code></pre>
+
+          <div class="ok">
+            Type hints help tooling (IDE, linters, mypy/pyright) but do not enforce types at runtime by default.
+          </div>
+        </section>
+
+        <section id="exceptions">
+          <h2>14. Exceptions</h2>
+
+          <h3>try/except/finally</h3>
+          <pre><code><span class="tok-keyword">try</span><span class="tok-punctuation">:</span>
+    <span class="tok-variable">n</span> <span class="tok-operator">=</span> <span class="tok-builtin">int</span><span class="tok-punctuation">(</span><span class="tok-string">"not a number"</span><span class="tok-punctuation">)</span>
+<span class="tok-keyword">except</span> <span class="tok-exception">ValueError</span> <span class="tok-keyword">as</span> <span class="tok-variable">e</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">"bad input"</span><span class="tok-punctuation">,</span> <span class="tok-variable">e</span><span class="tok-punctuation">)</span>
+<span class="tok-keyword">finally</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">"always runs"</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Raise</h3>
+          <pre><code><span class="tok-keyword">raise</span> <span class="tok-exception">ValueError</span><span class="tok-punctuation">(</span><span class="tok-string">"invalid"</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Custom exception</h3>
+          <pre><code><span class="tok-keyword">class</span> <span class="tok-class">AppError</span><span class="tok-punctuation">(</span><span class="tok-exception">Exception</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">pass</span></code></pre>
+
+          <div class="warn">
+            Unlike Java, Python does not have checked exceptions; you rely on conventions and documentation.
+          </div>
+        </section>
+
+        <section id="iterators">
+          <h2>15. Iterators & Generators</h2>
+
+          <h3>Iterator protocol</h3>
+          <pre><code><span class="tok-variable">it</span> <span class="tok-operator">=</span> <span class="tok-builtin">iter</span><span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span><span class="tok-number">2</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">first</span> <span class="tok-operator">=</span> <span class="tok-builtin">next</span><span class="tok-punctuation">(</span><span class="tok-variable">it</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Generator function</h3>
+          <pre><code><span class="tok-keyword">def</span> <span class="tok-function">count_up_to</span><span class="tok-punctuation">(</span><span class="tok-variable">n</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-variable">i</span> <span class="tok-operator">=</span> <span class="tok-number">0</span>
+    <span class="tok-keyword">while</span> <span class="tok-variable">i</span> <span class="tok-operator">&lt;</span> <span class="tok-variable">n</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">yield</span> <span class="tok-variable">i</span>
+        <span class="tok-variable">i</span> <span class="tok-operator">+=</span> <span class="tok-number">1</span>
+
+<span class="tok-keyword">for</span> <span class="tok-variable">x</span> <span class="tok-keyword">in</span> <span class="tok-function">count_up_to</span><span class="tok-punctuation">(</span><span class="tok-number">3</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-variable">x</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Useful built-ins</h3>
+          <pre><code><span class="tok-keyword">for</span> <span class="tok-variable">i</span><span class="tok-punctuation">,</span> <span class="tok-variable">x</span> <span class="tok-keyword">in</span> <span class="tok-builtin">enumerate</span><span class="tok-punctuation">(</span><span class="tok-variable">items</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-variable">i</span><span class="tok-punctuation">,</span> <span class="tok-variable">x</span><span class="tok-punctuation">)</span>
+
+<span class="tok-keyword">for</span> <span class="tok-variable">a</span><span class="tok-punctuation">,</span> <span class="tok-variable">b</span>
+ <span class="tok-keyword">in</span> <span class="tok-builtin">zip</span><span class="tok-punctuation">(</span><span class="tok-variable">list1</span><span class="tok-punctuation">,</span> <span class="tok-variable">list2</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-variable">a</span><span class="tok-punctuation">,</span> <span class="tok-variable">b</span><span class="tok-punctuation">)</span></code></pre>
+        </section>
+
+        <section id="contextmanagers">
+          <h2>16. Context Managers</h2>
+
+          <h3>Using with</h3>
+          <pre><code><span class="tok-keyword">with</span> <span class="tok-builtin">open</span><span class="tok-punctuation">(</span><span class="tok-string">"data.txt"</span><span class="tok-punctuation">,</span> <span class="tok-string">"r"</span><span class="tok-punctuation">)</span> <span class="tok-keyword">as</span> <span class="tok-variable">f</span><span class="tok-punctuation">:</span>
+    <span class="tok-variable">content</span> <span class="tok-operator">=</span> <span class="tok-variable">f</span><span class="tok-punctuation">.</span><span class="tok-method">read</span><span class="tok-punctuation">()</span></code></pre>
+
+          <h3>Custom context manager</h3>
+          <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Timer</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">def</span> <span class="tok-function">__enter__</span><span class="tok-punctuation">(</span><span class="tok-keyword">self</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">return</span> <span class="tok-keyword">self</span>
+
+    <span class="tok-keyword">def</span> <span class="tok-function">__exit__</span><span class="tok-punctuation">(</span><span class="tok-keyword">self</span><span class="tok-punctuation">,</span> <span class="tok-variable">exc_type</span><span class="tok-punctuation">,</span> <span class="tok-variable">exc</span><span class="tok-punctuation">,</span> <span class="tok-variable">tb</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">"done"</span><span class="tok-punctuation">)</span></code></pre>
+
+          <div class="ok">
+            Context managers are ideal for files, locks, DB connections, and other resources that must be cleaned up.
+          </div>
+        </section>
+
+        <section id="decorators">
+          <h2>17. Decorators</h2>
+
+          <h3>Basic decorator</h3>
+          <pre><code><span class="tok-keyword">def</span> <span class="tok-function">log_calls</span><span class="tok-punctuation">(</span><span class="tok-variable">func</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">def</span> <span class="tok-function">wrapper</span><span class="tok-punctuation">(</span><span class="tok-operator">*</span><span class="tok-variable">args</span><span class="tok-punctuation">,</span> <span class="tok-operator">**</span><span class="tok-variable">kwargs</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">f"Calling {func.__name__}"</span><span class="tok-punctuation">)</span>
+        <span class="tok-keyword">return</span> <span class="tok-variable">func</span><span class="tok-punctuation">(</span><span class="tok-operator">*</span><span class="tok-variable">args</span><span class="tok-punctuation">,</span> <span class="tok-operator">**</span><span class="tok-variable">kwargs</span><span class="tok-punctuation">)</span>
+    <span class="tok-keyword">return</span> <span class="tok-variable">wrapper</span>
+
+<span class="tok-decorator">@log_calls</span>
+<span class="tok-keyword">def</span> <span class="tok-function">hello</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">"hi"</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>Built-in decorators</h3>
+          <p>
+            <span class="tag">@property</span>
+            <span class="tag">@classmethod</span>
+            <span class="tag">@staticmethod</span>
+            <span class="tag">@dataclass</span>
+          </p>
+        </section>
+
+        <section id="async">
+          <h2>18. Async/Await</h2>
+
+          <h3>Basic async function</h3>
+          <pre><code><span class="tok-keyword">import</span> <span class="tok-namespace">asyncio</span>
+
+<span class="tok-keyword">async</span> <span class="tok-keyword">def</span> <span class="tok-function">fetch_data</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">await</span> <span class="tok-namespace">asyncio</span><span class="tok-punctuation">.</span><span class="tok-method">sleep</span><span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">)</span>
+    <span class="tok-keyword">return</span> <span class="tok-string">"done"</span>
+
+<span class="tok-keyword">async</span> <span class="tok-keyword">def</span> <span class="tok-function">main</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-variable">result</span> <span class="tok-operator">=</span> <span class="tok-keyword">await</span> <span class="tok-function">fetch_data</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-variable">result</span><span class="tok-punctuation">)</span>
+
+<span class="tok-namespace">asyncio</span><span class="tok-punctuation">.</span><span class="tok-method">run</span><span class="tok-punctuation">(</span><span class="tok-function">main</span><span class="tok-punctuation">(</span><span class="tok-punctuation">))</span></code></pre>
+
+          <h3>Concurrent tasks</h3>
+          <pre><code><span class="tok-keyword">async</span> <span class="tok-keyword">def</span> <span class="tok-function">work</span><span class="tok-punctuation">(</span><span class="tok-variable">n</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">await</span> <span class="tok-namespace">asyncio</span><span class="tok-punctuation">.</span><span class="tok-method">sleep</span><span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">)</span>
+    <span class="tok-keyword">return</span> <span class="tok-variable">n</span> <span class="tok-operator">*</span> <span class="tok-number">2</span>
+
+<span class="tok-keyword">async</span> <span class="tok-keyword">def</span> <span class="tok-function">main</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-variable">results</span> <span class="tok-operator">=</span> <span class="tok-keyword">await</span> <span class="tok-namespace">asyncio</span><span class="tok-punctuation">.</span><span class="tok-method">gather</span><span class="tok-punctuation">(</span>
+        <span class="tok-function">work</span><span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">),</span>
+        <span class="tok-function">work</span><span class="tok-punctuation">(</span><span class="tok-number">2</span><span class="tok-punctuation">),</span>
+        <span class="tok-function">work</span><span class="tok-punctuation">(</span><span class="tok-number">3</span><span class="tok-punctuation">)</span>
+    <span class="tok-punctuation">)</span>
+    <span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-variable">results</span><span class="tok-punctuation">)</span></code></pre>
+
+          <div class="warn">
+            <code class="inline">async</code>/<code class="inline">await</code> is for cooperative concurrency, especially I/O-bound tasks, not raw CPU-bound parallelism.
+          </div>
+        </section>
+
+        <section id="stdlib">
+          <h2>19. Standard Library Essentials</h2>
+
+          <h3>math</h3>
+          <pre><code><span class="tok-keyword">import</span> <span class="tok-namespace">math</span>
+
+<span class="tok-variable">root</span> <span class="tok-operator">=</span> <span class="tok-namespace">math</span><span class="tok-punctuation">.</span><span class="tok-method">sqrt</span><span class="tok-punctuation">(</span><span class="tok-number">16</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">pi</span> <span class="tok-operator">=</span> <span class="tok-namespace">math</span><span class="tok-punctuation">.</span><span class="tok-property">pi</span></code></pre>
+
+          <h3>datetime</h3>
+          <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">datetime</span> <span class="tok-keyword">import</span> <span class="tok-class">datetime</span>
+
+<span class="tok-variable">now</span> <span class="tok-operator">=</span> <span class="tok-class">datetime</span><span class="tok-punctuation">.</span><span class="tok-method">now</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>random</h3>
+          <pre><code><span class="tok-keyword">import</span> <span class="tok-namespace">random</span>
+
+<span class="tok-variable">n</span> <span class="tok-operator">=</span> <span class="tok-namespace">random</span><span class="tok-punctuation">.</span><span class="tok-method">randint</span><span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">10</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>collections</h3>
+          <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">collections</span> <span class="tok-keyword">import</span> <span class="tok-class">Counter</span><span class="tok-punctuation">,</span> <span class="tok-class">defaultdict</span>
+
+<span class="tok-variable">counts</span> <span class="tok-operator">=</span> <span class="tok-class">Counter</span><span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-string">"a"</span><span class="tok-punctuation">,</span><span class="tok-string">"b"</span><span class="tok-punctuation">,</span><span class="tok-string">"a"</span><span class="tok-punctuation">]</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">groups</span> <span class="tok-operator">=</span> <span class="tok-class">defaultdict</span><span class="tok-punctuation">(</span><span class="tok-builtin">list</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>itertools</h3>
+          <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">itertools</span> <span class="tok-keyword">import</span> <span class="tok-function">product</span>
+
+<span class="tok-variable">pairs</span> <span class="tok-operator">=</span> <span class="tok-builtin">list</span><span class="tok-punctuation">(</span><span class="tok-function">product</span><span class="tok-punctuation">(</span><span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span><span class="tok-number">2</span><span class="tok-punctuation">]</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-string">"a"</span><span class="tok-punctuation">,</span><span class="tok-string">"b"</span><span class="tok-punctuation">]</span><span class="tok-punctuation">))</span></code></pre>
+        </section>
+
+        <section id="files">
+          <h2>20. Files & Paths</h2>
+
+          <h3>Read a file</h3>
+          <pre><code><span class="tok-keyword">with</span> <span class="tok-builtin">open</span><span class="tok-punctuation">(</span><span class="tok-string">"data.txt"</span><span class="tok-punctuation">,</span> <span class="tok-string">"r"</span><span class="tok-punctuation">,</span> <span class="tok-variable">encoding</span><span class="tok-operator">=</span><span class="tok-string">"utf-8"</span><span class="tok-punctuation">)</span> <span class="tok-keyword">as</span> <span class="tok-variable">f</span><span class="tok-punctuation">:</span>
+    <span class="tok-variable">text</span> <span class="tok-operator">=</span> <span class="tok-variable">f</span><span class="tok-punctuation">.</span><span class="tok-method">read</span><span class="tok-punctuation">()</span></code></pre>
+
+          <h3>Write a file</h3>
+          <pre><code><span class="tok-keyword">with</span> <span class="tok-builtin">open</span><span class="tok-punctuation">(</span><span class="tok-string">"out.txt"</span><span class="tok-punctuation">,</span> <span class="tok-string">"w"</span><span class="tok-punctuation">,</span> <span class="tok-variable">encoding</span><span class="tok-operator">=</span><span class="tok-string">"utf-8"</span><span class="tok-punctuation">)</span> <span class="tok-keyword">as</span> <span class="tok-variable">f</span><span class="tok-punctuation">:</span>
+    <span class="tok-variable">f</span><span class="tok-punctuation">.</span><span class="tok-method">write</span><span class="tok-punctuation">(</span><span class="tok-string">"Hello file"</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>pathlib</h3>
+          <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">pathlib</span> <span class="tok-keyword">import</span> <span class="tok-class">Path</span>
+
+<span class="tok-variable">path</span> <span class="tok-operator">=</span> <span class="tok-class">Path</span><span class="tok-punctuation">(</span><span class="tok-string">"data.txt"</span><span class="tok-punctuation">)</span>
+<span class="tok-keyword">if</span> <span class="tok-variable">path</span><span class="tok-punctuation">.</span><span class="tok-method">exists</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-variable">text</span> <span class="tok-operator">=</span> <span class="tok-variable">path</span><span class="tok-punctuation">.</span><span class="tok-method">read_text</span><span class="tok-punctuation">(</span><span class="tok-variable">encoding</span><span class="tok-operator">=</span><span class="tok-string">"utf-8"</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>JSON</h3>
+          <pre><code><span class="tok-keyword">import</span> <span class="tok-namespace">json</span>
+
+<span class="tok-variable">data</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-string">"name"</span><span class="tok-punctuation">:</span> <span class="tok-string">"Ada"</span><span class="tok-punctuation">,</span> <span class="tok-string">"age"</span><span class="tok-punctuation">:</span> <span class="tok-number">20</span><span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">with</span> <span class="tok-builtin">open</span><span class="tok-punctuation">(</span><span class="tok-string">"user.json"</span><span class="tok-punctuation">,</span> <span class="tok-string">"w"</span><span class="tok-punctuation">)</span> <span class="tok-keyword">as</span> <span class="tok-variable">f</span><span class="tok-punctuation">:</span>
+    <span class="tok-namespace">json</span><span class="tok-punctuation">.</span><span class="tok-method">dump</span><span class="tok-punctuation">(</span><span class="tok-variable">data</span><span class="tok-punctuation">,</span> <span class="tok-variable">f</span><span class="tok-punctuation">)</span></code></pre>
+        </section>
+
+        <section id="testing">
+          <h2>21. Testing</h2>
+
+          <h3>Simple assert</h3>
+          <pre><code><span class="tok-keyword">def</span> <span class="tok-function">add</span><span class="tok-punctuation">(</span><span class="tok-variable">a</span><span class="tok-punctuation">,</span> <span class="tok-variable">b</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">return</span> <span class="tok-variable">a</span> <span class="tok-operator">+</span> <span class="tok-variable">b</span>
+
+<span class="tok-keyword">assert</span> <span class="tok-function">add</span><span class="tok-punctuation">(</span><span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">)</span> <span class="tok-operator">==</span> <span class="tok-number">5</span></code></pre>
+
+          <h3>unittest</h3>
+          <pre><code><span class="tok-keyword">import</span> <span class="tok-namespace">unittest</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">TestMath</span><span class="tok-punctuation">(</span><span class="tok-namespace">unittest</span><span class="tok-punctuation">.</span><span class="tok-class">TestCase</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">def</span> <span class="tok-function">test_add</span><span class="tok-punctuation">(</span><span class="tok-keyword">self</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+        <span class="tok-keyword">self</span><span class="tok-punctuation">.</span><span class="tok-method">assertEqual</span><span class="tok-punctuation">(</span><span class="tok-number">2</span> <span class="tok-operator">+</span> <span class="tok-number">3</span><span class="tok-punctuation">,</span> <span class="tok-number">5</span><span class="tok-punctuation">)</span></code></pre>
+
+          <h3>pytest style example</h3>
+          <pre><code><span class="tok-keyword">def</span> <span class="tok-function">test_add</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">assert</span> <span class="tok-number">2</span> <span class="tok-operator">+</span> <span class="tok-number">3</span> <span class="tok-operator">==</span> <span class="tok-number">5</span></code></pre>
+        </section>
+
+        <section id="tips">
+          <h2>22. Quick Remember Tips</h2>
+
+          <div class="grid">
+            <div class="card">
+              <h3>Indentation matters</h3>
+              <p>Whitespace defines blocks instead of braces.</p>
+            </div>
+            <div class="card">
+              <h3>Mutable defaults</h3>
+              <p>Avoid defaults like <code class="inline">[]</code>; use <code class="inline">None</code> and create inside.</p>
+            </div>
+            <div class="card">
+              <h3>is vs ==</h3>
+              <p><code class="inline">==</code> compares values; <code class="inline">is</code> compares identity.</p>
+            </div>
+            <div class="card">
+              <h3>List vs tuple</h3>
+              <p>Lists are mutable; tuples are immutable.</p>
+            </div>
+            <div class="card">
+              <h3>Dict order</h3>
+              <p>Modern Python preserves insertion order in dictionaries.</p>
+            </div>
+            <div class="card">
+              <h3>Everything is object-based</h3>
+              <p>Functions, classes, and modules are all first-class objects.</p>
+            </div>
+            <div class="card">
+              <h3>Generators save memory</h3>
+              <p>Use <code class="inline">yield</code> and generator expressions for lazy evaluation.</p>
+            </div>
+            <div class="card">
+              <h3>Async is for I/O</h3>
+              <p>Best for network/file waiting, not heavy CPU work.</p>
+            </div>
+          </div>
+
+          <h3>Mini cheat sheet</h3>
+          <pre><code><span class="tok-comment"># Print</span>
+<span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">"Hello"</span><span class="tok-punctuation">)</span>
+
+<span class="tok-comment"># Input</span>
+<span class="tok-variable">name</span> <span class="tok-operator">=</span> <span class="tok-builtin">input</span><span class="tok-punctuation">(</span><span class="tok-string">"Name: "</span><span class="tok-punctuation">)</span>
+
+<span class="tok-comment"># List</span>
+<span class="tok-variable">arr</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">]</span>
+
+<span class="tok-comment"># Loop</span>
+<span class="tok-keyword">for</span> <span class="tok-variable">x</span> <span class="tok-keyword">in</span> <span class="tok-variable">arr</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">pass</span>
+
+<span class="tok-comment"># Function</span>
+<span class="tok-keyword">def</span> <span class="tok-function">hello</span><span class="tok-punctuation">(</span><span class="tok-punctuation">)</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">pass</span>
+
+<span class="tok-comment"># Class</span>
+<span class="tok-keyword">class</span> <span class="tok-class">Car</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">pass</span>
+
+<span class="tok-comment"># Exception handling</span>
+<span class="tok-keyword">try</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">pass</span>
+<span class="tok-keyword">except</span> <span class="tok-exception">Exception</span><span class="tok-punctuation">:</span>
+    <span class="tok-keyword">pass</span></code></pre>
+        </section>
+      </main>
+    </div>
+
+  <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+  <script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.body.classList.add('light');
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('light');
+      const current = document.body.classList.contains('light') ? 'light' : 'dark';
+      localStorage.setItem('theme', current);
+    }
+  </script>
+  <!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

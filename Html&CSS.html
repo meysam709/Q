@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML & CSS Complete Summary</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p,
+        li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(59,130,246,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(59,130,246,0.2);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin: 4px 6px 4px 0;
+            font-weight: 600;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword {
+            color: var(--tok-keyword);
+        }
+        .tok-type {
+            color: var(--tok-type);
+        }
+        .tok-string {
+            color: var(--tok-string);
+        }
+        .tok-number {
+            color: var(--tok-number);
+        }
+        .tok-comment {
+            color: var(--tok-comment);
+            font-style: italic;
+        }
+        .tok-method {
+            color: var(--tok-method);
+        }
+        .tok-class {
+            color: var(--tok-class);
+        }
+        .tok-property {
+            color: var(--tok-property);
+        }
+        .tok-operator {
+            color: var(--tok-operator);
+        }
+        .tok-punctuation {
+            color: var(--tok-punctuation);
+        }
+        .tok-variable {
+            color: var(--tok-variable);
+        }
+        .tok-namespace {
+            color: var(--tok-namespace);
+        }
+        .tok-preproc {
+            color: var(--tok-preproc);
+        }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>HTML & CSS Complete Summary</h1>
+        <p>
+            A complete remembrance‑style reference for HTML and CSS covering structure, semantics,
+            forms, selectors, box model, layout, responsive design, and modern features.
+        </p>
+    </header>
+
+    <div class="layout">
+        <main>
+            <!-- HTML PART -->
+            <section id="html-intro">
+                <h2>1. HTML Basics</h2>
+                <p>
+                    HTML (HyperText Markup Language) provides the structure of web pages. It uses tags
+                    to define elements like headings, paragraphs, images, and links. HTML5 introduced
+                    semantic elements and multimedia support.
+                </p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Key characteristics</h3>
+                        <ul>
+                            <li>Markup language (not programming)</li>
+                            <li>Elements defined by tags</li>
+                            <li>Hierarchical (DOM tree)</li>
+                            <li>Case‑insensitive tags</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Common uses</h3>
+                        <ul>
+                            <li>Web page structure</li>
+                            <li>Content markup</li>
+                            <li>Forms & user input</li>
+                            <li>SEO & accessibility</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Basic structure</h3>
+                        <pre><code><span class="tok-punctuation">&lt;!DOCTYPE html&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">html</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">head</span>&gt;</span>...<span class="tok-tag">&lt;/<span class="tok-type">head</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">body</span>&gt;</span>...<span class="tok-tag">&lt;/<span class="tok-type">body</span>&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">html</span>&gt;</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section id="html-structure">
+                <h2>2. HTML Document Structure</h2>
+                <pre><code><span class="tok-meta">&lt;!DOCTYPE html&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">html</span> <span class="tok-attr">lang</span>=<span class="tok-string">"en"</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">head</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">meta</span> <span class="tok-attr">charset</span>=<span class="tok-string">"UTF-8"</span> /&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">meta</span> <span class="tok-attr">name</span>=<span class="tok-string">"viewport"</span> <span class="tok-attr">content</span>=<span class="tok-string">"width=device-width, initial-scale=1.0"</span> /&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">title</span>&gt;</span>Page Title<span class="tok-tag">&lt;/<span class="tok-type">title</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">link</span> <span class="tok-attr">rel</span>=<span class="tok-string">"stylesheet"</span> <span class="tok-attr">href</span>=<span class="tok-string">"styles.css"</span> /&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">head</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">body</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">h1</span>&gt;</span>Hello, World!<span class="tok-tag">&lt;/<span class="tok-type">h1</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">script</span> <span class="tok-attr">src</span>=<span class="tok-string">"script.js"</span>&gt;</span><span class="tok-tag">&lt;/<span class="tok-type">script</span>&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">body</span>&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">html</span>&gt;</span></code></pre>
+                <div class="note">The <code class="inline">&lt;meta name="viewport"&gt;</code> is essential for responsive design.</div>
+            </section>
+
+            <section id="html-text">
+                <h2>3. Text & Headings</h2>
+                <pre><code><span class="tok-tag">&lt;<span class="tok-type">h1</span>&gt;</span>Main heading<span class="tok-tag">&lt;/<span class="tok-type">h1</span>&gt;</span>   to   <span class="tok-tag">&lt;<span class="tok-type">h6</span>&gt;</span>Sub‑heading<span class="tok-tag">&lt;/<span class="tok-type">h6</span>&gt;</span>
+
+<span class="tok-tag">&lt;<span class="tok-type">p</span>&gt;</span>A paragraph of text.<span class="tok-tag">&lt;/<span class="tok-type">p</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">br</span> /&gt;</span>  <span class="tok-comment">&lt;!-- line break --&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">hr</span> /&gt;</span>  <span class="tok-comment">&lt;!-- horizontal rule --&gt;</span>
+
+<span class="tok-tag">&lt;<span class="tok-type">strong</span>&gt;</span>Bold importance<span class="tok-tag">&lt;/<span class="tok-type">strong</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">em</span>&gt;</span>Emphasized italic<span class="tok-tag">&lt;/<span class="tok-type">em</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">u</span>&gt;</span>Underlined<span class="tok-tag">&lt;/<span class="tok-type">u</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">mark</span>&gt;</span>Highlighted<span class="tok-tag">&lt;/<span class="tok-type">mark</span>&gt;</span></code></pre>
+            </section>
+
+            <section id="html-links-images">
+                <h2>4. Links & Images</h2>
+                <pre><code><span class="tok-comment">&lt;!-- hyperlink --&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">a</span> <span class="tok-attr">href</span>=<span class="tok-string">"https://example.com"</span> <span class="tok-attr">target</span>=<span class="tok-string">"_blank"</span>&gt;</span>Visit<span class="tok-tag">&lt;/<span class="tok-type">a</span>&gt;</span>
+
+<span class="tok-comment">&lt;!-- image --&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">img</span> <span class="tok-attr">src</span>=<span class="tok-string">"photo.jpg"</span> <span class="tok-attr">alt</span>=<span class="tok-string">"Description"</span> <span class="tok-attr">width</span>=<span class="tok-string">"300"</span> /&gt;</span></code></pre>
+                <div class="note">Always provide descriptive <code class="inline">alt</code> text for accessibility.</div>
+            </section>
+
+            <section id="html-lists">
+                <h2>5. Lists</h2>
+                <pre><code><span class="tok-comment">&lt;!-- unordered --&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">ul</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">li</span>&gt;</span>Item 1<span class="tok-tag">&lt;/<span class="tok-type">li</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">li</span>&gt;</span>Item 2<span class="tok-tag">&lt;/<span class="tok-type">li</span>&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">ul</span>&gt;</span>
+
+<span class="tok-comment">&lt;!-- ordered --&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">ol</span> <span class="tok-attr">type</span>=<span class="tok-string">"1"</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">li</span>&gt;</span>First<span class="tok-tag">&lt;/<span class="tok-type">li</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">li</span>&gt;</span>Second<span class="tok-tag">&lt;/<span class="tok-type">li</span>&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">ol</span>&gt;</span>
+
+<span class="tok-comment">&lt;!-- description list --&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">dl</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">dt</span>&gt;</span>Term<span class="tok-tag">&lt;/<span class="tok-type">dt</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">dd</span>&gt;</span>Definition<span class="tok-tag">&lt;/<span class="tok-type">dd</span>&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">dl</span>&gt;</span></code></pre>
+            </section>
+
+            <section id="html-tables">
+                <h2>6. Tables</h2>
+                <pre><code><span class="tok-tag">&lt;<span class="tok-type">table</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">thead</span>&gt;</span>
+        <span class="tok-tag">&lt;<span class="tok-type">tr</span>&gt;</span><span class="tok-tag">&lt;<span class="tok-type">th</span>&gt;</span>Name<span class="tok-tag">&lt;/<span class="tok-type">th</span>&gt;</span><span class="tok-tag">&lt;<span class="tok-type">th</span>&gt;</span>Age<span class="tok-tag">&lt;/<span class="tok-type">th</span>&gt;</span><span class="tok-tag">&lt;/<span class="tok-type">tr</span>&gt;</span>
+    <span class="tok-tag">&lt;/<span class="tok-type">thead</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">tbody</span>&gt;</span>
+        <span class="tok-tag">&lt;<span class="tok-type">tr</span>&gt;</span><span class="tok-tag">&lt;<span class="tok-type">td</span>&gt;</span>Alice<span class="tok-tag">&lt;/<span class="tok-type">td</span>&gt;</span><span class="tok-tag">&lt;<span class="tok-type">td</span>&gt;</span>25<span class="tok-tag">&lt;/<span class="tok-type">td</span>&gt;</span><span class="tok-tag">&lt;/<span class="tok-type">tr</span>&gt;</span>
+    <span class="tok-tag">&lt;/<span class="tok-type">tbody</span>&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">table</span>&gt;</span></code></pre>
+                <table>
+                    <tr><th>Tag</th><th>Purpose</th></tr>
+                    <tr><td>&lt;table&gt;</td><td>Defines a table</td></tr>
+                    <tr><td>&lt;tr&gt;</td><td>Table row</td></tr>
+                    <tr><td>&lt;th&gt;</td><td>Header cell</td></tr>
+                    <tr><td>&lt;td&gt;</td><td>Data cell</td></tr>
+                    <tr><td>&lt;thead&gt;, &lt;tbody&gt;, &lt;tfoot&gt;</td><td>Semantic grouping</td></tr>
+                </table>
+            </section>
+
+            <section id="html-forms">
+                <h2>7. Forms</h2>
+                <pre><code><span class="tok-tag">&lt;<span class="tok-type">form</span> <span class="tok-attr">action</span>=<span class="tok-string">"/submit"</span> <span class="tok-attr">method</span>=<span class="tok-string">"post"</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">label</span> <span class="tok-attr">for</span>=<span class="tok-string">"name"</span>&gt;</span>Name:<span class="tok-tag">&lt;/<span class="tok-type">label</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">input</span> <span class="tok-attr">type</span>=<span class="tok-string">"text"</span> <span class="tok-attr">id</span>=<span class="tok-string">"name"</span> <span class="tok-attr">name</span>=<span class="tok-string">"name"</span> <span class="tok-attr">placeholder</span>=<span class="tok-string">"Enter name"</span> <span class="tok-attr">required</span> /&gt;</span>
+
+    <span class="tok-tag">&lt;<span class="tok-type">label</span> <span class="tok-attr">for</span>=<span class="tok-string">"email"</span>&gt;</span>Email:<span class="tok-tag">&lt;/<span class="tok-type">label</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">input</span> <span class="tok-attr">type</span>=<span class="tok-string">"email"</span> <span class="tok-attr">id</span>=<span class="tok-string">"email"</span> <span class="tok-attr">name</span>=<span class="tok-string">"email"</span> /&gt;</span>
+
+    <span class="tok-tag">&lt;<span class="tok-type">label</span> <span class="tok-attr">for</span>=<span class="tok-string">"age"</span>&gt;</span>Age:<span class="tok-tag">&lt;/<span class="tok-type">label</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">input</span> <span class="tok-attr">type</span>=<span class="tok-string">"number"</span> <span class="tok-attr">id</span>=<span class="tok-string">"age"</span> <span class="tok-attr">min</span>=<span class="tok-string">"0"</span> <span class="tok-attr">max</span>=<span class="tok-string">"120"</span> /&gt;</span>
+
+    <span class="tok-tag">&lt;<span class="tok-type">input</span> <span class="tok-attr">type</span>=<span class="tok-string">"checkbox"</span> <span class="tok-attr">id</span>=<span class="tok-string">"agree"</span> /&gt;</span> <span class="tok-tag">&lt;<span class="tok-type">label</span> <span class="tok-attr">for</span>=<span class="tok-string">"agree"</span>&gt;</span>I agree<span class="tok-tag">&lt;/<span class="tok-type">label</span>&gt;</span>
+
+    <span class="tok-tag">&lt;<span class="tok-type">select</span> <span class="tok-attr">name</span>=<span class="tok-string">"city"</span>&gt;</span>
+        <span class="tok-tag">&lt;<span class="tok-type">option</span> <span class="tok-attr">value</span>=<span class="tok-string">"paris"</span>&gt;</span>Paris<span class="tok-tag">&lt;/<span class="tok-type">option</span>&gt;</span>
+        <span class="tok-tag">&lt;<span class="tok-type">option</span> <span class="tok-attr">value</span>=<span class="tok-string">"london"</span>&gt;</span>London<span class="tok-tag">&lt;/<span class="tok-type">option</span>&gt;</span>
+    <span class="tok-tag">&lt;/<span class="tok-type">select</span>&gt;</span>
+
+    <span class="tok-tag">&lt;<span class="tok-type">textarea</span> <span class="tok-attr">name</span>=<span class="tok-string">"message"</span> <span class="tok-attr">rows</span>=<span class="tok-string">"4"</span>&gt;</span><span class="tok-tag">&lt;/<span class="tok-type">textarea</span>&gt;</span>
+
+    <span class="tok-tag">&lt;<span class="tok-type">button</span> <span class="tok-attr">type</span>=<span class="tok-string">"submit"</span>&gt;</span>Send<span class="tok-tag">&lt;/<span class="tok-type">button</span>&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">form</span>&gt;</span></code></pre>
+                <table>
+                    <tr><th>Input type</th><th>Description</th></tr>
+                    <tr><td>text</td><td>Single line text</td></tr>
+                    <tr><td>email</td><td>Email validation</td></tr>
+                    <tr><td>password</td><td>Masked input</td></tr>
+                    <tr><td>number</td><td>Numeric spinner</td></tr>
+                    <tr><td>checkbox / radio</td><td>Selection</td></tr>
+                    <tr><td>date</td><td>Date picker</td></tr>
+                    <tr><td>file</td><td>File upload</td></tr>
+                    <tr><td>submit</td><td>Form submission</td></tr>
+                </table>
+            </section>
+
+            <section id="html-semantic">
+                <h2>8. Semantic HTML5</h2>
+                <pre><code><span class="tok-tag">&lt;<span class="tok-type">header</span>&gt;</span>...<span class="tok-tag">&lt;/<span class="tok-type">header</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">nav</span>&gt;</span>...<span class="tok-tag">&lt;/<span class="tok-type">nav</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">main</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">article</span>&gt;</span>...<span class="tok-tag">&lt;/<span class="tok-type">article</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">section</span>&gt;</span>...<span class="tok-tag">&lt;/<span class="tok-type">section</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">aside</span>&gt;</span>...<span class="tok-tag">&lt;/<span class="tok-type">aside</span>&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">main</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">footer</span>&gt;</span>...<span class="tok-tag">&lt;/<span class="tok-type">footer</span>&gt;</span></code></pre>
+                <div class="grid">
+                    <div class="card">&lt;header&gt; – introductory content</div>
+                    <div class="card">&lt;nav&gt; – navigation links</div>
+                    <div class="card">&lt;main&gt; – primary content</div>
+                    <div class="card">&lt;article&gt; – self‑contained composition</div>
+                    <div class="card">&lt;section&gt; – thematic grouping</div>
+                    <div class="card">&lt;aside&gt; – complementary content</div>
+                </div>
+            </section>
+
+            <section id="html-multimedia">
+                <h2>9. Multimedia</h2>
+                <pre><code><span class="tok-comment">&lt;!-- video --&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">video</span> <span class="tok-attr">controls</span> <span class="tok-attr">width</span>=<span class="tok-string">"400"</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">source</span> <span class="tok-attr">src</span>=<span class="tok-string">"movie.mp4"</span> <span class="tok-attr">type</span>=<span class="tok-string">"video/mp4"</span> /&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">video</span>&gt;</span>
+
+<span class="tok-comment">&lt;!-- audio --&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">audio</span> <span class="tok-attr">controls</span>&gt;</span>
+    <span class="tok-tag">&lt;<span class="tok-type">source</span> <span class="tok-attr">src</span>=<span class="tok-string">"song.mp3"</span> <span class="tok-attr">type</span>=<span class="tok-string">"audio/mpeg"</span> /&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">audio</span>&gt;</span>
+
+<span class="tok-comment">&lt;!-- iframe --&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">iframe</span> <span class="tok-attr">src</span>=<span class="tok-string">"page.html"</span> <span class="tok-attr">width</span>=<span class="tok-string">"600"</span> <span class="tok-attr">height</span>=<span class="tok-string">"400"</span>&gt;</span><span class="tok-tag">&lt;/<span class="tok-type">iframe</span>&gt;</span></code></pre>
+            </section>
+
+            <!-- CSS PART -->
+            <section id="css-intro">
+                <h2>10. CSS Basics</h2>
+                <p>
+                    CSS (Cascading Style Sheets) controls the presentation of HTML. It can be applied
+                    inline, internally via <code class="inline">&lt;style&gt;</code>, or externally via <code class="inline">&lt;link&gt;</code>.
+                </p>
+                <pre><code><span class="tok-comment">/* syntax: selector { property: value; } */</span>
+<span class="tok-selector">h1</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">color</span><span class="tok-punctuation">:</span> blue<span class="tok-punctuation">;</span>
+    <span class="tok-property">font-size</span><span class="tok-punctuation">:</span> <span class="tok-number">2</span><span class="tok-unit">rem</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <div class="note">CSS follows the cascade: more specific selectors and later rules override earlier ones.</div>
+            </section>
+
+            <section id="css-selectors">
+                <h2>11. CSS Selectors</h2>
+                <pre><code><span class="tok-comment">/* basic selectors */</span>
+<span class="tok-selector">p</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">}</span>               <span class="tok-comment">/* element */</span>
+<span class="tok-selector">.class</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">}</span>            <span class="tok-comment">/* class */</span>
+<span class="tok-selector">#id</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">}</span>               <span class="tok-comment">/* id */</span>
+<span class="tok-selector">*</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">}</span>                 <span class="tok-comment">/* universal */</span>
+
+<span class="tok-comment">/* combinators */</span>
+<span class="tok-selector">div p</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">}</span>           <span class="tok-comment">/* descendant */</span>
+<span class="tok-selector">div &gt; p</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">}</span>         <span class="tok-comment">/* child */</span>
+<span class="tok-selector">div + p</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">}</span>         <span class="tok-comment">/* adjacent sibling */</span>
+<span class="tok-selector">div ~ p</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">}</span>         <span class="tok-comment">/* general sibling */</span>
+
+<span class="tok-comment">/* pseudo‑classes */</span>
+<span class="tok-selector">a:hover</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">}</span>
+<span class="tok-selector">input:focus</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">}</span>
+<span class="tok-selector">li:first-child</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">}</span>
+
+<span class="tok-comment">/* pseudo‑elements */</span>
+<span class="tok-selector">p::first-line</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">}</span>
+<span class="tok-selector">div::before</span> <span class="tok-punctuation">{</span> <span class="tok-property">content</span><span class="tok-punctuation">:</span> <span class="tok-string">"↑"</span><span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span></code></pre>
+                <table>
+                    <tr><th>Selector</th><th>Example</th><th>Specificity weight</th></tr>
+                    <tr><td>Inline style</td><td><code class="inline">style="color:red"</code></td><td>1000</td></tr>
+                    <tr><td>ID</td><td><code class="inline">#header</code></td><td>100</td></tr>
+                    <tr><td>Class / attribute / pseudo‑class</td><td><code class="inline">.box</code>, <code class="inline">[type="text"]</code>, <code class="inline">:hover</code></td><td>10</td></tr>
+                    <tr><td>Element / pseudo‑element</td><td><code class="inline">div</code>, <code class="inline">::before</code></td><td>1</td></tr>
+                </table>
+            </section>
+
+            <section id="css-box-model">
+                <h2>12. Box Model</h2>
+                <pre><code><span class="tok-selector">div</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">width</span><span class="tok-punctuation">:</span> <span class="tok-number">300</span><span class="tok-unit">px</span><span class="tok-punctuation">;</span>
+    <span class="tok-property">height</span><span class="tok-punctuation">:</span> <span class="tok-number">150</span><span class="tok-unit">px</span><span class="tok-punctuation">;</span>
+    <span class="tok-property">padding</span><span class="tok-punctuation">:</span> <span class="tok-number">20</span><span class="tok-unit">px</span><span class="tok-punctuation">;</span>           <span class="tok-comment">/* inner spacing */</span>
+    <span class="tok-property">border</span><span class="tok-punctuation">:</span> <span class="tok-number">2</span><span class="tok-unit">px</span> solid black<span class="tok-punctuation">;</span> <span class="tok-comment">/* border */</span>
+    <span class="tok-property">margin</span><span class="tok-punctuation">:</span> <span class="tok-number">10</span><span class="tok-unit">px</span> auto<span class="tok-punctuation">;</span>       <span class="tok-comment">/* outer spacing (auto centers) */</span>
+    <span class="tok-property">box-sizing</span><span class="tok-punctuation">:</span> border-box<span class="tok-punctuation">;</span>  <span class="tok-comment">/* include border/padding in width */</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <div class="note">Using <code class="inline">box-sizing: border-box</code> globally makes layout predictable.</div>
+            </section>
+
+            <section id="css-typography">
+                <h2>13. Typography & Colors</h2>
+                <pre><code><span class="tok-selector">body</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">font-family</span><span class="tok-punctuation">:</span> <span class="tok-string">'Inter'</span><span class="tok-punctuation">,</span> sans-serif<span class="tok-punctuation">;</span>
+    <span class="tok-property">font-size</span><span class="tok-punctuation">:</span> <span class="tok-number">16</span><span class="tok-unit">px</span><span class="tok-punctuation">;</span>
+    <span class="tok-property">font-weight</span><span class="tok-punctuation">:</span> <span class="tok-number">400</span><span class="tok-punctuation">;</span>
+    <span class="tok-property">line-height</span><span class="tok-punctuation">:</span> <span class="tok-number">1.6</span><span class="tok-punctuation">;</span>
+    <span class="tok-property">color</span><span class="tok-punctuation">:</span> <span class="tok-hex">#333333</span><span class="tok-punctuation">;</span>
+    <span class="tok-property">background-color</span><span class="tok-punctuation">:</span> <span class="tok-hex">#ffffff</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-selector">h1</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">font-size</span><span class="tok-punctuation">:</span> <span class="tok-number">2.5</span><span class="tok-unit">rem</span><span class="tok-punctuation">;</span>
+    <span class="tok-property">text-align</span><span class="tok-punctuation">:</span> center<span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>Color formats</h3>
+                <pre><code><span class="tok-property">color</span><span class="tok-punctuation">:</span> <span class="tok-hex">#ff6600</span><span class="tok-punctuation">;</span>            <span class="tok-comment">/* hex */</span>
+<span class="tok-property">color</span><span class="tok-punctuation">:</span> <span class="tok-function">rgb</span><span class="tok-punctuation">(</span><span class="tok-number">255</span><span class="tok-punctuation">,</span> <span class="tok-number">102</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span><span class="tok-punctuation">);</span>   <span class="tok-comment">/* RGB */</span>
+<span class="tok-property">color</span><span class="tok-punctuation">:</span> <span class="tok-function">rgba</span><span class="tok-punctuation">(</span><span class="tok-number">255</span><span class="tok-punctuation">,</span><span class="tok-number">102</span><span class="tok-punctuation">,</span><span class="tok-number">0</span><span class="tok-punctuation">,</span><span class="tok-number">0.8</span><span class="tok-punctuation">);</span> <span class="tok-comment">/* RGBA with opacity */</span>
+<span class="tok-property">color</span><span class="tok-punctuation">:</span> <span class="tok-function">hsl</span><span class="tok-punctuation">(</span><span class="tok-number">24</span><span class="tok-punctuation">,</span> <span class="tok-number">100%</span><span class="tok-punctuation">,</span> <span class="tok-number">50%</span><span class="tok-punctuation">);</span>  <span class="tok-comment">/* HSL */</span></code></pre>
+            </section>
+
+            <section id="css-backgrounds">
+                <h2>14. Backgrounds & Images</h2>
+                <pre><code><span class="tok-selector">div</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">background-color</span><span class="tok-punctuation">:</span> <span class="tok-hex">#f0f0f0</span><span class="tok-punctuation">;</span>
+    <span class="tok-property">background-image</span><span class="tok-punctuation">:</span> <span class="tok-function">url</span><span class="tok-punctuation">(</span><span class="tok-string">"bg.jpg"</span><span class="tok-punctuation">);</span>
+    <span class="tok-property">background-size</span><span class="tok-punctuation">:</span> cover<span class="tok-punctuation">;</span>        <span class="tok-comment">/* cover / contain / 100% 100% */</span>
+    <span class="tok-property">background-repeat</span><span class="tok-punctuation">:</span> no-repeat<span class="tok-punctuation">;</span>
+    <span class="tok-property">background-position</span><span class="tok-punctuation">:</span> center<span class="tok-punctuation">;</span>
+    <span class="tok-property">background</span><span class="tok-punctuation">:</span> <span class="tok-function">linear-gradient</span><span class="tok-punctuation">(</span><span class="tok-number">45</span><span class="tok-unit">deg</span><span class="tok-punctuation">,</span> red<span class="tok-punctuation">,</span> blue<span class="tok-punctuation">);</span> <span class="tok-comment">/* gradient */</span>
+<span class="tok-punctuation">}</span></code></pre>
+            </section>
+
+            <section id="css-layout">
+                <h2>15. Layout: Flexbox</h2>
+                <pre><code><span class="tok-selector">.container</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">display</span><span class="tok-punctuation">:</span> flex<span class="tok-punctuation">;</span>
+    <span class="tok-property">flex-direction</span><span class="tok-punctuation">:</span> row<span class="tok-punctuation">;</span>          <span class="tok-comment">/* row | column | row-reverse ... */</span>
+    <span class="tok-property">justify-content</span><span class="tok-punctuation">:</span> space-between<span class="tok-punctuation">;</span> <span class="tok-comment">/* main axis */</span>
+    <span class="tok-property">align-items</span><span class="tok-punctuation">:</span> center<span class="tok-punctuation">;</span>          <span class="tok-comment">/* cross axis */</span>
+    <span class="tok-property">gap</span><span class="tok-punctuation">:</span> <span class="tok-number">20</span><span class="tok-unit">px</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-selector">.item</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">flex</span><span class="tok-punctuation">:</span> <span class="tok-number">1</span><span class="tok-punctuation">;</span>  <span class="tok-comment">/* grow evenly */</span>
+    <span class="tok-property">align-self</span><span class="tok-punctuation">:</span> stretch<span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>Flexbox cheatsheet</h3>
+                <table>
+                    <tr><th>Property</th><th>Values</th><th>Effect</th></tr>
+                    <tr><td>justify-content</td><td>flex-start, center, space-between, space-around</td><td>Main axis alignment</td></tr>
+                    <tr><td>align-items</td><td>flex-start, center, stretch</td><td>Cross axis alignment</td></tr>
+                    <tr><td>flex-wrap</td><td>nowrap, wrap</td><td>Wrap items</td></tr>
+                    <tr><td>flex-grow</td><td>0 (default) or positive number</td><td>Grow factor</td></tr>
+                </table>
+            </section>
+
+            <section id="css-grid">
+                <h2>16. Layout: CSS Grid</h2>
+                <pre><code><span class="tok-selector">.grid-container</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">display</span><span class="tok-punctuation">:</span> grid<span class="tok-punctuation">;</span>
+    <span class="tok-property">grid-template-columns</span><span class="tok-punctuation">:</span> <span class="tok-function">repeat</span><span class="tok-punctuation">(</span><span class="tok-number">3</span><span class="tok-punctuation">,</span> <span class="tok-number">1</span><span class="tok-unit">fr</span><span class="tok-punctuation">);</span>  <span class="tok-comment">/* three equal columns */</span>
+    <span class="tok-property">grid-template-rows</span><span class="tok-punctuation">:</span> <span class="tok-number">100</span><span class="tok-unit">px</span> auto<span class="tok-punctuation">;</span>
+    <span class="tok-property">gap</span><span class="tok-punctuation">:</span> <span class="tok-number">16</span><span class="tok-unit">px</span><span class="tok-punctuation">;</span>   <span class="tok-comment">/* shorthand for row-gap and column-gap */</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-selector">.item</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">grid-column</span><span class="tok-punctuation">:</span> span <span class="tok-number">2</span><span class="tok-punctuation">;</span>   <span class="tok-comment">/* span across columns */</span>
+    <span class="tok-property">grid-row</span><span class="tok-punctuation">:</span> <span class="tok-number">1</span> / <span class="tok-number">3</span><span class="tok-punctuation">;</span>     <span class="tok-comment">/* from row line 1 to 3 */</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <div class="note">Grid is ideal for 2‑dimensional layouts; Flexbox is better for 1‑dimensional rows or columns.</div>
+            </section>
+
+            <section id="css-responsive">
+                <h2>17. Responsive Design</h2>
+                <pre><code><span class="tok-comment">/* media queries */</span>
+<span class="tok-at">@media</span> (<span class="tok-property">max-width</span>: <span class="tok-number">768</span><span class="tok-unit">px</span>) <span class="tok-punctuation">{</span>
+    <span class="tok-selector">.container</span> <span class="tok-punctuation">{</span>
+        <span class="tok-property">flex-direction</span><span class="tok-punctuation">:</span> column<span class="tok-punctuation">;</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-comment">/* fluid images */</span>
+<span class="tok-selector">img</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">max-width</span><span class="tok-punctuation">:</span> <span class="tok-number">100</span><span class="tok-unit">%</span><span class="tok-punctuation">;</span>
+    <span class="tok-property">height</span><span class="tok-punctuation">:</span> auto<span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-comment">/* responsive units */</span>
+<span class="tok-property">font-size</span><span class="tok-punctuation">:</span> clamp<span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-unit">rem</span><span class="tok-punctuation">,</span> <span class="tok-number">2.5</span><span class="tok-unit">vw</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-unit">rem</span><span class="tok-punctuation">);</span>  <span class="tok-comment">/* min, preferred, max */</span></code></pre>
+                <h3>Common breakpoints</h3>
+                <table>
+                    <tr><th>Device</th><th>Width</th></tr>
+                    <tr><td>Mobile</td><td>&lt; 576px</td></tr>
+                    <tr><td>Tablet</td><td>576px – 768px</td></tr>
+                    <tr><td>Desktop</td><td>&gt; 992px</td></tr>
+                </table>
+            </section>
+
+            <section id="css-transitions">
+                <h2>18. Transitions & Animations</h2>
+                <pre><code><span class="tok-comment">/* transition */</span>
+<span class="tok-selector">button</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">background</span><span class="tok-punctuation">:</span> blue<span class="tok-punctuation">;</span>
+    <span class="tok-property">transition</span><span class="tok-punctuation">:</span> background <span class="tok-number">0.3</span><span class="tok-unit">s</span> ease<span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-selector">button:hover</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">background</span><span class="tok-punctuation">:</span> red<span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-comment">/* keyframe animation */</span>
+<span class="tok-at">@keyframes</span> slideIn <span class="tok-punctuation">{</span>
+    <span class="tok-selector">from</span> <span class="tok-punctuation">{</span> <span class="tok-property">transform</span><span class="tok-punctuation">:</span> <span class="tok-function">translateX</span><span class="tok-punctuation">(</span><span class="tok-number">-100</span><span class="tok-unit">%</span><span class="tok-punctuation">);</span> <span class="tok-punctuation">}</span>
+    <span class="tok-selector">to</span>   <span class="tok-punctuation">{</span> <span class="tok-property">transform</span><span class="tok-punctuation">:</span> <span class="tok-function">translateX</span><span class="tok-punctuation">(</span><span class="tok-number">0</span><span class="tok-punctuation">);</span> <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-selector">.box</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">animation</span><span class="tok-punctuation">:</span> slideIn <span class="tok-number">0.5</span><span class="tok-unit">s</span> ease-out<span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+            </section>
+
+            <section id="css-modern">
+                <h2>19. Modern CSS Features</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>CSS Variables</h3>
+                        <pre><code><span class="tok-selector">:root</span> <span class="tok-punctuation">{</span>
+    <span class="tok-property">--main-color</span><span class="tok-punctuation">:</span> <span class="tok-hex">#3498db</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-selector">body</span> <span class="tok-punctuation">{</span> <span class="tok-property">color</span><span class="tok-punctuation">:</span> <span class="tok-function">var</span>(<span class="tok-variable">--main-color</span>)<span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Flexbox Gap</h3>
+                        <p><code class="inline">gap: 20px;</code> works in flex and grid without margin hacks.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Aspect Ratio</h3>
+                        <pre><code><span class="tok-property">aspect-ratio</span><span class="tok-punctuation">:</span> <span class="tok-number">16</span> / <span class="tok-number">9</span><span class="tok-punctuation">;</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Container Queries</h3>
+                        <p>Style based on parent container size, not viewport.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tips">
+                <h2>20. Quick Remember Tips</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>HTML</h3>
+                        <ul>
+                            <li>Always include <code class="inline">&lt;!DOCTYPE html&gt;</code></li>
+                            <li>Use semantic tags for accessibility</li>
+                            <li>Close all tags (XHTML style optional but clean)</li>
+                            <li>Forms need <code class="inline">name</code> attributes for submission</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>CSS</h3>
+                        <ul>
+                            <li>Use <code class="inline">box-sizing: border-box</code> globally</li>
+                            <li>Prefer <code class="inline">rem</code> / <code class="inline">em</code> over <code class="inline">px</code> for typography</li>
+                            <li>Organize with a methodology (BEM, utility‑first)</li>
+                            <li>Minimize repaints by animating <code class="inline">transform</code> and <code class="inline">opacity</code></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common pitfalls: forgetting the viewport meta tag, overusing <code class="inline">!important</code>,
+                    not clearing floats, ignoring cross‑browser compatibility, and missing <code class="inline">alt</code> text on images.
+                </div>
+            </section>
+        </main>
+    </div>
+
+
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+<!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

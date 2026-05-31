@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assembly (x86-64) Complete Summary</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p,
+        li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(59,130,246,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(59,130,246,0.2);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin: 4px 6px 4px 0;
+            font-weight: 600;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword {
+            color: var(--tok-keyword);
+        }
+        .tok-type {
+            color: var(--tok-type);
+        }
+        .tok-string {
+            color: var(--tok-string);
+        }
+        .tok-number {
+            color: var(--tok-number);
+        }
+        .tok-comment {
+            color: var(--tok-comment);
+            font-style: italic;
+        }
+        .tok-method {
+            color: var(--tok-method);
+        }
+        .tok-class {
+            color: var(--tok-class);
+        }
+        .tok-property {
+            color: var(--tok-property);
+        }
+        .tok-operator {
+            color: var(--tok-operator);
+        }
+        .tok-punctuation {
+            color: var(--tok-punctuation);
+        }
+        .tok-variable {
+            color: var(--tok-variable);
+        }
+        .tok-namespace {
+            color: var(--tok-namespace);
+        }
+        .tok-preproc {
+            color: var(--tok-preproc);
+        }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>Assembly (x86-64) Complete Summary</h1>
+        <p>
+            A comprehensive remembrance‑style reference for x86‑64 Assembly (Intel syntax).
+            Covers registers, instructions, memory addressing, control flow, the stack,
+            system calls, and essential patterns – with full code examples.
+        </p>
+    </header>
+
+    <div class="layout">
+        <main>
+            <!-- 1. Basics -->
+            <section id="intro">
+                <h2>1. Assembly Basics</h2>
+                <p>
+                    Assembly is a low‑level language that maps directly to machine code. x86‑64
+                    (also called AMD64) is the 64‑bit extension of the x86 architecture. It uses
+                    little‑endian byte ordering and supports a large register set.
+                </p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Key characteristics</h3>
+                        <ul>
+                            <li>Each instruction corresponds to one CPU operation</li>
+                            <li>Register‑based (load/store architecture)</li>
+                            <li>Little‑endian</li>
+                            <li>Supports multiple addressing modes</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Common assemblers</h3>
+                        <ul>
+                            <li>NASM (Netwide Assembler)</li>
+                            <li>MASM (Microsoft Macro Assembler)</li>
+                            <li>GAS (GNU Assembler, AT&T syntax)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Assemble & link (NASM)</h3>
+                        <pre><code><span class="tok-comment">; assemble</span>
+nasm -f elf64 -o program.o program.asm
+<span class="tok-comment">; link</span>
+ld -o program program.o</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Syntax & Structure -->
+            <section id="syntax">
+                <h2>2. Syntax & Structure</h2>
+                <pre><code><span class="tok-keyword">section</span> <span class="tok-string">.data</span>        <span class="tok-comment">; initialized data</span>
+    msg <span class="tok-keyword">db</span> <span class="tok-string">"Hello, World!"</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span>
+
+<span class="tok-keyword">section</span> <span class="tok-string">.bss</span>         <span class="tok-comment">; uninitialized data</span>
+    buffer <span class="tok-keyword">resb</span> <span class="tok-number">128</span>
+
+<span class="tok-keyword">section</span> <span class="tok-string">.text</span>        <span class="tok-comment">; code</span>
+    <span class="tok-keyword">global</span> <span class="tok-method">_start</span>
+
+<span class="tok-method">_start:</span>
+    <span class="tok-comment">; exit(0)</span>
+    <span class="tok-keyword">mov</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-number">60</span>          <span class="tok-comment">; syscall number (exit)</span>
+    <span class="tok-keyword">xor</span> <span class="tok-type">rdi</span><span class="tok-punctuation">,</span> <span class="tok-type">rdi</span>       <span class="tok-comment">; exit code 0</span>
+    <span class="tok-keyword">syscall</span></code></pre>
+                <h3>Comments</h3>
+                <pre><code><span class="tok-comment">; single‑line comment</span>
+<span class="tok-comment">; multi‑line comments are
+; just multiple single‑line ones</span></code></pre>
+            </section>
+
+            <!-- 3. Registers -->
+            <section id="registers">
+                <h2>3. Registers (x86-64)</h2>
+                <p>64‑bit registers start with <code class="inline">R</code>. Lower parts are accessible as <code class="inline">E</code> (32‑bit), <code class="inline">W</code> (16‑bit), and <code class="inline">B</code>/<code class="inline">L</code> (8‑bit).</p>
+                <table>
+                    <tr><th>64‑bit</th><th>32‑bit</th><th>16‑bit</th><th>8‑bit low</th><th>Purpose</th></tr>
+                    <tr><td>RAX</td><td>EAX</td><td>AX</td><td>AL</td><td>Return value / accumulator</td></tr>
+                    <tr><td>RBX</td><td>EBX</td><td>BX</td><td>BL</td><td>Callee‑saved</td></tr>
+                    <tr><td>RCX</td><td>ECX</td><td>CX</td><td>CL</td><td>Counter / 4th argument</td></tr>
+                    <tr><td>RDX</td><td>EDX</td><td>DX</td><td>DL</td><td>3rd argument / I/O</td></tr>
+                    <tr><td>RSI</td><td>ESI</td><td>SI</td><td>SIL</td><td>2nd argument / source index</td></tr>
+                    <tr><td>RDI</td><td>EDI</td><td>DI</td><td>DIL</td><td>1st argument / destination index</td></tr>
+                    <tr><td>RBP</td><td>EBP</td><td>BP</td><td>BPL</td><td>Base pointer (stack frame)</td></tr>
+                    <tr><td>RSP</td><td>ESP</td><td>SP</td><td>SPL</td><td>Stack pointer</td></tr>
+                    <tr><td>R8–R15</td><td>R8D–R15D</td><td>R8W–R15W</td><td>R8B–R15B</td><td>General purpose (extended)</td></tr>
+                </table>
+                <h3>Special registers</h3>
+                <ul>
+                    <li><strong>RIP</strong> – Instruction pointer (cannot be modified directly)</li>
+                    <li><strong>RFLAGS</strong> – Status flags (CF, ZF, SF, OF, etc.)</li>
+                    <li><strong>XMM0–XMM15</strong> – 128‑bit SSE registers (floating point)</li>
+                </ul>
+            </section>
+
+            <!-- 4. Data Directives & Types -->
+            <section id="data">
+                <h2>4. Data Directives & Types</h2>
+                <pre><code><span class="tok-keyword">section</span> <span class="tok-string">.data</span>
+    byte_var  <span class="tok-keyword">db</span> <span class="tok-number">0x55</span>              <span class="tok-comment">; define byte (8 bits)</span>
+    word_var  <span class="tok-keyword">dw</span> <span class="tok-number">1000</span>             <span class="tok-comment">; define word (16 bits)</span>
+    dword_var <span class="tok-keyword">dd</span> <span class="tok-number">0x12345678</span>       <span class="tok-comment">; define double word (32 bits)</span>
+    qword_var <span class="tok-keyword">dq</span> <span class="tok-number">0x1A2B3C4D5E6F</span>   <span class="tok-comment">; define quad word (64 bits)</span>
+    ten_bytes <span class="tok-keyword">dt</span> <span class="tok-number">3.14</span>            <span class="tok-comment">; define ten bytes (80‑bit float)</span>
+    str_var   <span class="tok-keyword">db</span> <span class="tok-string">"Hello"</span><span class="tok-punctuation">,</span> <span class="tok-number">0</span>      <span class="tok-comment">; null‑terminated string</span>
+    array     <span class="tok-keyword">dd</span> <span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">,</span> <span class="tok-number">4</span>     <span class="tok-comment">; array of dwords</span>
+
+<span class="tok-keyword">section</span> <span class="tok-string">.bss</span>
+    buffer <span class="tok-keyword">resb</span> <span class="tok-number">256</span>        <span class="tok-comment">; reserve 256 bytes</span>
+    arr    <span class="tok-keyword">resq</span> <span class="tok-number">10</span>         <span class="tok-comment">; reserve 10 quad words</span></code></pre>
+                <div class="note">Data is laid out sequentially in memory. Strings are not automatically null‑terminated unless you add <code class="inline">, 0</code>.</div>
+            </section>
+
+            <!-- 5. Memory Addressing -->
+            <section id="addressing">
+                <h2>5. Memory Addressing Modes</h2>
+                <p>General form: <code class="inline">[base + index*scale + displacement]</code></p>
+                <pre><code><span class="tok-keyword">mov</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-type">rbx</span><span class="tok-punctuation">]</span>               <span class="tok-comment">; base only</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-type">rbx</span> <span class="tok-operator">+</span> <span class="tok-number">8</span><span class="tok-punctuation">]</span>          <span class="tok-comment">; base + displacement</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-type">rbx</span> <span class="tok-operator">+</span> <span class="tok-type">rcx</span><span class="tok-operator">*</span><span class="tok-number">4</span><span class="tok-punctuation">]</span>     <span class="tok-comment">; base + index*scale</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-type">rbx</span> <span class="tok-operator">+</span> <span class="tok-type">rcx</span><span class="tok-operator">*</span><span class="tok-number">4</span> <span class="tok-operator">+</span> <span class="tok-number">16</span><span class="tok-punctuation">]</span> <span class="tok-comment">; full form</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-variable">array</span><span class="tok-punctuation">]</span>          <span class="tok-comment">; direct address (label)</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-variable">array</span> <span class="tok-operator">+</span> <span class="tok-type">rcx</span><span class="tok-operator">*</span><span class="tok-number">4</span><span class="tok-punctuation">]</span> <span class="tok-comment">; label + offset</span></code></pre>
+                <p>Scale can be 1, 2, 4, or 8. Displacement can be 8, 16, or 32 bits.</p>
+                <div class="danger">Always ensure the address is valid and the size matches the destination register.</div>
+            </section>
+
+            <!-- 6. Data Movement -->
+            <section id="movement">
+                <h2>6. Data Movement Instructions</h2>
+                <pre><code><span class="tok-keyword">mov</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-number">42</span>                <span class="tok-comment">; immediate to register</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-type">rbx</span>               <span class="tok-comment">; register to register</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-type">rbx</span><span class="tok-punctuation">]</span>            <span class="tok-comment">; memory to register</span>
+<span class="tok-keyword">mov</span> <span class="tok-punctuation">[</span><span class="tok-type">rbx</span><span class="tok-punctuation">],</span> <span class="tok-type">rax</span>             <span class="tok-comment">; register to memory</span>
+
+<span class="tok-keyword">movzx</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-type">byte</span> <span class="tok-punctuation">[</span><span class="tok-type">rsi</span><span class="tok-punctuation">]</span>  <span class="tok-comment">; move with zero‑extend</span>
+<span class="tok-keyword">movsx</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-type">word</span> <span class="tok-punctuation">[</span><span class="tok-type">rsi</span><span class="tok-punctuation">]</span>  <span class="tok-comment">; move with sign‑extend</span>
+
+<span class="tok-keyword">lea</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-type">rbx</span> <span class="tok-operator">+</span> <span class="tok-number">8</span><span class="tok-punctuation">]</span>       <span class="tok-comment">; load effective address (no memory access)</span>
+
+<span class="tok-keyword">push</span> <span class="tok-type">rax</span>                    <span class="tok-comment">; push onto stack (RSP -= 8)</span>
+<span class="tok-keyword">pop</span> <span class="tok-type">rbx</span>                     <span class="tok-comment">; pop from stack (RSP += 8)</span></code></pre>
+            </section>
+
+            <!-- 7. Arithmetic & Logic -->
+            <section id="arithmetic">
+                <h2>7. Arithmetic & Logic</h2>
+                <pre><code><span class="tok-keyword">add</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-number">10</span>            <span class="tok-comment">; rax += 10</span>
+<span class="tok-keyword">sub</span> <span class="tok-type">rbx</span><span class="tok-punctuation">,</span> <span class="tok-type">rcx</span>           <span class="tok-comment">; rbx -= rcx</span>
+<span class="tok-keyword">inc</span> <span class="tok-type">rax</span>                 <span class="tok-comment">; rax++</span>
+<span class="tok-keyword">dec</span> <span class="tok-type">rax</span>                 <span class="tok-comment">; rax--</span>
+<span class="tok-keyword">mul</span> <span class="tok-type">rbx</span>                 <span class="tok-comment">; unsigned: rdx:rax = rax * rbx</span>
+<span class="tok-keyword">imul</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-type">rbx</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span>   <span class="tok-comment">; signed: rax = rbx * 3</span>
+<span class="tok-keyword">div</span> <span class="tok-type">rcx</span>                 <span class="tok-comment">; unsigned: rax = rdx:rax / rcx, rdx = remainder</span>
+<span class="tok-keyword">idiv</span> <span class="tok-type">rcx</span>                <span class="tok-comment">; signed division</span>
+
+<span class="tok-keyword">and</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-type">rbx</span>           <span class="tok-comment">; bitwise AND</span>
+<span class="tok-keyword">or</span>  <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-type">rbx</span>           <span class="tok-comment">; bitwise OR</span>
+<span class="tok-keyword">xor</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-type">rax</span>          <span class="tok-comment">; zero out rax (xor same = 0)</span>
+<span class="tok-keyword">not</span> <span class="tok-type">rax</span>                 <span class="tok-comment">; bitwise NOT</span>
+<span class="tok-keyword">neg</span> <span class="tok-type">rax</span>                 <span class="tok-comment">; two's complement negation</span>
+<span class="tok-keyword">shl</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-number">1</span>            <span class="tok-comment">; logical shift left (multiply by 2)</span>
+<span class="tok-keyword">shr</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-number">1</span>            <span class="tok-comment">; logical shift right</span>
+<span class="tok-keyword">sar</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-number">1</span>            <span class="tok-comment">; arithmetic shift right (preserve sign)</span></code></pre>
+                <div class="note">Flags (ZF, CF, SF, OF) are set by most arithmetic instructions. Use <code class="inline">cmp</code> to set flags without storing the result.</div>
+            </section>
+
+            <!-- 8. Control Flow -->
+            <section id="control">
+                <h2>8. Control Flow</h2>
+                <h3>Unconditional jumps</h3>
+                <pre><code><span class="tok-keyword">jmp</span> <span class="tok-variable">label</span>          <span class="tok-comment">; direct jump</span>
+<span class="tok-keyword">jmp</span> <span class="tok-type">rax</span>            <span class="tok-comment">; indirect jump (register)</span></code></pre>
+                <h3>Conditional jumps (after <code class="inline">cmp</code> or arithmetic)</h3>
+                <pre><code><span class="tok-keyword">cmp</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-type">rbx</span>
+<span class="tok-keyword">je</span>  <span class="tok-variable">equal</span>          <span class="tok-comment">; jump if equal (ZF=1)</span>
+<span class="tok-keyword">jne</span> <span class="tok-variable">not_equal</span>     <span class="tok-comment">; jump if not equal (ZF=0)</span>
+<span class="tok-keyword">jg</span>  <span class="tok-variable">greater</span>       <span class="tok-comment">; jump if greater (signed)</span>
+<span class="tok-keyword">jl</span>  <span class="tok-variable">less</span>          <span class="tok-comment">; jump if less (signed)</span>
+<span class="tok-keyword">ja</span>  <span class="tok-variable">above</span>         <span class="tok-comment">; jump if above (unsigned)</span>
+<span class="tok-keyword">jb</span>  <span class="tok-variable">below</span>         <span class="tok-comment">; jump if below (unsigned)</span>
+<span class="tok-keyword">jz</span>  <span class="tok-variable">zero_flag</span>     <span class="tok-comment">; same as je</span></code></pre>
+                <h3>Loops</h3>
+                <pre><code><span class="tok-keyword">mov</span> <span class="tok-type">rcx</span><span class="tok-punctuation">,</span> <span class="tok-number">10</span>
+<span class="tok-variable">loop_start:</span>
+    <span class="tok-comment">; body</span>
+    <span class="tok-keyword">dec</span> <span class="tok-type">rcx</span>
+    <span class="tok-keyword">jnz</span> <span class="tok-variable">loop_start</span>
+
+<span class="tok-comment">; or use 'loop' instruction (decrements rcx and jumps if not zero)</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rcx</span><span class="tok-punctuation">,</span> <span class="tok-number">5</span>
+<span class="tok-variable">l1:</span>
+    <span class="tok-keyword">loop</span> <span class="tok-variable">l1</span></code></pre>
+            </section>
+
+            <!-- 9. Stack & Functions -->
+            <section id="stack">
+                <h2>9. Stack & Functions</h2>
+                <h3>Stack basics</h3>
+                <pre><code><span class="tok-keyword">push</span> <span class="tok-type">rbp</span>          <span class="tok-comment">; save old base pointer</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rbp</span><span class="tok-punctuation">,</span> <span class="tok-type">rsp</span>     <span class="tok-comment">; set new base pointer</span>
+<span class="tok-keyword">sub</span> <span class="tok-type">rsp</span><span class="tok-punctuation">,</span> <span class="tok-number">32</span>      <span class="tok-comment">; allocate 32 bytes for locals</span>
+<span class="tok-comment">; ... function body ...</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rsp</span><span class="tok-punctuation">,</span> <span class="tok-type">rbp</span>     <span class="tok-comment">; restore stack pointer</span>
+<span class="tok-keyword">pop</span> <span class="tok-type">rbp</span>           <span class="tok-comment">; restore old base pointer</span>
+<span class="tok-keyword">ret</span>               <span class="tok-comment">; return (pops RIP)</span></code></pre>
+                <h3>Calling a function</h3>
+                <pre><code><span class="tok-keyword">call</span> <span class="tok-variable">my_function</span>   <span class="tok-comment">; pushes return address and jumps</span>
+<span class="tok-comment">; after call, rax holds return value (if any)</span></code></pre>
+                <h3>Calling convention (System V AMD64 ABI)</h3>
+                <ul>
+                    <li>First 6 integer/pointer arguments: RDI, RSI, RDX, RCX, R8, R9</li>
+                    <li>Return value: RAX</li>
+                    <li>Callee‑saved registers: RBX, RBP, R12–R15</li>
+                    <li>Stack must be 16‑byte aligned before <code class="inline">call</code></li>
+                </ul>
+            </section>
+
+            <!-- 10. System Calls (Linux) -->
+            <section id="syscalls">
+                <h2>10. System Calls (Linux x86-64)</h2>
+                <pre><code><span class="tok-keyword">mov</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-number">1</span>            <span class="tok-comment">; syscall number (write)</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rdi</span><span class="tok-punctuation">,</span> <span class="tok-number">1</span>            <span class="tok-comment">; arg1: file descriptor (stdout)</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rsi</span><span class="tok-punctuation">,</span> <span class="tok-variable">msg</span>         <span class="tok-comment">; arg2: pointer to string</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rdx</span><span class="tok-punctuation">,</span> <span class="tok-number">13</span>           <span class="tok-comment">; arg3: length</span>
+<span class="tok-keyword">syscall</span>               <span class="tok-comment">; invoke kernel</span>
+<span class="tok-comment">; return value in rax</span></code></pre>
+                <table>
+                    <tr><th>syscall</th><th>rax</th><th>rdi</th><th>rsi</th><th>rdx</th></tr>
+                    <tr><td>read</td><td>0</td><td>fd</td><td>buf</td><td>count</td></tr>
+                    <tr><td>write</td><td>1</td><td>fd</td><td>buf</td><td>count</td></tr>
+                    <tr><td>open</td><td>2</td><td>filename</td><td>flags</td><td>mode</td></tr>
+                    <tr><td>close</td><td>3</td><td>fd</td><td>-</td><td>-</td></tr>
+                    <tr><td>exit</td><td>60</td><td>error_code</td><td>-</td><td>-</td></tr>
+                </table>
+                <div class="note">Arguments go in: RDI, RSI, RDX, R10, R8, R9. Use <code class="inline">syscall</code> instruction (not <code class="inline">int 0x80</code>).</div>
+            </section>
+
+            <!-- 11. Macros & Preprocessor (NASM) -->
+            <section id="macros">
+                <h2>11. Macros & Preprocessor</h2>
+                <pre><code><span class="tok-preproc">%define</span> <span class="tok-variable">BUFFER_SIZE</span> <span class="tok-number">256</span>
+
+<span class="tok-preproc">%macro</span> <span class="tok-method">print</span> <span class="tok-number">2</span>           <span class="tok-comment">; macro with 2 args (string, length)</span>
+    <span class="tok-keyword">mov</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-number">1</span>
+    <span class="tok-keyword">mov</span> <span class="tok-type">rdi</span><span class="tok-punctuation">,</span> <span class="tok-number">1</span>
+    <span class="tok-keyword">mov</span> <span class="tok-type">rsi</span><span class="tok-punctuation">,</span> <span class="tok-variable">%1</span>
+    <span class="tok-keyword">mov</span> <span class="tok-type">rdx</span><span class="tok-punctuation">,</span> <span class="tok-variable">%2</span>
+    <span class="tok-keyword">syscall</span>
+<span class="tok-preproc">%endmacro</span>
+
+<span class="tok-keyword">section</span> <span class="tok-string">.data</span>
+    hello <span class="tok-keyword">db</span> <span class="tok-string">"Hi"</span><span class="tok-punctuation">,</span> <span class="tok-number">10</span>
+
+<span class="tok-keyword">section</span> <span class="tok-string">.text</span>
+    <span class="tok-method">print</span> <span class="tok-variable">hello</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span>   <span class="tok-comment">; expands to the 4 instructions above</span></code></pre>
+                <h3>Conditional assembly</h3>
+                <pre><code><span class="tok-preproc">%ifdef</span> <span class="tok-variable">DEBUG</span>
+    <span class="tok-comment">; debug code</span>
+<span class="tok-preproc">%endif</span></code></pre>
+            </section>
+
+            <!-- 12. Floating Point (SSE) -->
+            <section id="float">
+                <h2>12. Floating Point (SSE)</h2>
+                <pre><code><span class="tok-comment">; Scalar double‑precision</span>
+<span class="tok-keyword">movsd</span> <span class="tok-type">xmm0</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-type">rsi</span><span class="tok-punctuation">]</span>       <span class="tok-comment">; load double</span>
+<span class="tok-keyword">addsd</span> <span class="tok-type">xmm0</span><span class="tok-punctuation">,</span> <span class="tok-type">xmm1</span>         <span class="tok-comment">; add doubles</span>
+<span class="tok-keyword">movsd</span> <span class="tok-punctuation">[</span><span class="tok-type">rdi</span><span class="tok-punctuation">],</span> <span class="tok-type">xmm0</span>       <span class="tok-comment">; store double</span>
+
+<span class="tok-comment">; Scalar single‑precision</span>
+<span class="tok-keyword">movss</span> <span class="tok-type">xmm0</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-type">rsi</span><span class="tok-punctuation">]</span>
+<span class="tok-keyword">mulss</span> <span class="tok-type">xmm0</span><span class="tok-punctuation">,</span> <span class="tok-type">xmm1</span>
+
+<span class="tok-comment">; Convert between integers and floats</span>
+<span class="tok-keyword">cvtsi2sd</span> <span class="tok-type">xmm0</span><span class="tok-punctuation">,</span> <span class="tok-type">rax</span>   <span class="tok-comment">; integer to double</span>
+<span class="tok-keyword">cvttsd2si</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-type">xmm0</span> <span class="tok-comment">; truncate double to integer</span></code></pre>
+            </section>
+
+            <!-- 13. Common Patterns -->
+            <section id="patterns">
+                <h2>13. Common Patterns</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Zero a register</h3>
+                        <pre><code><span class="tok-keyword">xor</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-type">rax</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Set to 1</h3>
+                        <pre><code><span class="tok-keyword">xor</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-type">rax</span>
+<span class="tok-keyword">inc</span> <span class="tok-type">rax</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Swap two registers</h3>
+                        <pre><code><span class="tok-keyword">xchg</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-type">rbx</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Load address of string</h3>
+                        <pre><code><span class="tok-keyword">lea</span> <span class="tok-type">rsi</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-variable">msg</span><span class="tok-punctuation">]</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Multiply by constant</h3>
+                        <pre><code><span class="tok-keyword">lea</span> <span class="tok-type">rax</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span><span class="tok-type">rax</span> <span class="tok-operator">+</span> <span class="tok-type">rax</span><span class="tok-operator">*</span><span class="tok-number">4</span><span class="tok-punctuation">]</span>  <span class="tok-comment">; rax *= 5</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>String length (loop)</h3>
+                        <pre><code><span class="tok-keyword">mov</span> <span class="tok-type">rdi</span><span class="tok-punctuation">,</span> <span class="tok-variable">msg</span>
+<span class="tok-keyword">xor</span> <span class="tok-type">al</span><span class="tok-punctuation">,</span> <span class="tok-type">al</span>
+<span class="tok-keyword">mov</span> <span class="tok-type">rcx</span><span class="tok-punctuation">,</span> <span class="tok-number">-1</span>
+<span class="tok-keyword">repne</span> <span class="tok-keyword">scasb</span>        <span class="tok-comment">; find zero byte</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 14. Quick Remember Tips -->
+            <section id="tips">
+                <h2>14. Quick Remember Tips</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Registers</h3>
+                        <p>Learn the ABI: RDI, RSI, RDX, RCX, R8, R9 for args; RAX return; RBX, RBP, R12‑R15 preserved.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Instructions</h3>
+                        <p>Most instructions can take register, memory, or immediate operands. Destination usually first (Intel).</p>
+                    </div>
+                    <div class="card">
+                        <h3>Stack alignment</h3>
+                        <p>Keep stack 16‑byte aligned before calls. Sub an odd multiple of 8 if needed.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Comments</h3>
+                        <p>Use <code class="inline">;</code> for comments. Document registers and side effects.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Debugging</h3>
+                        <p>Use <code class="inline">gdb</code> with layout asm, stepi, info registers.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Endianness</h3>
+                        <p>Little‑endian: least significant byte at lowest address.</p>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common pitfalls: forgetting to zero a register before division, using wrong operand size,
+                    not aligning the stack, and corrupting callee‑saved registers.
+                </div>
+            </section>
+        </main>
+    </div>
+
+ 
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+<!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

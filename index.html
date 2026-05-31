@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultimate Knowledge Hub</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 700px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.1rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+            z-index: 10;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 220px;
+            height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--text);
+            transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            background: rgba(59,130,246,0.15);
+            border-color: var(--accent);
+        }
+
+        .card .icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .card .title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        body.light .card {
+            background: rgba(255,255,255,0.7);
+        }
+
+        body.light .card:hover {
+            background: rgba(59,130,246,0.1);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+            width: 100%;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                width: 150px;
+                height: 150px;
+            }
+            .card .icon {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀</button>
+        <h1>Knowledge Hub</h1>
+        <p>Your complete collection of programming & technology references</p>
+    </header>
+
+    <div class="container">
+        <!-- ============ CARD TEMPLATE (copy this block to add a new subject) ============ -->
+        <!--
+        <a href="YOUR_FILE.html" class="card">
+            <div class="icon">🔷</div>
+            <div class="title">Language Name</div>
+        </a>
+        -->
+
+        <a href="csharp.html" class="card">
+            <div class="icon">🎯</div>
+            <div class="title">C#</div>
+        </a>
+
+        <a href="C++.html" class="card">
+            <div class="icon">⚙️</div>
+            <div class="title">C++</div>
+        </a>
+
+        <a href="JavaScript.html" class="card">
+            <div class="icon">📜</div>
+            <div class="title">JavaScript</div>
+        </a>
+
+        <a href="Python.html" class="card">
+            <div class="icon">🐍</div>
+            <div class="title">Python</div>
+        </a>
+        <a href="Python2.html" class="card">
+            <div class="icon">🐍</div>
+            <div class="title">Python</div>
+        </a>
+        <a href="C.html" class="card">
+            <div class="icon">🔵</div>
+            <div class="title">C</div>
+        </a>
+
+        <a href="Html&CSS.html" class="card">
+            <div class="icon">🌐</div>
+            <div class="title">HTML & CSS</div>
+        </a>
+
+        <a href="Assembly.html" class="card">
+            <div class="icon">🧠</div>
+            <div class="title">Assembly</div>
+        </a>
+
+        <a href="SQL.html" class="card">
+            <div class="icon">🗃️</div>
+            <div class="title">SQL</div>
+        </a>
+
+        <a href="Django.html" class="card">
+            <div class="icon">🟢</div>
+            <div class="title">Django</div>
+        </a>
+
+        <a href="PHP.html" class="card">
+            <div class="icon">🐘</div>
+            <div class="title">PHP</div>
+        </a>
+
+        <a href="network.html" class="card">
+            <div class="icon">🛜</div>
+            <div class="title">Networking</div>
+        </a>
+        <a href="algorithm.html" class="card">
+            <div class="icon">🧩</div>
+            <div class="title">Algorithm</div>
+        </a>
+        <a href="linux.html" class="card">
+            <div class="icon">💻</div>
+            <div class="title">Linux</div>
+        </a>
+
+        <a href="Java.html" class="card">
+            <div class="icon">☕</div>
+            <div class="title">Java</div>
+        </a>
+        <a href="phisics.html" class="card">
+            <div class="icon">📚</div>
+            <div class="title">Physics</div>
+        </a>
+        <a href="git.html" class="card">
+            <div class="icon">🐛</div>
+            <div class="title">Git</div>
+        </a>
+        <a href="computernetwork.html" class="card">
+            <div class="icon">🖥️</div>
+            <div class="title">Computer Network</div>
+        </a>
+
+        <a href="cybersecurity.html" class="card">
+            <div class="icon">🛡️</div>
+            <div class="title">Cyber Security</div>
+        </a>
+        <a href="machinelearning.html" class="card">
+            <div class="icon">🤖</div>
+            <div class="title">Machine Learning</div>
+        </a>
+        <!-- Duplicate the above block for more subjects -->
+    </div>
+
+    <div class="footer">
+        Click any card to open the complete reference.
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+</body>
+</html>

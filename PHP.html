@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PHP Complete Guide</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p,
+        li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(59,130,246,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(59,130,246,0.2);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin: 4px 6px 4px 0;
+            font-weight: 600;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword {
+            color: var(--tok-keyword);
+        }
+        .tok-type {
+            color: var(--tok-type);
+        }
+        .tok-string {
+            color: var(--tok-string);
+        }
+        .tok-number {
+            color: var(--tok-number);
+        }
+        .tok-comment {
+            color: var(--tok-comment);
+            font-style: italic;
+        }
+        .tok-method {
+            color: var(--tok-method);
+        }
+        .tok-class {
+            color: var(--tok-class);
+        }
+        .tok-property {
+            color: var(--tok-property);
+        }
+        .tok-operator {
+            color: var(--tok-operator);
+        }
+        .tok-punctuation {
+            color: var(--tok-punctuation);
+        }
+        .tok-variable {
+            color: var(--tok-variable);
+        }
+        .tok-namespace {
+            color: var(--tok-namespace);
+        }
+        .tok-preproc {
+            color: var(--tok-preproc);
+        }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>PHP Complete Guide</h1>
+        <p>
+            A teaching‑oriented, comprehensive guide to PHP. Covers syntax, variables,
+            functions, arrays, OOP, database access (PDO), forms, sessions, and modern PHP features.
+        </p>
+    </header>
+
+    <div class="layout">
+        <main>
+            <!-- 1. PHP Basics -->
+            <section id="intro">
+                <h2>1. PHP Fundamentals</h2>
+                <p>
+                    PHP is a server‑side scripting language designed for web development. It is
+                    embedded within HTML and runs on a web server (Apache, Nginx). PHP is dynamically
+                    typed, has a large standard library, and powers millions of websites.
+                </p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Key characteristics</h3>
+                        <ul>
+                            <li>Server‑side execution</li>
+                            <li>Embedded in HTML</li>
+                            <li>Dynamic typing</li>
+                            <li>Huge ecosystem (Composer, frameworks)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Common uses</h3>
+                        <ul>
+                            <li>Dynamic websites</li>
+                            <li>Content Management Systems (WordPress)</li>
+                            <li>REST APIs</li>
+                            <li>E‑commerce platforms</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>First script</h3>
+                        <pre><code><span class="tok-preproc">&lt;?php</span>
+<span class="tok-keyword">echo</span> <span class="tok-string">"Hello, PHP!"</span><span class="tok-punctuation">;</span>
+<span class="tok-preproc">?&gt;</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Syntax & Structure -->
+            <section id="syntax">
+                <h2>2. Syntax & Structure</h2>
+                <pre><code><span class="tok-preproc">&lt;?php</span>
+<span class="tok-comment">// PHP code goes here</span>
+<span class="tok-variable">$name</span> <span class="tok-operator">=</span> <span class="tok-string">"Alice"</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">echo</span> <span class="tok-string">"Hello, $name!"</span><span class="tok-punctuation">;</span>   <span class="tok-comment">// variables inside double quotes</span>
+<span class="tok-preproc">?&gt;</span></code></pre>
+                <h3>Comments</h3>
+                <pre><code><span class="tok-comment">// single‑line comment</span>
+<span class="tok-comment"># also single‑line (less common)</span>
+<span class="tok-comment">/* multi‑line
+   comment */</span></code></pre>
+                <div class="note">PHP files usually have <code class="inline">.php</code> extension. The closing <code class="inline">?&gt;</code> is optional if the file contains only PHP.</div>
+            </section>
+
+            <!-- 3. Variables & Data Types -->
+            <section id="variables">
+                <h2>3. Variables & Data Types</h2>
+                <pre><code><span class="tok-variable">$age</span> <span class="tok-operator">=</span> <span class="tok-number">25</span><span class="tok-punctuation">;</span>                 <span class="tok-comment">// integer</span>
+<span class="tok-variable">$price</span> <span class="tok-operator">=</span> <span class="tok-number">19.99</span><span class="tok-punctuation">;</span>           <span class="tok-comment">// float (double)</span>
+<span class="tok-variable">$name</span> <span class="tok-operator">=</span> <span class="tok-string">"Alice"</span><span class="tok-punctuation">;</span>          <span class="tok-comment">// string</span>
+<span class="tok-variable">$isActive</span> <span class="tok-operator">=</span> <span class="tok-keyword">true</span><span class="tok-punctuation">;</span>        <span class="tok-comment">// boolean</span>
+<span class="tok-variable">$items</span> <span class="tok-operator">=</span> <span class="tok-keyword">array</span><span class="tok-punctuation">(</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">);</span>  <span class="tok-comment">// array (old syntax)</span>
+<span class="tok-variable">$list</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">];</span>      <span class="tok-comment">// array (modern)</span>
+<span class="tok-variable">$obj</span> <span class="tok-operator">=</span> <span class="tok-keyword">null</span><span class="tok-punctuation">;</span>              <span class="tok-comment">// null</span></code></pre>
+                <table>
+                    <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+                    <tr><td>int</td><td>Integer</td><td><code class="inline">$x = 5;</code></td></tr>
+                    <tr><td>float</td><td>Floating point</td><td><code class="inline">$f = 3.14;</code></td></tr>
+                    <tr><td>string</td><td>Text</td><td><code class="inline">$s = "Hi";</code></td></tr>
+                    <tr><td>bool</td><td>true / false</td><td><code class="inline">$ok = true;</code></td></tr>
+                    <tr><td>array</td><td>Ordered map</td><td><code class="inline">$arr = [1, 2];</code></td></tr>
+                    <tr><td>null</td><td>No value</td><td><code class="inline">$x = null;</code></td></tr>
+                </table>
+                <p>PHP automatically converts types. Use <code class="inline">gettype()</code> to check a variable's type.</p>
+            </section>
+
+            <!-- 4. Operators -->
+            <section id="operators">
+                <h2>4. Operators</h2>
+                <div class="grid">
+                    <div class="card"><h3>Arithmetic</h3><p><code class="inline">+ - * / % **</code></p></div>
+                    <div class="card"><h3>Comparison</h3><p><code class="inline">== === != !== > < >= <=</code></p></div>
+                    <div class="card"><h3>Logical</h3><p><code class="inline">and or xor && || !</code></p></div>
+                    <div class="card"><h3>Assignment</h3><p><code class="inline">= += -= *= /= %= **= .=</code></p></div>
+                    <div class="card"><h3>String</h3><p><code class="inline">.</code> (concatenation), <code class="inline">.=</code></p></div>
+                    <div class="card"><h3>Null coalescing</h3><p><code class="inline">??</code> (if null, use alternative)</p></div>
+                </div>
+                <p class="note">Always prefer <code class="inline">===</code> (strict comparison) over <code class="inline">==</code> to avoid type juggling surprises.</p>
+            </section>
+
+            <!-- 5. Control Flow -->
+            <section id="control">
+                <h2>5. Control Flow</h2>
+                <h3>if / else</h3>
+                <pre><code><span class="tok-keyword">if</span> <span class="tok-punctuation">(</span><span class="tok-variable">$age</span> <span class="tok-operator">&gt;=</span> <span class="tok-number">18</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">echo</span> <span class="tok-string">"Adult"</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span> <span class="tok-keyword">elseif</span> <span class="tok-punctuation">(</span><span class="tok-variable">$age</span> <span class="tok-operator">&gt;=</span> <span class="tok-number">13</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">echo</span> <span class="tok-string">"Teen"</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span> <span class="tok-keyword">else</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">echo</span> <span class="tok-string">"Child"</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>switch</h3>
+                <pre><code><span class="tok-keyword">switch</span> <span class="tok-punctuation">(</span><span class="tok-variable">$day</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">case</span> <span class="tok-number">1</span><span class="tok-punctuation">:</span> <span class="tok-keyword">echo</span> <span class="tok-string">"Monday"</span><span class="tok-punctuation">;</span> <span class="tok-keyword">break</span><span class="tok-punctuation">;</span>
+    <span class="tok-keyword">default</span><span class="tok-punctuation">:</span> <span class="tok-keyword">echo</span> <span class="tok-string">"Unknown"</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>Loops</h3>
+                <pre><code><span class="tok-keyword">for</span> <span class="tok-punctuation">(</span><span class="tok-variable">$i</span> <span class="tok-operator">=</span> <span class="tok-number">0</span><span class="tok-punctuation">;</span> <span class="tok-variable">$i</span> <span class="tok-operator">&lt;</span> <span class="tok-number">5</span><span class="tok-punctuation">;</span> <span class="tok-variable">$i</span><span class="tok-operator">++</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">echo</span> <span class="tok-variable">$i</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">foreach</span> <span class="tok-punctuation">(</span><span class="tok-variable">$items</span> <span class="tok-keyword">as</span> <span class="tok-variable">$item</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">echo</span> <span class="tok-variable">$item</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">while</span> <span class="tok-punctuation">(</span><span class="tok-variable">$x</span> <span class="tok-operator">&lt;</span> <span class="tok-number">3</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-variable">$x</span><span class="tok-operator">++</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+            </section>
+
+            <!-- 6. Functions -->
+            <section id="functions">
+                <h2>6. Functions</h2>
+                <pre><code><span class="tok-keyword">function</span> <span class="tok-method">add</span><span class="tok-punctuation">(</span><span class="tok-variable">$a</span><span class="tok-punctuation">,</span> <span class="tok-variable">$b</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">return</span> <span class="tok-variable">$a</span> <span class="tok-operator">+</span> <span class="tok-variable">$b</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-comment">// type declarations (PHP 7+)</span>
+<span class="tok-keyword">function</span> <span class="tok-method">multiply</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span> <span class="tok-variable">$a</span><span class="tok-punctuation">,</span> <span class="tok-keyword">int</span> <span class="tok-variable">$b</span><span class="tok-punctuation">):</span> <span class="tok-keyword">int</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">return</span> <span class="tok-variable">$a</span> <span class="tok-operator">*</span> <span class="tok-variable">$b</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-comment">// arrow function (PHP 7.4+)</span>
+<span class="tok-variable">$double</span> <span class="tok-operator">=</span> <span class="tok-keyword">fn</span><span class="tok-punctuation">(</span><span class="tok-variable">$x</span><span class="tok-punctuation">)</span> <span class="tok-operator">=&gt;</span> <span class="tok-variable">$x</span> <span class="tok-operator">*</span> <span class="tok-number">2</span><span class="tok-punctuation">;</span>
+
+<span class="tok-comment">// variable‑length argument lists</span>
+<span class="tok-keyword">function</span> <span class="tok-method">sum</span><span class="tok-punctuation">(</span><span class="tok-operator">...</span><span class="tok-variable">$nums</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">return</span> <span class="tok-method">array_sum</span><span class="tok-punctuation">(</span><span class="tok-variable">$nums</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span></code></pre>
+            </section>
+
+            <!-- 7. Arrays -->
+            <section id="arrays">
+                <h2>7. Arrays</h2>
+                <h3>Indexed & associative arrays</h3>
+                <pre><code><span class="tok-variable">$indexed</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-string">'apple'</span><span class="tok-punctuation">,</span> <span class="tok-string">'banana'</span><span class="tok-punctuation">];</span>
+<span class="tok-variable">$assoc</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-string">'name'</span> <span class="tok-operator">=&gt;</span> <span class="tok-string">'Alice'</span><span class="tok-punctuation">,</span> <span class="tok-string">'age'</span> <span class="tok-operator">=&gt;</span> <span class="tok-number">25</span><span class="tok-punctuation">];</span>
+
+<span class="tok-keyword">echo</span> <span class="tok-variable">$indexed</span><span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">];</span>         <span class="tok-comment">// apple</span>
+<span class="tok-keyword">echo</span> <span class="tok-variable">$assoc</span><span class="tok-punctuation">[</span><span class="tok-string">'name'</span><span class="tok-punctuation">];</span>      <span class="tok-comment">// Alice</span></code></pre>
+                <h3>Array functions</h3>
+                <pre><code><span class="tok-method">count</span><span class="tok-punctuation">(</span><span class="tok-variable">$arr</span><span class="tok-punctuation">);</span>               <span class="tok-comment">// length</span>
+<span class="tok-method">array_push</span><span class="tok-punctuation">(</span><span class="tok-variable">$arr</span><span class="tok-punctuation">,</span> <span class="tok-string">'new'</span><span class="tok-punctuation">);</span>   <span class="tok-comment">// add to end</span>
+<span class="tok-method">array_pop</span><span class="tok-punctuation">(</span><span class="tok-variable">$arr</span><span class="tok-punctuation">);</span>            <span class="tok-comment">// remove last</span>
+<span class="tok-method">array_merge</span><span class="tok-punctuation">(</span><span class="tok-variable">$a</span><span class="tok-punctuation">,</span> <span class="tok-variable">$b</span><span class="tok-punctuation">);</span>      <span class="tok-comment">// merge arrays</span>
+<span class="tok-method">array_filter</span><span class="tok-punctuation">(</span><span class="tok-variable">$arr</span><span class="tok-punctuation">,</span> <span class="tok-variable">$callback</span><span class="tok-punctuation">);</span>
+<span class="tok-method">array_map</span><span class="tok-punctuation">(</span><span class="tok-variable">$callback</span><span class="tok-punctuation">,</span> <span class="tok-variable">$arr</span><span class="tok-punctuation">);</span></code></pre>
+            </section>
+
+            <!-- 8. Strings -->
+            <section id="strings">
+                <h2>8. Strings</h2>
+                <pre><code><span class="tok-variable">$str</span> <span class="tok-operator">=</span> <span class="tok-string">"Hello"</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">echo</span> <span class="tok-method">strlen</span><span class="tok-punctuation">(</span><span class="tok-variable">$str</span><span class="tok-punctuation">);</span>           <span class="tok-comment">// 5</span>
+<span class="tok-keyword">echo</span> <span class="tok-method">strtoupper</span><span class="tok-punctuation">(</span><span class="tok-variable">$str</span><span class="tok-punctuation">);</span>      <span class="tok-comment">// HELLO</span>
+<span class="tok-keyword">echo</span> <span class="tok-method">str_replace</span><span class="tok-punctuation">(</span><span class="tok-string">'H'</span><span class="tok-punctuation">,</span> <span class="tok-string">'J'</span><span class="tok-punctuation">,</span> <span class="tok-variable">$str</span><span class="tok-punctuation">);</span> <span class="tok-comment">// Jello</span>
+<span class="tok-variable">$pos</span> <span class="tok-operator">=</span> <span class="tok-method">strpos</span><span class="tok-punctuation">(</span><span class="tok-variable">$str</span><span class="tok-punctuation">,</span> <span class="tok-string">'ll'</span><span class="tok-punctuation">);</span>  <span class="tok-comment">// 2</span></code></pre>
+                <p>Use <code class="inline">sprintf()</code> or double‑quoted strings with variable interpolation for complex formatting.</p>
+            </section>
+
+            <!-- 9. OOP -->
+            <section id="oop">
+                <h2>9. Object‑Oriented Programming</h2>
+                <h3>Classes & objects</h3>
+                <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Person</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">public</span> <span class="tok-variable">$name</span><span class="tok-punctuation">;</span>
+    <span class="tok-keyword">private</span> <span class="tok-variable">$age</span><span class="tok-punctuation">;</span>
+
+    <span class="tok-keyword">function</span> <span class="tok-method">__construct</span><span class="tok-punctuation">(</span><span class="tok-variable">$name</span><span class="tok-punctuation">,</span> <span class="tok-variable">$age</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+        <span class="tok-variable">$this</span><span class="tok-operator">-&gt;</span><span class="tok-property">name</span> <span class="tok-operator">=</span> <span class="tok-variable">$name</span><span class="tok-punctuation">;</span>
+        <span class="tok-variable">$this</span><span class="tok-operator">-&gt;</span><span class="tok-property">age</span> <span class="tok-operator">=</span> <span class="tok-variable">$age</span><span class="tok-punctuation">;</span>
+    <span class="tok-punctuation">}</span>
+
+    <span class="tok-keyword">public</span> <span class="tok-keyword">function</span> <span class="tok-method">introduce</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+        <span class="tok-keyword">return</span> <span class="tok-string">"I'm $this-&gt;name, $this-&gt;age years old."</span><span class="tok-punctuation">;</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-variable">$p</span> <span class="tok-operator">=</span> <span class="tok-keyword">new</span> <span class="tok-class">Person</span><span class="tok-punctuation">(</span><span class="tok-string">"Alice"</span><span class="tok-punctuation">,</span> <span class="tok-number">25</span><span class="tok-punctuation">);</span>
+<span class="tok-keyword">echo</span> <span class="tok-variable">$p</span><span class="tok-operator">-&gt;</span><span class="tok-method">introduce</span><span class="tok-punctuation">();</span></code></pre>
+                <h3>Inheritance & polymorphism</h3>
+                <pre><code><span class="tok-keyword">class</span> <span class="tok-class">Animal</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">public</span> <span class="tok-keyword">function</span> <span class="tok-method">speak</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+        <span class="tok-keyword">return</span> <span class="tok-string">"Animal sound"</span><span class="tok-punctuation">;</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">Dog</span> <span class="tok-keyword">extends</span> <span class="tok-class">Animal</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">public</span> <span class="tok-keyword">function</span> <span class="tok-method">speak</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+        <span class="tok-keyword">return</span> <span class="tok-string">"Bark"</span><span class="tok-punctuation">;</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>Interfaces & traits</h3>
+                <pre><code><span class="tok-keyword">interface</span> <span class="tok-class">Logger</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">public</span> <span class="tok-keyword">function</span> <span class="tok-method">log</span><span class="tok-punctuation">(</span><span class="tok-variable">$msg</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">trait</span> <span class="tok-class">Timestampable</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">public</span> <span class="tok-variable">$created_at</span><span class="tok-punctuation">;</span>
+    <span class="tok-keyword">public</span> <span class="tok-keyword">function</span> <span class="tok-method">setCreatedAt</span><span class="tok-punctuation">(</span><span class="tok-variable">$date</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+        <span class="tok-variable">$this</span><span class="tok-operator">-&gt;</span><span class="tok-property">created_at</span> <span class="tok-operator">=</span> <span class="tok-variable">$date</span><span class="tok-punctuation">;</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">}</span></code></pre>
+            </section>
+
+            <!-- 10. Error Handling -->
+            <section id="errors">
+                <h2>10. Error & Exception Handling</h2>
+                <pre><code><span class="tok-keyword">try</span> <span class="tok-punctuation">{</span>
+    <span class="tok-variable">$result</span> <span class="tok-operator">=</span> <span class="tok-number">10</span> <span class="tok-operator">/</span> <span class="tok-number">0</span><span class="tok-punctuation">;</span>
+    <span class="tok-keyword">if</span> <span class="tok-punctuation">(</span><span class="tok-operator">!</span><span class="tok-variable">$result</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+        <span class="tok-keyword">throw</span> <span class="tok-keyword">new</span> <span class="tok-class">Exception</span><span class="tok-punctuation">(</span><span class="tok-string">"Division by zero"</span><span class="tok-punctuation">);</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">}</span> <span class="tok-keyword">catch</span> <span class="tok-punctuation">(</span><span class="tok-class">Exception</span> <span class="tok-variable">$e</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">echo</span> <span class="tok-string">"Error: "</span> <span class="tok-operator">.</span> <span class="tok-variable">$e</span><span class="tok-operator">-&gt;</span><span class="tok-method">getMessage</span><span class="tok-punctuation">();</span>
+<span class="tok-punctuation">}</span> <span class="tok-keyword">finally</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">echo</span> <span class="tok-string">"Cleanup"</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <p>PHP 8+ uses <code class="inline">\Error</code> for internal errors and <code class="inline">\Exception</code> for user exceptions. Both implement <code class="inline">Throwable</code>.</p>
+            </section>
+
+            <!-- 11. File Handling -->
+            <section id="files">
+                <h2>11. File Handling</h2>
+                <pre><code><span class="tok-comment">// read entire file</span>
+<span class="tok-variable">$content</span> <span class="tok-operator">=</span> <span class="tok-method">file_get_contents</span><span class="tok-punctuation">(</span><span class="tok-string">'data.txt'</span><span class="tok-punctuation">);</span>
+
+<span class="tok-comment">// write to file</span>
+<span class="tok-method">file_put_contents</span><span class="tok-punctuation">(</span><span class="tok-string">'data.txt'</span><span class="tok-punctuation">,</span> <span class="tok-string">'Hello'</span><span class="tok-punctuation">);</span>
+
+<span class="tok-comment">// fopen / fwrite / fclose (for streaming)</span>
+<span class="tok-variable">$handle</span> <span class="tok-operator">=</span> <span class="tok-method">fopen</span><span class="tok-punctuation">(</span><span class="tok-string">'log.txt'</span><span class="tok-punctuation">,</span> <span class="tok-string">'a'</span><span class="tok-punctuation">);</span>
+<span class="tok-method">fwrite</span><span class="tok-punctuation">(</span><span class="tok-variable">$handle</span><span class="tok-punctuation">,</span> <span class="tok-string">"New line\n"</span><span class="tok-punctuation">);</span>
+<span class="tok-method">fclose</span><span class="tok-punctuation">(</span><span class="tok-variable">$handle</span><span class="tok-punctuation">);</span></code></pre>
+                <div class="note">Always check if the file exists and is readable/writable before operations. Use <code class="inline">is_readable()</code>, <code class="inline">is_writable()</code>.</div>
+            </section>
+
+            <!-- 12. Database Access (PDO) -->
+            <section id="database">
+                <h2>12. Database Access with PDO</h2>
+                <p>PDO (PHP Data Objects) provides a consistent interface for multiple databases.</p>
+                <pre><code><span class="tok-variable">$dsn</span> <span class="tok-operator">=</span> <span class="tok-string">'mysql:host=localhost;dbname=test;charset=utf8mb4'</span><span class="tok-punctuation">;</span>
+<span class="tok-variable">$user</span> <span class="tok-operator">=</span> <span class="tok-string">'root'</span><span class="tok-punctuation">;</span>
+<span class="tok-variable">$pass</span> <span class="tok-operator">=</span> <span class="tok-string">''</span><span class="tok-punctuation">;</span>
+
+<span class="tok-keyword">try</span> <span class="tok-punctuation">{</span>
+    <span class="tok-variable">$pdo</span> <span class="tok-operator">=</span> <span class="tok-keyword">new</span> <span class="tok-class">PDO</span><span class="tok-punctuation">(</span><span class="tok-variable">$dsn</span><span class="tok-punctuation">,</span> <span class="tok-variable">$user</span><span class="tok-punctuation">,</span> <span class="tok-variable">$pass</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">[</span>
+        <span class="tok-variable">PDO</span><span class="tok-operator">::</span><span class="tok-variable">ATTR_ERRMODE</span> <span class="tok-operator">=&gt;</span> <span class="tok-variable">PDO</span><span class="tok-operator">::</span><span class="tok-variable">ERRMODE_EXCEPTION</span><span class="tok-punctuation">,</span>
+    <span class="tok-punctuation">]);</span>
+
+    <span class="tok-comment">// prepared statement</span>
+    <span class="tok-variable">$stmt</span> <span class="tok-operator">=</span> <span class="tok-variable">$pdo</span><span class="tok-operator">-&gt;</span><span class="tok-method">prepare</span><span class="tok-punctuation">(</span><span class="tok-string">'SELECT * FROM users WHERE id = ?'</span><span class="tok-punctuation">);</span>
+    <span class="tok-variable">$stmt</span><span class="tok-operator">-&gt;</span><span class="tok-method">execute</span><span class="tok-punctuation">([</span><span class="tok-variable">$id</span><span class="tok-punctuation">]);</span>
+    <span class="tok-variable">$user</span> <span class="tok-operator">=</span> <span class="tok-variable">$stmt</span><span class="tok-operator">-&gt;</span><span class="tok-method">fetch</span><span class="tok-punctuation">(</span><span class="tok-variable">PDO</span><span class="tok-operator">::</span><span class="tok-variable">FETCH_ASSOC</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span> <span class="tok-keyword">catch</span> <span class="tok-punctuation">(</span><span class="tok-class">PDOException</span> <span class="tok-variable">$e</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">echo</span> <span class="tok-string">"DB error: "</span> <span class="tok-operator">.</span> <span class="tok-variable">$e</span><span class="tok-operator">-&gt;</span><span class="tok-method">getMessage</span><span class="tok-punctuation">();</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <div class="danger">Never concatenate user input directly into SQL queries. Always use prepared statements to prevent SQL injection.</div>
+            </section>
+
+            <!-- 13. Forms & User Input -->
+            <section id="forms">
+                <h2>13. Handling Forms</h2>
+                <pre><code><span class="tok-comment">// check if form submitted</span>
+<span class="tok-keyword">if</span> <span class="tok-punctuation">(</span><span class="tok-variable">$_SERVER</span><span class="tok-punctuation">[</span><span class="tok-string">'REQUEST_METHOD'</span><span class="tok-punctuation">]</span> <span class="tok-operator">===</span> <span class="tok-string">'POST'</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-variable">$name</span> <span class="tok-operator">=</span> <span class="tok-method">htmlspecialchars</span><span class="tok-punctuation">(</span><span class="tok-variable">$_POST</span><span class="tok-punctuation">[</span><span class="tok-string">'name'</span><span class="tok-punctuation">]</span> <span class="tok-operator">??</span> <span class="tok-string">''</span><span class="tok-punctuation">);</span>
+    <span class="tok-variable">$email</span> <span class="tok-operator">=</span> <span class="tok-method">filter_input</span><span class="tok-punctuation">(</span><span class="tok-variable">INPUT_POST</span><span class="tok-punctuation">,</span> <span class="tok-string">'email'</span><span class="tok-punctuation">,</span> <span class="tok-variable">FILTER_VALIDATE_EMAIL</span><span class="tok-punctuation">);</span>
+    <span class="tok-keyword">if</span> <span class="tok-punctuation">(</span><span class="tok-operator">!</span><span class="tok-variable">$email</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+        <span class="tok-variable">$error</span> <span class="tok-operator">=</span> <span class="tok-string">"Invalid email"</span><span class="tok-punctuation">;</span>
+    <span class="tok-punctuation">}</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <p>Superglobals: <code class="inline">$_GET</code>, <code class="inline">$_POST</code>, <code class="inline">$_FILES</code> (file uploads), <code class="inline">$_SESSION</code>, <code class="inline">$_COOKIE</code>.</p>
+            </section>
+
+            <!-- 14. Sessions & Cookies -->
+            <section id="sessions">
+                <h2>14. Sessions & Cookies</h2>
+                <h3>Sessions</h3>
+                <pre><code><span class="tok-method">session_start</span><span class="tok-punctuation">();</span>
+<span class="tok-variable">$_SESSION</span><span class="tok-punctuation">[</span><span class="tok-string">'user_id'</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-number">42</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">echo</span> <span class="tok-variable">$_SESSION</span><span class="tok-punctuation">[</span><span class="tok-string">'user_id'</span><span class="tok-punctuation">];</span></code></pre>
+                <h3>Cookies</h3>
+                <pre><code><span class="tok-method">setcookie</span><span class="tok-punctuation">(</span><span class="tok-string">'theme'</span><span class="tok-punctuation">,</span> <span class="tok-string">'dark'</span><span class="tok-punctuation">,</span> <span class="tok-method">time</span><span class="tok-punctuation">()</span> <span class="tok-operator">+</span> <span class="tok-number">86400</span><span class="tok-punctuation">,</span> <span class="tok-string">'/'</span><span class="tok-punctuation">);</span>  <span class="tok-comment">// 1 day</span>
+<span class="tok-keyword">echo</span> <span class="tok-variable">$_COOKIE</span><span class="tok-punctuation">[</span><span class="tok-string">'theme'</span><span class="tok-punctuation">]</span> <span class="tok-operator">??</span> <span class="tok-string">'light'</span><span class="tok-punctuation">;</span></code></pre>
+            </section>
+
+            <!-- 15. Modern PHP Features -->
+            <section id="modern">
+                <h2>15. Modern PHP Features (7.x & 8.x)</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Null coalescing operator</h3>
+                        <pre><code><span class="tok-variable">$name</span> <span class="tok-operator">=</span> <span class="tok-variable">$_GET</span><span class="tok-punctuation">[</span><span class="tok-string">'name'</span><span class="tok-punctuation">]</span> <span class="tok-operator">??</span> <span class="tok-string">'Guest'</span><span class="tok-punctuation">;</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Nullsafe operator (PHP 8)</h3>
+                        <pre><code><span class="tok-variable">$country</span> <span class="tok-operator">=</span> <span class="tok-variable">$user</span><span class="tok-operator">?-></span><span class="tok-property">getAddress</span><span class="tok-punctuation">()</span><span class="tok-operator">?-></span><span class="tok-property">country</span><span class="tok-punctuation">;</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Match expression (PHP 8)</h3>
+                        <pre><code><span class="tok-variable">$status</span> <span class="tok-operator">=</span> <span class="tok-keyword">match</span><span class="tok-punctuation">(</span><span class="tok-variable">$code</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-number">200</span> <span class="tok-operator">=&gt;</span> <span class="tok-string">'OK'</span><span class="tok-punctuation">,</span>
+    <span class="tok-number">404</span> <span class="tok-operator">=&gt;</span> <span class="tok-string">'Not Found'</span><span class="tok-punctuation">,</span>
+<span class="tok-punctuation">};</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Named arguments (PHP 8)</h3>
+                        <pre><code><span class="tok-method">createUser</span><span class="tok-punctuation">(</span><span class="tok-variable">name</span><span class="tok-punctuation">:</span> <span class="tok-string">'Alice'</span><span class="tok-punctuation">,</span> <span class="tok-variable">age</span><span class="tok-punctuation">:</span> <span class="tok-number">25</span><span class="tok-punctuation">);</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Arrow functions</h3>
+                        <pre><code><span class="tok-variable">$double</span> <span class="tok-operator">=</span> <span class="tok-keyword">fn</span><span class="tok-punctuation">(</span><span class="tok-variable">$x</span><span class="tok-punctuation">)</span> <span class="tok-operator">=&gt;</span> <span class="tok-variable">$x</span> <span class="tok-operator">*</span> <span class="tok-number">2</span><span class="tok-punctuation">;</span></code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Union types</h3>
+                        <pre><code><span class="tok-keyword">function</span> <span class="tok-method">foo</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span><span class="tok-operator">|</span><span class="tok-keyword">float</span> <span class="tok-variable">$num</span><span class="tok-punctuation">):</span> <span class="tok-keyword">int</span><span class="tok-operator">|</span><span class="tok-keyword">float</span> <span class="tok-punctuation">{</span> <span class="tok-keyword">return</span> <span class="tok-variable">$num</span><span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 16. Quick Tips & Best Practices -->
+            <section id="tips">
+                <h2>16. Quick Tips & Best Practices</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Security</h3>
+                        <ul>
+                            <li>Always escape output with <code class="inline">htmlspecialchars()</code></li>
+                            <li>Use prepared statements for database queries</li>
+                            <li>Hash passwords with <code class="inline">password_hash()</code></li>
+                            <li>Validate all user input</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Performance</h3>
+                        <ul>
+                            <li>Use single quotes for static strings</li>
+                            <li>Enable opcode caching (OPcache)</li>
+                            <li>Autoload classes with Composer</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Code style</h3>
+                        <ul>
+                            <li>Follow PSR‑12 coding standards</li>
+                            <li>Use meaningful variable names</li>
+                            <li>Keep functions short and focused</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common pitfalls: trusting user input without validation, using <code class="inline">==</code> instead of <code class="inline">===</code>,
+                    forgetting to start the session, and using <code class="inline">mysql_*</code> functions (removed in PHP 7).
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+<!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

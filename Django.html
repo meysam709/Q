@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Django Backend Complete Guide</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p,
+        li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(59,130,246,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(59,130,246,0.2);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin: 4px 6px 4px 0;
+            font-weight: 600;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword {
+            color: var(--tok-keyword);
+        }
+        .tok-type {
+            color: var(--tok-type);
+        }
+        .tok-string {
+            color: var(--tok-string);
+        }
+        .tok-number {
+            color: var(--tok-number);
+        }
+        .tok-comment {
+            color: var(--tok-comment);
+            font-style: italic;
+        }
+        .tok-method {
+            color: var(--tok-method);
+        }
+        .tok-class {
+            color: var(--tok-class);
+        }
+        .tok-property {
+            color: var(--tok-property);
+        }
+        .tok-operator {
+            color: var(--tok-operator);
+        }
+        .tok-punctuation {
+            color: var(--tok-punctuation);
+        }
+        .tok-variable {
+            color: var(--tok-variable);
+        }
+        .tok-namespace {
+            color: var(--tok-namespace);
+        }
+        .tok-preproc {
+            color: var(--tok-preproc);
+        }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>Django Backend Complete Guide</h1>
+        <p>
+            A teaching‑oriented, complete guide to backend development with Django.
+            Covers MVT architecture, models, ORM, views, templates, forms, admin,
+            authentication, REST APIs (DRF), testing, and deployment.
+        </p>
+    </header>
+
+    <div class="layout">
+        <main>
+            <!-- 1. Django Basics -->
+            <section id="intro">
+                <h2>1. Django Fundamentals</h2>
+                <p>
+                    Django is a high‑level Python web framework that encourages rapid development and clean, pragmatic design.
+                    It follows the <strong>Model‑View‑Template (MVT)</strong> pattern: Models handle data, Views contain logic,
+                    and Templates render the user interface. Django comes with an ORM, admin panel, authentication, and many
+                    built‑in features.
+                </p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Core components</h3>
+                        <ul>
+                            <li>Models (database schema)</li>
+                            <li>Views (request handlers)</li>
+                            <li>Templates (HTML rendering)</li>
+                            <li>URL dispatcher</li>
+                            <li>Admin interface</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Start a project</h3>
+                        <pre><code><span class="tok-comment"># install Django</span>
+pip install django
+
+<span class="tok-comment"># create project</span>
+django-admin startproject myproject
+
+<span class="tok-comment"># run development server</span>
+python manage.py runserver</code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>Project structure</h3>
+                        <pre><code>myproject/
+├── manage.py
+├── myproject/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Apps & URL routing -->
+            <section id="apps">
+                <h2>2. Apps & URL Routing</h2>
+                <p>A Django project is composed of multiple <strong>apps</strong>. Each app is a self‑contained module.</p>
+                <pre><code><span class="tok-comment"># create an app</span>
+python manage.py startapp blog</code></pre>
+                <p>App structure: models.py, views.py, urls.py (create it), templates/, etc.</p>
+                <h3>URL configuration</h3>
+                <pre><code><span class="tok-comment"># myproject/urls.py</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">django</span><span class="tok-punctuation">.</span><span class="tok-namespace">urls</span> <span class="tok-keyword">import</span> <span class="tok-variable">include</span><span class="tok-punctuation">,</span> <span class="tok-variable">path</span>
+
+<span class="tok-variable">urlpatterns</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span>
+    <span class="tok-method">path</span><span class="tok-punctuation">(</span><span class="tok-string">'blog/'</span><span class="tok-punctuation">,</span> <span class="tok-method">include</span><span class="tok-punctuation">(</span><span class="tok-string">'blog.urls'</span><span class="tok-punctuation">)),</span>
+<span class="tok-punctuation">]</span>
+
+<span class="tok-comment"># blog/urls.py</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">django</span><span class="tok-punctuation">.</span><span class="tok-namespace">urls</span> <span class="tok-keyword">import</span> <span class="tok-variable">path</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">.</span> <span class="tok-keyword">import</span> <span class="tok-variable">views</span>
+
+<span class="tok-variable">urlpatterns</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span>
+    <span class="tok-method">path</span><span class="tok-punctuation">(</span><span class="tok-string">''</span><span class="tok-punctuation">,</span> <span class="tok-variable">views</span><span class="tok-punctuation">.</span><span class="tok-variable">home</span><span class="tok-punctuation">,</span> <span class="tok-variable">name</span><span class="tok-operator">=</span><span class="tok-string">'blog-home'</span><span class="tok-punctuation">),</span>
+    <span class="tok-method">path</span><span class="tok-punctuation">(</span><span class="tok-string">'post/&lt;int:pk&gt;/'</span><span class="tok-punctuation">,</span> <span class="tok-variable">views</span><span class="tok-punctuation">.</span><span class="tok-variable">post_detail</span><span class="tok-punctuation">,</span> <span class="tok-variable">name</span><span class="tok-operator">=</span><span class="tok-string">'post-detail'</span><span class="tok-punctuation">),</span>
+<span class="tok-punctuation">]</span></code></pre>
+                <div class="note">Use <code class="inline">&lt;int:pk&gt;</code> to capture URL parameters and pass them to views.</div>
+            </section>
+
+            <!-- 3. Models & ORM -->
+            <section id="models">
+                <h2>3. Models & the ORM</h2>
+                <p>Models are Python classes that map to database tables. Each attribute represents a database field.</p>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">django</span><span class="tok-punctuation">.</span><span class="tok-namespace">db</span> <span class="tok-keyword">import</span> <span class="tok-variable">models</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">Post</span><span class="tok-punctuation">(</span><span class="tok-variable">models</span><span class="tok-punctuation">.</span><span class="tok-variable">Model</span><span class="tok-punctuation">):</span>
+    <span class="tok-variable">title</span> <span class="tok-operator">=</span> <span class="tok-variable">models</span><span class="tok-punctuation">.</span><span class="tok-method">CharField</span><span class="tok-punctuation">(</span><span class="tok-variable">max_length</span><span class="tok-operator">=</span><span class="tok-number">200</span><span class="tok-punctuation">)</span>
+    <span class="tok-variable">slug</span> <span class="tok-operator">=</span> <span class="tok-variable">models</span><span class="tok-punctuation">.</span><span class="tok-method">SlugField</span><span class="tok-punctuation">(</span><span class="tok-variable">unique</span><span class="tok-operator">=</span><span class="tok-keyword">True</span><span class="tok-punctuation">)</span>
+    <span class="tok-variable">body</span> <span class="tok-operator">=</span> <span class="tok-variable">models</span><span class="tok-punctuation">.</span><span class="tok-method">TextField</span><span class="tok-punctuation">()</span>
+    <span class="tok-variable">created</span> <span class="tok-operator">=</span> <span class="tok-variable">models</span><span class="tok-punctuation">.</span><span class="tok-method">DateTimeField</span><span class="tok-punctuation">(</span><span class="tok-variable">auto_now_add</span><span class="tok-operator">=</span><span class="tok-keyword">True</span><span class="tok-punctuation">)</span>
+    <span class="tok-variable">author</span> <span class="tok-operator">=</span> <span class="tok-variable">models</span><span class="tok-punctuation">.</span><span class="tok-method">ForeignKey</span><span class="tok-punctuation">(</span><span class="tok-variable">settings</span><span class="tok-punctuation">.</span><span class="tok-variable">AUTH_USER_MODEL</span><span class="tok-punctuation">,</span> <span class="tok-variable">on_delete</span><span class="tok-operator">=</span><span class="tok-variable">models</span><span class="tok-punctuation">.</span><span class="tok-variable">CASCADE</span><span class="tok-punctuation">)</span>
+
+    <span class="tok-keyword">class</span> <span class="tok-class">Meta</span><span class="tok-punctuation">:</span>
+        <span class="tok-variable">ordering</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-string">'-created'</span><span class="tok-punctuation">]</span>
+
+    <span class="tok-keyword">def</span> <span class="tok-method">__str__</span><span class="tok-punctuation">(</span><span class="tok-variable">self</span><span class="tok-punctuation">):</span>
+        <span class="tok-keyword">return</span> <span class="tok-variable">self</span><span class="tok-punctuation">.</span><span class="tok-variable">title</span></code></pre>
+                <h3>Migrations</h3>
+                <pre><code>python manage.py makemigrations    <span class="tok-comment"># create migration files</span>
+python manage.py migrate           <span class="tok-comment"># apply to database</span></code></pre>
+                <h3>Query examples</h3>
+                <pre><code><span class="tok-comment"># all posts</span>
+<span class="tok-variable">Post</span><span class="tok-punctuation">.</span><span class="tok-variable">objects</span><span class="tok-punctuation">.</span><span class="tok-method">all</span><span class="tok-punctuation">()</span>
+
+<span class="tok-comment"># filter</span>
+<span class="tok-variable">Post</span><span class="tok-punctuation">.</span><span class="tok-variable">objects</span><span class="tok-punctuation">.</span><span class="tok-method">filter</span><span class="tok-punctuation">(</span><span class="tok-variable">author</span><span class="tok-operator">=</span><span class="tok-variable">user</span><span class="tok-punctuation">,</span> <span class="tok-variable">title__icontains</span><span class="tok-operator">=</span><span class="tok-string">'django'</span><span class="tok-punctuation">)</span>
+
+<span class="tok-comment"># get single object</span>
+<span class="tok-variable">Post</span><span class="tok-punctuation">.</span><span class="tok-variable">objects</span><span class="tok-punctuation">.</span><span class="tok-method">get</span><span class="tok-punctuation">(</span><span class="tok-variable">pk</span><span class="tok-operator">=</span><span class="tok-number">1</span><span class="tok-punctuation">)</span>  <span class="tok-comment"># raises DoesNotExist if not found</span>
+
+<span class="tok-comment"># eager loading</span>
+<span class="tok-variable">Post</span><span class="tok-punctuation">.</span><span class="tok-variable">objects</span><span class="tok-punctuation">.</span><span class="tok-method">select_related</span><span class="tok-punctuation">(</span><span class="tok-string">'author'</span><span class="tok-punctuation">).</span><span class="tok-method">all</span><span class="tok-punctuation">()</span></code></pre>
+            </section>
+
+            <!-- 4. Views -->
+            <section id="views">
+                <h2>4. Views – Function & Class‑Based</h2>
+                <h3>Function‑based view</h3>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">django</span><span class="tok-punctuation">.</span><span class="tok-namespace">shortcuts</span> <span class="tok-keyword">import</span> <span class="tok-variable">render</span><span class="tok-punctuation">,</span> <span class="tok-variable">get_object_or_404</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">.</span><span class="tok-variable">models</span> <span class="tok-keyword">import</span> <span class="tok-variable">Post</span>
+
+<span class="tok-keyword">def</span> <span class="tok-method">post_list</span><span class="tok-punctuation">(</span><span class="tok-variable">request</span><span class="tok-punctuation">):</span>
+    <span class="tok-variable">posts</span> <span class="tok-operator">=</span> <span class="tok-variable">Post</span><span class="tok-punctuation">.</span><span class="tok-variable">objects</span><span class="tok-punctuation">.</span><span class="tok-method">all</span><span class="tok-punctuation">()</span>
+    <span class="tok-keyword">return</span> <span class="tok-method">render</span><span class="tok-punctuation">(</span><span class="tok-variable">request</span><span class="tok-punctuation">,</span> <span class="tok-string">'blog/post_list.html'</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">{</span><span class="tok-string">'posts'</span><span class="tok-punctuation">:</span> <span class="tok-variable">posts</span><span class="tok-punctuation">})</span>
+</code></pre>
+                <h3>Class‑based generic views</h3>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">django</span><span class="tok-punctuation">.</span><span class="tok-namespace">views</span><span class="tok-punctuation">.</span><span class="tok-namespace">generic</span> <span class="tok-keyword">import</span> <span class="tok-variable">ListView</span><span class="tok-punctuation">,</span> <span class="tok-variable">DetailView</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">.</span><span class="tok-variable">models</span> <span class="tok-keyword">import</span> <span class="tok-variable">Post</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">PostListView</span><span class="tok-punctuation">(</span><span class="tok-variable">ListView</span><span class="tok-punctuation">):</span>
+    <span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">Post</span>
+    <span class="tok-variable">template_name</span> <span class="tok-operator">=</span> <span class="tok-string">'blog/post_list.html'</span>
+    <span class="tok-variable">context_object_name</span> <span class="tok-operator">=</span> <span class="tok-string">'posts'</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">PostDetailView</span><span class="tok-punctuation">(</span><span class="tok-variable">DetailView</span><span class="tok-punctuation">):</span>
+    <span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">Post</span>
+    <span class="tok-variable">template_name</span> <span class="tok-operator">=</span> <span class="tok-string">'blog/post_detail.html'</span></code></pre>
+                <p>URL configuration with CBVs uses <code class="inline">.as_view()</code>.</p>
+            </section>
+
+            <!-- 5. Templates -->
+            <section id="templates">
+                <h2>5. Templates & Static Files</h2>
+                <p>Django uses its own template language. Create templates inside <code class="inline">blog/templates/blog/</code>.</p>
+                <pre><code><span class="tok-comment">&lt;!-- base.html --&gt;</span>
+<span class="tok-punctuation">&lt;!DOCTYPE html&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">html</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">head</span>&gt;</span><span class="tok-tag">&lt;<span class="tok-type">title</span>&gt;</span>{% block title %}My Blog{% endblock %}<span class="tok-tag">&lt;/<span class="tok-type">title</span>&gt;</span><span class="tok-tag">&lt;/<span class="tok-type">head</span>&gt;</span>
+<span class="tok-tag">&lt;<span class="tok-type">body</span>&gt;</span>
+    {% block content %}{% endblock %}
+<span class="tok-tag">&lt;/<span class="tok-type">body</span>&gt;</span>
+<span class="tok-tag">&lt;/<span class="tok-type">html</span>&gt;</span>
+
+<span class="tok-comment">&lt;!-- post_list.html --&gt;</span>
+{% extends 'blog/base.html' %}
+{% block content %}
+    {% for post in posts %}
+        <span class="tok-tag">&lt;<span class="tok-type">h2</span>&gt;</span><span class="tok-tag">&lt;<span class="tok-type">a</span> <span class="tok-attr">href</span>=<span class="tok-string">"{% url 'post-detail' post.pk %}"</span>&gt;</span>{{ post.title }}<span class="tok-tag">&lt;/<span class="tok-type">a</span>&gt;</span><span class="tok-tag">&lt;/<span class="tok-type">h2</span>&gt;</span>
+    {% endfor %}
+{% endblock %}</code></pre>
+                <h3>Static files</h3>
+                <p>Store CSS/JS/images in <code class="inline">blog/static/blog/</code>. Load with <code class="inline">{% load static %}</code>.</p>
+                <pre><code>{% load static %}
+<span class="tok-tag">&lt;<span class="tok-type">link</span> <span class="tok-attr">rel</span>=<span class="tok-string">"stylesheet"</span> <span class="tok-attr">href</span>=<span class="tok-string">"{% static 'blog/style.css' %}"</span> /&gt;</span></code></pre>
+            </section>
+
+            <!-- 6. Forms -->
+            <section id="forms">
+                <h2>6. Forms & ModelForms</h2>
+                <p>Forms handle user input and validation. ModelForms automatically create forms from models.</p>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">django</span> <span class="tok-keyword">import</span> <span class="tok-variable">forms</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">.</span><span class="tok-variable">models</span> <span class="tok-keyword">import</span> <span class="tok-variable">Post</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">PostForm</span><span class="tok-punctuation">(</span><span class="tok-variable">forms</span><span class="tok-punctuation">.</span><span class="tok-variable">ModelForm</span><span class="tok-punctuation">):</span>
+    <span class="tok-keyword">class</span> <span class="tok-class">Meta</span><span class="tok-punctuation">:</span>
+        <span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">Post</span>
+        <span class="tok-variable">fields</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-string">'title'</span><span class="tok-punctuation">,</span> <span class="tok-string">'body'</span><span class="tok-punctuation">]</span></code></pre>
+                <p>View to handle form:</p>
+                <pre><code><span class="tok-keyword">def</span> <span class="tok-method">post_create</span><span class="tok-punctuation">(</span><span class="tok-variable">request</span><span class="tok-punctuation">):</span>
+    <span class="tok-keyword">if</span> <span class="tok-variable">request</span><span class="tok-punctuation">.</span><span class="tok-variable">method</span> <span class="tok-operator">==</span> <span class="tok-string">'POST'</span><span class="tok-punctuation">:</span>
+        <span class="tok-variable">form</span> <span class="tok-operator">=</span> <span class="tok-variable">PostForm</span><span class="tok-punctuation">(</span><span class="tok-variable">request</span><span class="tok-punctuation">.</span><span class="tok-variable">POST</span><span class="tok-punctuation">)</span>
+        <span class="tok-keyword">if</span> <span class="tok-variable">form</span><span class="tok-punctuation">.</span><span class="tok-method">is_valid</span><span class="tok-punctuation">():</span>
+            <span class="tok-variable">form</span><span class="tok-punctuation">.</span><span class="tok-method">save</span><span class="tok-punctuation">()</span>
+            <span class="tok-keyword">return</span> <span class="tok-method">redirect</span><span class="tok-punctuation">(</span><span class="tok-string">'blog-home'</span><span class="tok-punctuation">)</span>
+    <span class="tok-keyword">else</span><span class="tok-punctuation">:</span>
+        <span class="tok-variable">form</span> <span class="tok-operator">=</span> <span class="tok-variable">PostForm</span><span class="tok-punctuation">()</span>
+    <span class="tok-keyword">return</span> <span class="tok-method">render</span><span class="tok-punctuation">(</span><span class="tok-variable">request</span><span class="tok-punctuation">,</span> <span class="tok-string">'blog/post_form.html'</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">{</span><span class="tok-string">'form'</span><span class="tok-punctuation">:</span> <span class="tok-variable">form</span><span class="tok-punctuation">})</span></code></pre>
+            </section>
+
+            <!-- 7. Admin -->
+            <section id="admin">
+                <h2>7. The Django Admin</h2>
+                <p>A built‑in interface for managing data. Register models in <code class="inline">admin.py</code>.</p>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">django</span><span class="tok-punctuation">.</span><span class="tok-namespace">contrib</span> <span class="tok-keyword">import</span> <span class="tok-variable">admin</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">.</span><span class="tok-variable">models</span> <span class="tok-keyword">import</span> <span class="tok-variable">Post</span>
+
+<span class="tok-method">@admin.register</span><span class="tok-punctuation">(</span><span class="tok-variable">Post</span><span class="tok-punctuation">)</span>
+<span class="tok-keyword">class</span> <span class="tok-class">PostAdmin</span><span class="tok-punctuation">(</span><span class="tok-variable">admin</span><span class="tok-punctuation">.</span><span class="tok-variable">ModelAdmin</span><span class="tok-punctuation">):</span>
+    <span class="tok-variable">list_display</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-string">'title'</span><span class="tok-punctuation">,</span> <span class="tok-string">'author'</span><span class="tok-punctuation">,</span> <span class="tok-string">'created'</span><span class="tok-punctuation">]</span>
+    <span class="tok-variable">prepopulated_fields</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-string">'slug'</span><span class="tok-punctuation">:</span> <span class="tok-punctuation">(</span><span class="tok-string">'title'</span><span class="tok-punctuation">,)}</span>
+    <span class="tok-variable">search_fields</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-string">'title'</span><span class="tok-punctuation">,</span> <span class="tok-string">'body'</span><span class="tok-punctuation">]</span></code></pre>
+                <p>Create a superuser: <code class="inline">python manage.py createsuperuser</code>. Access admin at <code class="inline">/admin/</code>.</p>
+            </section>
+
+            <!-- 8. Authentication -->
+            <section id="auth">
+                <h2>8. Authentication & Authorization</h2>
+                <p>Django provides a full authentication system with users, groups, and permissions.</p>
+                <pre><code><span class="tok-comment"># login required decorator</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">django</span><span class="tok-punctuation">.</span><span class="tok-namespace">contrib</span><span class="tok-punctuation">.</span><span class="tok-namespace">auth</span><span class="tok-punctuation">.</span><span class="tok-namespace">decorators</span> <span class="tok-keyword">import</span> <span class="tok-variable">login_required</span>
+
+<span class="tok-method">@login_required</span>
+<span class="tok-keyword">def</span> <span class="tok-method">dashboard</span><span class="tok-punctuation">(</span><span class="tok-variable">request</span><span class="tok-punctuation">):</span>
+    <span class="tok-keyword">return</span> <span class="tok-method">render</span><span class="tok-punctuation">(</span><span class="tok-variable">request</span><span class="tok-punctuation">,</span> <span class="tok-string">'dashboard.html'</span><span class="tok-punctuation">)</span></code></pre>
+                <p>Built‑in views: <code class="inline">LoginView</code>, <code class="inline">LogoutView</code>, <code class="inline">PasswordChangeView</code>. Add to urls:</p>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">django</span><span class="tok-punctuation">.</span><span class="tok-namespace">contrib</span><span class="tok-punctuation">.</span><span class="tok-namespace">auth</span> <span class="tok-keyword">import</span> <span class="tok-variable">views</span> <span class="tok-keyword">as</span> <span class="tok-variable">auth_views</span>
+<span class="tok-variable">urlpatterns</span> <span class="tok-operator">+=</span> <span class="tok-punctuation">[</span>
+    <span class="tok-method">path</span><span class="tok-punctuation">(</span><span class="tok-string">'accounts/login/'</span><span class="tok-punctuation">,</span> <span class="tok-variable">auth_views</span><span class="tok-punctuation">.</span><span class="tok-variable">LoginView</span><span class="tok-punctuation">.</span><span class="tok-method">as_view</span><span class="tok-punctuation">(),</span> <span class="tok-variable">name</span><span class="tok-operator">=</span><span class="tok-string">'login'</span><span class="tok-punctuation">),</span>
+<span class="tok-punctuation">]</span></code></pre>
+            </section>
+
+            <!-- 9. Django REST Framework -->
+            <section id="drf">
+                <h2>9. Django REST Framework (DRF)</h2>
+                <p>DRF is the standard toolkit for building Web APIs with Django. Install with <code class="inline">pip install djangorestframework</code>.</p>
+                <h3>Serializers</h3>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">rest_framework</span> <span class="tok-keyword">import</span> <span class="tok-variable">serializers</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">.</span><span class="tok-variable">models</span> <span class="tok-keyword">import</span> <span class="tok-variable">Post</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">PostSerializer</span><span class="tok-punctuation">(</span><span class="tok-variable">serializers</span><span class="tok-punctuation">.</span><span class="tok-variable">ModelSerializer</span><span class="tok-punctuation">):</span>
+    <span class="tok-keyword">class</span> <span class="tok-class">Meta</span><span class="tok-punctuation">:</span>
+        <span class="tok-variable">model</span> <span class="tok-operator">=</span> <span class="tok-variable">Post</span>
+        <span class="tok-variable">fields</span> <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-string">'id'</span><span class="tok-punctuation">,</span> <span class="tok-string">'title'</span><span class="tok-punctuation">,</span> <span class="tok-string">'body'</span><span class="tok-punctuation">,</span> <span class="tok-string">'author'</span><span class="tok-punctuation">,</span> <span class="tok-string">'created'</span><span class="tok-punctuation">]</span></code></pre>
+                <h3>Viewsets & Routers</h3>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">rest_framework</span> <span class="tok-keyword">import</span> <span class="tok-variable">viewsets</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">.</span><span class="tok-variable">models</span> <span class="tok-keyword">import</span> <span class="tok-variable">Post</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">.</span><span class="tok-variable">serializers</span> <span class="tok-keyword">import</span> <span class="tok-variable">PostSerializer</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">PostViewSet</span><span class="tok-punctuation">(</span><span class="tok-variable">viewsets</span><span class="tok-punctuation">.</span><span class="tok-variable">ModelViewSet</span><span class="tok-punctuation">):</span>
+    <span class="tok-variable">queryset</span> <span class="tok-operator">=</span> <span class="tok-variable">Post</span><span class="tok-punctuation">.</span><span class="tok-variable">objects</span><span class="tok-punctuation">.</span><span class="tok-method">all</span><span class="tok-punctuation">()</span>
+    <span class="tok-variable">serializer_class</span> <span class="tok-operator">=</span> <span class="tok-variable">PostSerializer</span></code></pre>
+                <p>URLs with router:</p>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">rest_framework</span><span class="tok-punctuation">.</span><span class="tok-namespace">routers</span> <span class="tok-keyword">import</span> <span class="tok-variable">DefaultRouter</span>
+<span class="tok-variable">router</span> <span class="tok-operator">=</span> <span class="tok-variable">DefaultRouter</span><span class="tok-punctuation">()</span>
+<span class="tok-variable">router</span><span class="tok-punctuation">.</span><span class="tok-method">register</span><span class="tok-punctuation">(</span><span class="tok-string">'posts'</span><span class="tok-punctuation">,</span> <span class="tok-variable">PostViewSet</span><span class="tok-punctuation">)</span>
+<span class="tok-variable">urlpatterns</span> <span class="tok-operator">+=</span> <span class="tok-variable">router</span><span class="tok-punctuation">.</span><span class="tok-variable">urls</span></code></pre>
+                <p>Add <code class="inline">'rest_framework'</code> to <code class="inline">INSTALLED_APPS</code>.</p>
+            </section>
+
+            <!-- 10. Testing -->
+            <section id="testing">
+                <h2>10. Testing in Django</h2>
+                <p>Django uses Python's built‑in <code class="inline">unittest</code> with extensions. Test files live in <code class="inline">tests.py</code> or a <code class="inline">tests/</code> package.</p>
+                <pre><code><span class="tok-keyword">from</span> <span class="tok-namespace">django</span><span class="tok-punctuation">.</span><span class="tok-namespace">test</span> <span class="tok-keyword">import</span> <span class="tok-variable">TestCase</span>
+<span class="tok-keyword">from</span> <span class="tok-namespace">.</span><span class="tok-variable">models</span> <span class="tok-keyword">import</span> <span class="tok-variable">Post</span>
+
+<span class="tok-keyword">class</span> <span class="tok-class">PostModelTest</span><span class="tok-punctuation">(</span><span class="tok-variable">TestCase</span><span class="tok-punctuation">):</span>
+    <span class="tok-keyword">def</span> <span class="tok-method">test_string_representation</span><span class="tok-punctuation">(</span><span class="tok-variable">self</span><span class="tok-punctuation">):</span>
+        <span class="tok-variable">post</span> <span class="tok-operator">=</span> <span class="tok-variable">Post</span><span class="tok-punctuation">(</span><span class="tok-variable">title</span><span class="tok-operator">=</span><span class="tok-string">"Test"</span><span class="tok-punctuation">)</span>
+        <span class="tok-variable">self</span><span class="tok-punctuation">.</span><span class="tok-method">assertEqual</span><span class="tok-punctuation">(</span><span class="tok-method">str</span><span class="tok-punctuation">(</span><span class="tok-variable">post</span><span class="tok-punctuation">),</span> <span class="tok-string">"Test"</span><span class="tok-punctuation">)</span></code></pre>
+                <p>Run tests: <code class="inline">python manage.py test</code>.</p>
+            </section>
+
+            <!-- 11. Deployment -->
+            <section id="deployment">
+                <h2>11. Deployment Considerations</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Settings</h3>
+                        <ul>
+                            <li>Set <code class="inline">DEBUG = False</code></li>
+                            <li>Use environment variables for <code class="inline">SECRET_KEY</code>, database URL</li>
+                            <li>Allow only your domain in <code class="inline">ALLOWED_HOSTS</code></li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Static & Media</h3>
+                        <p>Collect static files with <code class="inline">python manage.py collectstatic</code>. Serve from a web server (Nginx, etc.) or a CDN.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Database</h3>
+                        <p>Use PostgreSQL for production. Apply migrations as part of your deploy process.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Web server</h3>
+                        <p>Gunicorn / uWSGI behind Nginx is a common setup. Use HTTPS.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 12. Best Practices -->
+            <section id="tips">
+                <h2>12. Best Practices & Quick Tips</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Project structure</h3>
+                        <p>Keep apps modular. Use a <code class="inline">config</code> or <code class="inline">core</code> app for common models.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Query efficiency</h3>
+                        <p>Use <code class="inline">select_related</code> / <code class="inline">prefetch_related</code> to avoid N+1 queries.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Security</h3>
+                        <p>Always use CSRF protection. Escape user input in templates (auto‑escaped). Use <code class="inline">django‑axes</code> for brute‑force protection.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Environment variables</h3>
+                        <p>Use <code class="inline">python‑decouple</code> or <code class="inline">django‑environ</code> to manage settings.</p>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common pitfalls: forgetting to run migrations, not handling <code class="inline">DoesNotExist</code> exceptions,
+                    using <code class="inline">CharField</code> without <code class="inline">max_length</code>, and leaving <code class="inline">DEBUG=True</code> in production.
+                </div>
+            </section>
+        </main>
+    </div>
+
+
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+<!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

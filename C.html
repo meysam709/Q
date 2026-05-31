@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C Complete Summary</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p,
+        li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(59,130,246,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(59,130,246,0.2);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin: 4px 6px 4px 0;
+            font-weight: 600;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword {
+            color: var(--tok-keyword);
+        }
+        .tok-type {
+            color: var(--tok-type);
+        }
+        .tok-string {
+            color: var(--tok-string);
+        }
+        .tok-number {
+            color: var(--tok-number);
+        }
+        .tok-comment {
+            color: var(--tok-comment);
+            font-style: italic;
+        }
+        .tok-method {
+            color: var(--tok-method);
+        }
+        .tok-class {
+            color: var(--tok-class);
+        }
+        .tok-property {
+            color: var(--tok-property);
+        }
+        .tok-operator {
+            color: var(--tok-operator);
+        }
+        .tok-punctuation {
+            color: var(--tok-punctuation);
+        }
+        .tok-variable {
+            color: var(--tok-variable);
+        }
+        .tok-namespace {
+            color: var(--tok-namespace);
+        }
+        .tok-preproc {
+            color: var(--tok-preproc);
+        }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>C Complete Summary</h1>
+        <p>
+            A complete remembrance‑style C reference covering syntax, data types, pointers,
+            memory management, structs, preprocessor, file I/O, and standard library essentials
+            with VS Code‑like syntax coloring.
+        </p>
+    </header>
+
+    <div class="layout">
+        <main>
+            <!-- 1. C Basics -->
+            <section id="intro">
+                <h2>1. C Basics</h2>
+                <p>
+                    C is a general‑purpose, compiled language that provides low‑level memory access.
+                    It is the foundation of modern operating systems, embedded systems, and many
+                    higher‑level languages.
+                </p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Key characteristics</h3>
+                        <ul>
+                            <li>Statically typed</li>
+                            <li>Procedural paradigm</li>
+                            <li>Manual memory management</li>
+                            <li>Extremely portable</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Common uses</h3>
+                        <ul>
+                            <li>Operating systems (Linux, Windows)</li>
+                            <li>Embedded firmware</li>
+                            <li>Performance‑critical applications</li>
+                            <li>Compilers & interpreters</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Compile & run (GCC)</h3>
+                        <pre><code><span class="tok-comment">// compile</span>
+gcc -o program main.c
+<span class="tok-comment">// run</span>
+./program</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Syntax & Structure -->
+            <section id="syntax">
+                <h2>2. Syntax & Structure</h2>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;stdio.h&gt;</span>
+
+<span class="tok-keyword">int</span> <span class="tok-method">main</span><span class="tok-punctuation">()</span> <span class="tok-punctuation">{</span>
+    <span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"Hello, C!</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">);</span>
+    <span class="tok-keyword">return</span> <span class="tok-number">0</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>Comments</h3>
+                <pre><code><span class="tok-comment">// single-line comment (C99 and later)</span>
+<span class="tok-comment">/* multi-line
+   comment */</span></code></pre>
+            </section>
+
+            <!-- 3. Variables & Data Types -->
+            <section id="variables">
+                <h2>3. Variables & Data Types</h2>
+                <pre><code><span class="tok-keyword">int</span> age <span class="tok-operator">=</span> <span class="tok-number">25</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">float</span> price <span class="tok-operator">=</span> <span class="tok-number">19.99f</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">double</span> pi <span class="tok-operator">=</span> <span class="tok-number">3.14159265358979</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">char</span> grade <span class="tok-operator">=</span> <span class="tok-string">'A'</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">_Bool</span> is_active <span class="tok-operator">=</span> <span class="tok-number">1</span><span class="tok-punctuation">;</span>   <span class="tok-comment">/* or bool with &lt;stdbool.h&gt; */</span>
+<span class="tok-keyword">char</span> name<span class="tok-punctuation">[]</span> <span class="tok-operator">=</span> <span class="tok-string">"Alice"</span><span class="tok-punctuation">;</span>
+
+<span class="tok-keyword">const</span> <span class="tok-keyword">int</span> MAX <span class="tok-operator">=</span> <span class="tok-number">100</span><span class="tok-punctuation">;</span></code></pre>
+                <table>
+                    <tr><th>Type</th><th>Size (typical)</th><th>Example</th></tr>
+                    <tr><td>char</td><td>1 byte</td><td><code class="inline">char c = 'A';</code></td></tr>
+                    <tr><td>int</td><td>4 bytes</td><td><code class="inline">int x = 5;</code></td></tr>
+                    <tr><td>short</td><td>2 bytes</td><td><code class="inline">short s = 32767;</code></td></tr>
+                    <tr><td>long</td><td>4 or 8 bytes</td><td><code class="inline">long l = 100000L;</code></td></tr>
+                    <tr><td>long long</td><td>8 bytes</td><td><code class="inline">long long ll = 1e18;</code></td></tr>
+                    <tr><td>float</td><td>4 bytes</td><td><code class="inline">float f = 3.14f;</code></td></tr>
+                    <tr><td>double</td><td>8 bytes</td><td><code class="inline">double d = 3.14;</code></td></tr>
+                    <tr><td>long double</td><td>10/16 bytes</td><td><code class="inline">long double ld = 3.14L;</code></td></tr>
+                </table>
+                <div class="note"><code class="inline">sizeof</code> operator returns the size in bytes. Example: <code class="inline">sizeof(int)</code>.</div>
+            </section>
+
+            <!-- 4. Operators -->
+            <section id="operators">
+                <h2>4. Operators</h2>
+                <div class="grid">
+                    <div class="card"><h3>Arithmetic</h3><p><code class="inline">+ - * / % ++ --</code></p></div>
+                    <div class="card"><h3>Relational</h3><p><code class="inline">== != > < >= <=</code></p></div>
+                    <div class="card"><h3>Logical</h3><p><code class="inline">&& || !</code></p></div>
+                    <div class="card"><h3>Bitwise</h3><p><code class="inline">& | ^ ~ << >></code></p></div>
+                    <div class="card"><h3>Assignment</h3><p><code class="inline">= += -= *= /= %= &= ^= |= <<= >>=</code></p></div>
+                    <div class="card"><h3>Misc</h3><p><code class="inline">sizeof</code>, <code class="inline">&</code> (address), <code class="inline">*</code> (dereference), ternary <code class="inline">?:</code></p></div>
+                </div>
+            </section>
+
+            <!-- 5. Control Flow -->
+            <section id="control">
+                <h2>5. Control Flow</h2>
+                <h3>if / else</h3>
+                <pre><code><span class="tok-keyword">if</span> <span class="tok-punctuation">(</span>age <span class="tok-operator">&gt;=</span> <span class="tok-number">18</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"Adult</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span> <span class="tok-keyword">else</span> <span class="tok-punctuation">{</span>
+    <span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"Minor</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>switch</h3>
+                <pre><code><span class="tok-keyword">switch</span> <span class="tok-punctuation">(</span>day<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">case</span> <span class="tok-number">1</span><span class="tok-punctuation">:</span> <span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"Monday</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">);</span> <span class="tok-keyword">break</span><span class="tok-punctuation">;</span>
+    <span class="tok-keyword">default</span><span class="tok-punctuation">:</span> <span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"Unknown</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <h3>Loops</h3>
+                <pre><code><span class="tok-keyword">for</span> <span class="tok-punctuation">(</span><span class="tok-keyword">int</span> i <span class="tok-operator">=</span> <span class="tok-number">0</span><span class="tok-punctuation">;</span> i <span class="tok-operator">&lt;</span> <span class="tok-number">5</span><span class="tok-punctuation">;</span> i<span class="tok-operator">++</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"%d "</span><span class="tok-punctuation">,</span> i<span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">int</span> x <span class="tok-operator">=</span> <span class="tok-number">0</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">while</span> <span class="tok-punctuation">(</span>x <span class="tok-operator">&lt;</span> <span class="tok-number">3</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    x<span class="tok-operator">++</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">do</span> <span class="tok-punctuation">{</span>
+    x<span class="tok-operator">++</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span> <span class="tok-keyword">while</span> <span class="tok-punctuation">(</span>x <span class="tok-operator">&lt;</span> <span class="tok-number">5</span><span class="tok-punctuation">);</span></code></pre>
+            </section>
+
+            <!-- 6. Functions -->
+            <section id="functions">
+                <h2>6. Functions</h2>
+                <pre><code><span class="tok-comment">/* declaration & definition */</span>
+<span class="tok-keyword">int</span> <span class="tok-method">add</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span> a<span class="tok-punctuation">,</span> <span class="tok-keyword">int</span> b<span class="tok-punctuation">);</span>   <span class="tok-comment">// prototype</span>
+
+<span class="tok-keyword">int</span> <span class="tok-method">add</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span> a<span class="tok-punctuation">,</span> <span class="tok-keyword">int</span> b<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">return</span> a <span class="tok-operator">+</span> b<span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-keyword">void</span> <span class="tok-method">printSum</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span> a<span class="tok-punctuation">,</span> <span class="tok-keyword">int</span> b<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"%d</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> a <span class="tok-operator">+</span> b<span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-comment">/* recursion */</span>
+<span class="tok-keyword">int</span> <span class="tok-method">factorial</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span> n<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">return</span> <span class="tok-punctuation">(</span>n <span class="tok-operator">&lt;=</span> <span class="tok-number">1</span><span class="tok-punctuation">)</span> <span class="tok-operator">?</span> <span class="tok-number">1</span> <span class="tok-operator">:</span> n <span class="tok-operator">*</span> <span class="tok-method">factorial</span><span class="tok-punctuation">(</span>n <span class="tok-operator">-</span> <span class="tok-number">1</span><span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <div class="note">Functions must be declared before use unless defined earlier. Use <code class="inline">void</code> for no parameters.</div>
+            </section>
+
+            <!-- 7. Arrays & Strings -->
+            <section id="arrays">
+                <h2>7. Arrays & Strings</h2>
+                <h3>Arrays</h3>
+                <pre><code><span class="tok-keyword">int</span> numbers<span class="tok-punctuation">[</span><span class="tok-number">5</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-number">2</span><span class="tok-punctuation">,</span> <span class="tok-number">3</span><span class="tok-punctuation">,</span> <span class="tok-number">4</span><span class="tok-punctuation">,</span> <span class="tok-number">5</span><span class="tok-punctuation">};</span>
+<span class="tok-keyword">int</span> matrix<span class="tok-punctuation">[</span><span class="tok-number">2</span><span class="tok-punctuation">][</span><span class="tok-number">3</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span> <span class="tok-punctuation">{</span><span class="tok-number">1</span><span class="tok-punctuation">,</span><span class="tok-number">2</span><span class="tok-punctuation">,</span><span class="tok-number">3</span><span class="tok-punctuation">}</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">{</span><span class="tok-number">4</span><span class="tok-punctuation">,</span><span class="tok-number">5</span><span class="tok-punctuation">,</span><span class="tok-number">6</span><span class="tok-punctuation">}</span> <span class="tok-punctuation">};</span>
+<span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"%d</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> numbers<span class="tok-punctuation">[</span><span class="tok-number">0</span><span class="tok-punctuation">]);</span>   <span class="tok-comment">// 1</span></code></pre>
+                <h3>Strings (char arrays)</h3>
+                <pre><code><span class="tok-keyword">char</span> str1<span class="tok-punctuation">[</span><span class="tok-number">6</span><span class="tok-punctuation">]</span> <span class="tok-operator">=</span> <span class="tok-string">"Hello"</span><span class="tok-punctuation">;</span>   <span class="tok-comment">/* null‑terminated */</span>
+<span class="tok-keyword">char</span> str2<span class="tok-punctuation">[]</span> <span class="tok-operator">=</span> <span class="tok-string">"World"</span><span class="tok-punctuation">;</span>
+<span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"%s %s</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> str1<span class="tok-punctuation">,</span> str2<span class="tok-punctuation">);</span></code></pre>
+                <div class="danger">Strings are null‑terminated character arrays. Always allocate enough space for <code class="inline">'\0'</code>.</div>
+            </section>
+
+            <!-- 8. Pointers -->
+            <section id="pointers">
+                <h2>8. Pointers</h2>
+                <pre><code><span class="tok-keyword">int</span> x <span class="tok-operator">=</span> <span class="tok-number">10</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">int</span> <span class="tok-operator">*</span>ptr <span class="tok-operator">=</span> <span class="tok-operator">&amp;</span>x<span class="tok-punctuation">;</span>          <span class="tok-comment">// pointer to x</span>
+<span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"%d</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-operator">*</span>ptr<span class="tok-punctuation">);</span>   <span class="tok-comment">// dereference: 10</span>
+<span class="tok-operator">*</span>ptr <span class="tok-operator">=</span> <span class="tok-number">20</span><span class="tok-punctuation">;</span>             <span class="tok-comment">// modify x via pointer</span>
+
+<span class="tok-keyword">void</span> <span class="tok-operator">*</span>vptr <span class="tok-operator">=</span> <span class="tok-operator">&amp;</span>x<span class="tok-punctuation">;</span>       <span class="tok-comment">// void pointer (generic)</span>
+<span class="tok-keyword">int</span> <span class="tok-operator">*</span>iptr <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-keyword">int</span><span class="tok-operator">*</span><span class="tok-punctuation">)</span>vptr<span class="tok-punctuation">;</span> <span class="tok-comment">// cast back</span></code></pre>
+                <h3>Pointer arithmetic</h3>
+                <pre><code><span class="tok-keyword">int</span> arr<span class="tok-punctuation">[]</span> <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-number">10</span><span class="tok-punctuation">,</span> <span class="tok-number">20</span><span class="tok-punctuation">,</span> <span class="tok-number">30</span><span class="tok-punctuation">};</span>
+<span class="tok-keyword">int</span> <span class="tok-operator">*</span>p <span class="tok-operator">=</span> arr<span class="tok-punctuation">;</span>          <span class="tok-comment">// pointer to first element</span>
+<span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"%d</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">,</span> <span class="tok-operator">*</span><span class="tok-punctuation">(</span>p <span class="tok-operator">+</span> <span class="tok-number">1</span><span class="tok-punctuation">));</span> <span class="tok-comment">// 20</span></code></pre>
+                <h3>Function pointers</h3>
+                <pre><code><span class="tok-keyword">int</span> <span class="tok-method">add</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span> a<span class="tok-punctuation">,</span> <span class="tok-keyword">int</span> b<span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span> <span class="tok-keyword">return</span> a <span class="tok-operator">+</span> b<span class="tok-punctuation">;</span> <span class="tok-punctuation">}</span>
+<span class="tok-keyword">int</span> <span class="tok-punctuation">(</span><span class="tok-operator">*</span>func_ptr<span class="tok-punctuation">)(</span><span class="tok-keyword">int</span><span class="tok-punctuation">,</span> <span class="tok-keyword">int</span><span class="tok-punctuation">)</span> <span class="tok-operator">=</span> add<span class="tok-punctuation">;</span>
+<span class="tok-keyword">int</span> result <span class="tok-operator">=</span> <span class="tok-method">func_ptr</span><span class="tok-punctuation">(</span><span class="tok-number">3</span><span class="tok-punctuation">,</span> <span class="tok-number">4</span><span class="tok-punctuation">);</span></code></pre>
+            </section>
+
+            <!-- 9. Memory Management -->
+            <section id="memory">
+                <h2>9. Dynamic Memory Management</h2>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;stdlib.h&gt;</span>
+
+<span class="tok-keyword">int</span> <span class="tok-operator">*</span>arr <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-keyword">int</span><span class="tok-operator">*</span><span class="tok-punctuation">)</span><span class="tok-method">malloc</span><span class="tok-punctuation">(</span><span class="tok-number">5</span> <span class="tok-operator">*</span> <span class="tok-keyword">sizeof</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span><span class="tok-punctuation">));</span>   <span class="tok-comment">// allocate</span>
+<span class="tok-keyword">if</span> <span class="tok-punctuation">(</span>arr <span class="tok-operator">==</span> <span class="tok-keyword">NULL</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-comment">/* handle error */</span>
+<span class="tok-punctuation">}</span>
+<span class="tok-keyword">for</span> <span class="tok-punctuation">(</span><span class="tok-keyword">int</span> i <span class="tok-operator">=</span> <span class="tok-number">0</span><span class="tok-punctuation">;</span> i <span class="tok-operator">&lt;</span> <span class="tok-number">5</span><span class="tok-punctuation">;</span> i<span class="tok-operator">++</span><span class="tok-punctuation">)</span> arr<span class="tok-punctuation">[</span>i<span class="tok-punctuation">]</span> <span class="tok-operator">=</span> i<span class="tok-punctuation">;</span>
+<span class="tok-method">free</span><span class="tok-punctuation">(</span>arr<span class="tok-punctuation">);</span>  <span class="tok-comment">// must free to avoid leaks</span>
+
+<span class="tok-comment">// zero‑initialized allocation</span>
+<span class="tok-keyword">int</span> <span class="tok-operator">*</span>zero <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-keyword">int</span><span class="tok-operator">*</span><span class="tok-punctuation">)</span><span class="tok-method">calloc</span><span class="tok-punctuation">(</span><span class="tok-number">5</span><span class="tok-punctuation">,</span> <span class="tok-keyword">sizeof</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span><span class="tok-punctuation">));</span>
+
+<span class="tok-comment">// resize</span>
+arr <span class="tok-operator">=</span> <span class="tok-punctuation">(</span><span class="tok-keyword">int</span><span class="tok-operator">*</span><span class="tok-punctuation">)</span><span class="tok-method">realloc</span><span class="tok-punctuation">(</span>arr<span class="tok-punctuation">,</span> <span class="tok-number">10</span> <span class="tok-operator">*</span> <span class="tok-keyword">sizeof</span><span class="tok-punctuation">(</span><span class="tok-keyword">int</span><span class="tok-punctuation">));</span></code></pre>
+                <div class="danger">Always <code class="inline">free</code> memory returned by <code class="inline">malloc</code>/<code class="inline">calloc</code>/<code class="inline">realloc</code>. Double‑free or use‑after‑free causes undefined behavior.</div>
+            </section>
+
+            <!-- 10. Structures & Unions -->
+            <section id="structs">
+                <h2>10. Structures & Unions</h2>
+                <h3>struct</h3>
+                <pre><code><span class="tok-keyword">struct</span> <span class="tok-class">Point</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">int</span> x<span class="tok-punctuation">;</span>
+    <span class="tok-keyword">int</span> y<span class="tok-punctuation">;</span>
+<span class="tok-punctuation">};</span>
+
+<span class="tok-keyword">struct</span> <span class="tok-class">Point</span> p1 <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-number">3</span><span class="tok-punctuation">,</span> <span class="tok-number">7</span><span class="tok-punctuation">};</span>
+<span class="tok-keyword">struct</span> <span class="tok-class">Point</span> p2 <span class="tok-operator">=</span> <span class="tok-punctuation">{</span><span class="tok-punctuation">.</span>x <span class="tok-operator">=</span> <span class="tok-number">1</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">.</span>y <span class="tok-operator">=</span> <span class="tok-number">2</span><span class="tok-punctuation">};</span>   <span class="tok-comment">/* designated initializers (C99) */</span>
+<span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"(%d, %d)"</span><span class="tok-punctuation">,</span> p1<span class="tok-punctuation">.</span>x<span class="tok-punctuation">,</span> p1<span class="tok-punctuation">.</span>y<span class="tok-punctuation">);</span></code></pre>
+                <h3>union</h3>
+                <pre><code><span class="tok-keyword">union</span> <span class="tok-class">Data</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">int</span> i<span class="tok-punctuation">;</span>
+    <span class="tok-keyword">float</span> f<span class="tok-punctuation">;</span>
+    <span class="tok-keyword">char</span> str<span class="tok-punctuation">[</span><span class="tok-number">20</span><span class="tok-punctuation">];</span>
+<span class="tok-punctuation">};</span>
+<span class="tok-keyword">union</span> <span class="tok-class">Data</span> data<span class="tok-punctuation">;</span>
+data<span class="tok-punctuation">.</span>i <span class="tok-operator">=</span> <span class="tok-number">10</span><span class="tok-punctuation">;</span>   <span class="tok-comment">/* only one member active at a time */</span></code></pre>
+                <div class="note">struct members are stored separately; union members share the same memory location.</div>
+            </section>
+
+            <!-- 11. Enums -->
+            <section id="enums">
+                <h2>11. Enums</h2>
+                <pre><code><span class="tok-keyword">enum</span> <span class="tok-class">Color</span> <span class="tok-punctuation">{</span> RED<span class="tok-punctuation">,</span> GREEN<span class="tok-punctuation">,</span> BLUE <span class="tok-punctuation">};</span>   <span class="tok-comment">// 0,1,2</span>
+<span class="tok-keyword">enum</span> <span class="tok-class">Color</span> c <span class="tok-operator">=</span> GREEN<span class="tok-punctuation">;</span>
+
+<span class="tok-comment">/* custom values */</span>
+<span class="tok-keyword">enum</span> <span class="tok-class">Status</span> <span class="tok-punctuation">{</span> OK <span class="tok-operator">=</span> <span class="tok-number">200</span><span class="tok-punctuation">,</span> NOT_FOUND <span class="tok-operator">=</span> <span class="tok-number">404</span> <span class="tok-punctuation">};</span></code></pre>
+            </section>
+
+            <!-- 12. Preprocessor -->
+            <section id="preprocessor">
+                <h2>12. Preprocessor Directives</h2>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;stdio.h&gt;</span>      <span class="tok-comment">// system header</span>
+<span class="tok-preproc">#include</span> <span class="tok-string">"myheader.h"</span>    <span class="tok-comment">// user header</span>
+
+<span class="tok-preproc">#define</span> <span class="tok-variable">PI</span> <span class="tok-number">3.14159</span>
+<span class="tok-preproc">#define</span> <span class="tok-method">SQUARE</span><span class="tok-punctuation">(</span><span class="tok-variable">x</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">(</span><span class="tok-punctuation">(</span>x<span class="tok-punctuation">)</span> <span class="tok-operator">*</span> <span class="tok-punctuation">(</span>x<span class="tok-punctuation">))</span>
+
+<span class="tok-preproc">#ifdef</span> <span class="tok-variable">DEBUG</span>
+<span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"Debug mode</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">);</span>
+<span class="tok-preproc">#else</span>
+<span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"Release mode</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">);</span>
+<span class="tok-preproc">#endif</span>
+
+<span class="tok-preproc">#pragma</span> <span class="tok-keyword">once</span>   <span class="tok-comment">// common header guard alternative</span></code></pre>
+            </section>
+
+            <!-- 13. File I/O -->
+            <section id="fileio">
+                <h2>13. File I/O</h2>
+                <pre><code><span class="tok-preproc">#include</span> <span class="tok-string">&lt;stdio.h&gt;</span>
+
+<span class="tok-comment">// write</span>
+<span class="tok-keyword">FILE</span> <span class="tok-operator">*</span>fp <span class="tok-operator">=</span> <span class="tok-method">fopen</span><span class="tok-punctuation">(</span><span class="tok-string">"data.txt"</span><span class="tok-punctuation">,</span> <span class="tok-string">"w"</span><span class="tok-punctuation">);</span>
+<span class="tok-keyword">if</span> <span class="tok-punctuation">(</span>fp <span class="tok-operator">!=</span> <span class="tok-keyword">NULL</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-method">fprintf</span><span class="tok-punctuation">(</span>fp<span class="tok-punctuation">,</span> <span class="tok-string">"Hello, File</span><span class="tok-string">\n</span><span class="tok-string">"</span><span class="tok-punctuation">);</span>
+    <span class="tok-method">fclose</span><span class="tok-punctuation">(</span>fp<span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-comment">// read line by line</span>
+fp <span class="tok-operator">=</span> <span class="tok-method">fopen</span><span class="tok-punctuation">(</span><span class="tok-string">"data.txt"</span><span class="tok-punctuation">,</span> <span class="tok-string">"r"</span><span class="tok-punctuation">);</span>
+<span class="tok-keyword">if</span> <span class="tok-punctuation">(</span>fp <span class="tok-operator">!=</span> <span class="tok-keyword">NULL</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+    <span class="tok-keyword">char</span> line<span class="tok-punctuation">[</span><span class="tok-number">256</span><span class="tok-punctuation">];</span>
+    <span class="tok-keyword">while</span> <span class="tok-punctuation">(</span><span class="tok-method">fgets</span><span class="tok-punctuation">(</span>line<span class="tok-punctuation">,</span> <span class="tok-keyword">sizeof</span><span class="tok-punctuation">(</span>line<span class="tok-punctuation">),</span> fp<span class="tok-punctuation">))</span> <span class="tok-punctuation">{</span>
+        <span class="tok-method">printf</span><span class="tok-punctuation">(</span><span class="tok-string">"%s"</span><span class="tok-punctuation">,</span> line<span class="tok-punctuation">);</span>
+    <span class="tok-punctuation">}</span>
+    <span class="tok-method">fclose</span><span class="tok-punctuation">(</span>fp<span class="tok-punctuation">);</span>
+<span class="tok-punctuation">}</span></code></pre>
+                <table>
+                    <tr><th>Mode</th><th>Description</th></tr>
+                    <tr><td>"r"</td><td>Read</td></tr>
+                    <tr><td>"w"</td><td>Write (create/truncate)</td></tr>
+                    <tr><td>"a"</td><td>Append</td></tr>
+                    <tr><td>"rb"/"wb"</td><td>Binary read/write</td></tr>
+                </table>
+            </section>
+
+            <!-- 14. Standard Library Highlights -->
+            <section id="stdlib">
+                <h2>14. Standard Library Highlights</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>&lt;stdio.h&gt;</h3>
+                        <p><code class="inline">printf</code>, <code class="inline">scanf</code>, <code class="inline">fgets</code>, <code class="inline">fopen</code>, <code class="inline">fclose</code></p>
+                    </div>
+                    <div class="card">
+                        <h3>&lt;stdlib.h&gt;</h3>
+                        <p><code class="inline">malloc</code>, <code class="inline">free</code>, <code class="inline">atoi</code>, <code class="inline">rand</code>, <code class="inline">exit</code></p>
+                    </div>
+                    <div class="card">
+                        <h3>&lt;string.h&gt;</h3>
+                        <p><code class="inline">strlen</code>, <code class="inline">strcpy</code>, <code class="inline">strcmp</code>, <code class="inline">strcat</code>, <code class="inline">memcpy</code></p>
+                    </div>
+                    <div class="card">
+                        <h3>&lt;ctype.h&gt;</h3>
+                        <p><code class="inline">isdigit</code>, <code class="inline">isalpha</code>, <code class="inline">toupper</code></p>
+                    </div>
+                    <div class="card">
+                        <h3>&lt;math.h&gt;</h3>
+                        <p><code class="inline">sqrt</code>, <code class="inline">pow</code>, <code class="inline">sin</code>, <code class="inline">cos</code>, <code class="inline">fabs</code> (link with -lm)</p>
+                    </div>
+                    <div class="card">
+                        <h3>&lt;time.h&gt;</h3>
+                        <p><code class="inline">time</code>, <code class="inline">clock</code>, <code class="inline">strftime</code></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 15. Quick Remember Tips -->
+            <section id="tips">
+                <h2>15. Quick Remember Tips</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Strings</h3>
+                        <p>Always null‑terminated. Use <code class="inline">strncpy</code> instead of <code class="inline">strcpy</code> for safety.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Pointers</h3>
+                        <p>Initialize pointers to <code class="inline">NULL</code>. Check for <code class="inline">NULL</code> after <code class="inline">malloc</code>.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Arrays</h3>
+                        <p>Array name acts as pointer to first element. Pass array size separately.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Memory</h3>
+                        <p>One <code class="inline">free</code> per <code class="inline">malloc</code>. After <code class="inline">free</code>, set pointer to <code class="inline">NULL</code>.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Headers</h3>
+                        <p>Use include guards: <code class="inline">#ifndef HEADER_H</code> / <code class="inline">#define</code> / <code class="inline">#endif</code>.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Undefined behavior</h3>
+                        <p>Buffer overflows, signed integer overflow, and dereferencing <code class="inline">NULL</code> are undefined – avoid at all costs.</p>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common mistakes: forgetting <code class="inline">'\0'</code> in strings, using <code class="inline">gets</code> (deprecated – use <code class="inline">fgets</code>), mixing <code class="inline">int</code> and <code class="inline">size_t</code>,
+                    and not checking return values of <code class="inline">malloc</code> or <code class="inline">fopen</code>.
+                </div>
+            </section>
+        </main>
+    </div>
+
+
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+    <!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

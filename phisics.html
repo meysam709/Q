@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Physics Complete Summary</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p,
+        li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(59,130,246,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(59,130,246,0.2);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin: 4px 6px 4px 0;
+            font-weight: 600;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword {
+            color: var(--tok-keyword);
+        }
+        .tok-type {
+            color: var(--tok-type);
+        }
+        .tok-string {
+            color: var(--tok-string);
+        }
+        .tok-number {
+            color: var(--tok-number);
+        }
+        .tok-comment {
+            color: var(--tok-comment);
+            font-style: italic;
+        }
+        .tok-method {
+            color: var(--tok-method);
+        }
+        .tok-class {
+            color: var(--tok-class);
+        }
+        .tok-property {
+            color: var(--tok-property);
+        }
+        .tok-operator {
+            color: var(--tok-operator);
+        }
+        .tok-punctuation {
+            color: var(--tok-punctuation);
+        }
+        .tok-variable {
+            color: var(--tok-variable);
+        }
+        .tok-namespace {
+            color: var(--tok-namespace);
+        }
+        .tok-preproc {
+            color: var(--tok-preproc);
+        }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>Physics Complete Summary</h1>
+        <p>
+            A comprehensive journey through physics: from classical mechanics to quantum fields,
+            with essential formulas, laws, and real‑world connections.
+        </p>
+    </header>
+
+    <div class="layout">
+        <main>
+            <!-- 1. Introduction & Foundations -->
+            <section id="intro">
+                <h2>1. Foundations & Measurements</h2>
+                <p>Physics describes the fundamental laws of nature using quantitative models. It relies on precise measurements and standardized units.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>SI Base Units</h3>
+                        <ul>
+                            <li><strong>Length:</strong> meter (m)</li>
+                            <li><strong>Mass:</strong> kilogram (kg)</li>
+                            <li><strong>Time:</strong> second (s)</li>
+                            <li><strong>Electric current:</strong> ampere (A)</li>
+                            <li><strong>Temperature:</strong> kelvin (K)</li>
+                            <li><strong>Amount of substance:</strong> mole (mol)</li>
+                            <li><strong>Luminous intensity:</strong> candela (cd)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Key Prefixes</h3>
+                        <p>nano (10⁻⁹), micro (10⁻⁶), milli (10⁻³), centi (10⁻²), kilo (10³), mega (10⁶), giga (10⁹).</p>
+                    </div>
+                    <div class="card">
+                        <h3>Scalars vs Vectors</h3>
+                        <p><strong>Scalar:</strong> magnitude only (mass, speed).<br><strong>Vector:</strong> magnitude + direction (velocity, force).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Kinematics & Dynamics -->
+            <section id="mechanics">
+                <h2>2. Classical Mechanics</h2>
+                <h3>Kinematics</h3>
+                <pre><code><span class="tok-variable">v</span> <span class="tok-operator">=</span> <span class="tok-variable">u</span> <span class="tok-operator">+</span> <span class="tok-variable">a</span><span class="tok-variable">t</span>        <span class="tok-comment"># final velocity</span>
+<span class="tok-variable">s</span> <span class="tok-operator">=</span> <span class="tok-variable">ut</span> <span class="tok-operator">+</span> <span class="tok-number">½</span><span class="tok-variable">a</span><span class="tok-variable">t²</span>   <span class="tok-comment"># displacement with constant acceleration</span>
+<span class="tok-variable">v²</span> <span class="tok-operator">=</span> <span class="tok-variable">u²</span> <span class="tok-operator">+</span> <span class="tok-number">2</span><span class="tok-variable">as</span>    <span class="tok-comment"># velocity‑displacement relation</span></code></pre>
+                <h3>Newton's Laws</h3>
+                <ul>
+                    <li><strong>1st:</strong> An object stays at rest or in uniform motion unless acted upon by a net force.</li>
+                    <li><strong>2nd:</strong> <code class="inline">F = ma</code> (force equals mass times acceleration).</li>
+                    <li><strong>3rd:</strong> For every action, there is an equal and opposite reaction.</li>
+                </ul>
+                <h3>Work, Energy & Power</h3>
+                <ul>
+                    <li>Kinetic energy: <code class="inline">K = ½mv²</code></li>
+                    <li>Potential energy (gravity): <code class="inline">U = mgh</code></li>
+                    <li>Work: <code class="inline">W = F·d·cosθ</code></li>
+                    <li>Power: <code class="inline">P = W/t</code></li>
+                </ul>
+                <h3>Momentum & Collisions</h3>
+                <p><code class="inline">p = mv</code>. In isolated systems, total momentum is conserved. Elastic collisions conserve kinetic energy; inelastic ones don't.</p>
+            </section>
+
+            <!-- 3. Rotational Motion & Gravity -->
+            <section id="rotation">
+                <h2>3. Rotational Motion & Gravity</h2>
+                <h3>Angular Quantities</h3>
+                <ul>
+                    <li>Angular velocity: <code class="inline">ω = Δθ/Δt</code></li>
+                    <li>Torque: <code class="inline">τ = r × F</code></li>
+                    <li>Moment of inertia: <code class="inline">I = Σmr²</code></li>
+                    <li>Angular momentum: <code class="inline">L = Iω</code></li>
+                </ul>
+                <h3>Universal Gravitation</h3>
+                <p>Newton's law: <code class="inline">F = G·(m₁m₂)/r²</code>, where <code class="inline">G = 6.674×10⁻¹¹ N·m²/kg²</code>.</p>
+                <p>Kepler's laws describe planetary orbits. Gravitational potential energy: <code class="inline">U = -G·(m₁m₂)/r</code>.</p>
+            </section>
+
+            <!-- 4. Fluid Mechanics -->
+            <section id="fluids">
+                <h2>4. Fluid Mechanics</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Pressure</h3>
+                        <p><code class="inline">P = F/A</code> (Pascal's principle). Hydrostatic pressure: <code class="inline">P = ρgh</code>.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Buoyancy</h3>
+                        <p>Archimedes' principle: buoyant force equals weight of displaced fluid.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Continuity & Bernoulli</h3>
+                        <p><code class="inline">A₁v₁ = A₂v₂</code> (incompressible). Bernoulli's equation: <code class="inline">P + ½ρv² + ρgh = constant</code>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Thermodynamics -->
+            <section id="thermo">
+                <h2>5. Thermodynamics</h2>
+                <h3>Laws of Thermodynamics</h3>
+                <ul>
+                    <li><strong>0th:</strong> Thermal equilibrium → temperature.</li>
+                    <li><strong>1st:</strong> ΔU = Q - W (energy conservation).</li>
+                    <li><strong>2nd:</strong> Entropy of isolated system never decreases; no perfect engine.</li>
+                    <li><strong>3rd:</strong> Absolute zero is unattainable.</li>
+                </ul>
+                <h3>Key Concepts</h3>
+                <ul>
+                    <li>Heat capacity: <code class="inline">Q = mcΔT</code> or <code class="inline">nCΔT</code>.</li>
+                    <li>Ideal gas law: <code class="inline">PV = nRT</code> (R = 8.314 J/mol·K).</li>
+                    <li>Kinetic theory: <code class="inline">K_avg = (3/2)kT</code> where k = 1.38×10⁻²³ J/K.</li>
+                </ul>
+                <div class="note">Thermodynamic processes: isothermal (ΔT=0), adiabatic (Q=0), isobaric, isochoric.</div>
+            </section>
+
+            <!-- 6. Waves & Oscillations -->
+            <section id="waves">
+                <h2>6. Waves & Oscillations</h2>
+                <h3>Simple Harmonic Motion (SHM)</h3>
+                <p><code class="inline">x(t) = A·cos(ωt + φ)</code>, where ω = 2πf. For a spring: <code class="inline">ω = √(k/m)</code>.</p>
+                <h3>Wave Properties</h3>
+                <ul>
+                    <li>Speed: <code class="inline">v = f·λ</code>.</li>
+                    <li>Types: transverse (light) / longitudinal (sound).</li>
+                    <li>Interference, diffraction, standing waves.</li>
+                </ul>
+                <h3>Sound</h3>
+                <p>Speed in air ≈ 343 m/s. Intensity level: <code class="inline">β = 10 log₁₀(I/I₀)</code> dB. Doppler effect changes perceived frequency.</p>
+            </section>
+
+            <!-- 7. Electromagnetism -->
+            <section id="electromag">
+                <h2>7. Electromagnetism</h2>
+                <h3>Electrostatics</h3>
+                <p>Coulomb's law: <code class="inline">F = k·(q₁q₂)/r²</code> (k ≈ 9×10⁹ N·m²/C²). Electric field: <code class="inline">E = F/q</code>.</p>
+                <h3>Circuits</h3>
+                <ul>
+                    <li>Ohm's law: <code class="inline">V = IR</code>.</li>
+                    <li>Power: <code class="inline">P = IV = I²R = V²/R</code>.</li>
+                    <li>Capacitance: <code class="inline">C = Q/V</code>. Time constant τ = RC.</li>
+                </ul>
+                <h3>Magnetism</h3>
+                <p>Lorentz force: <code class="inline">F = q(v × B)</code>. Ampere's law, Faraday's law of induction.</p>
+                <h3>Maxwell's Equations</h3>
+                <p>Gauss's law for electricity & magnetism, Faraday's law, Ampère‑Maxwell law. Predicted electromagnetic waves (light).</p>
+            </section>
+
+            <!-- 8. Optics -->
+            <section id="optics">
+                <h2>8. Optics</h2>
+                <h3>Reflection & Refraction</h3>
+                <p>Snell's law: <code class="inline">n₁ sinθ₁ = n₂ sinθ₂</code>. Total internal reflection when θ₁ > critical angle.</p>
+                <h3>Lenses & Mirrors</h3>
+                <p>Thin lens equation: <code class="inline">1/f = 1/do + 1/di</code>. Magnification: <code class="inline">m = -di/do</code>.</p>
+                <h3>Wave Optics</h3>
+                <p>Double‑slit interference: <code class="inline">d sinθ = mλ</code> (maxima). Diffraction grating, thin‑film interference.</p>
+            </section>
+
+            <!-- 9. Relativity -->
+            <section id="relativity">
+                <h2>9. Relativity</h2>
+                <h3>Special Relativity</h3>
+                <p>Postulates: laws of physics same in all inertial frames; speed of light c is constant.</p>
+                <ul>
+                    <li>Time dilation: <code class="inline">Δt = γΔt₀</code> where γ = 1/√(1 - v²/c²).</li>
+                    <li>Length contraction: <code class="inline">L = L₀/γ</code>.</li>
+                    <li>Mass‑energy equivalence: <code class="inline">E = mc²</code>.</li>
+                </ul>
+                <h3>General Relativity</h3>
+                <p>Gravity as curvature of spacetime. Predicts gravitational waves, black holes, and expansion of universe.</p>
+            </section>
+
+            <!-- 10. Quantum Mechanics -->
+            <section id="quantum">
+                <h2>10. Quantum Mechanics</h2>
+                <h3>Key Principles</h3>
+                <ul>
+                    <li>Wave‑particle duality (de Broglie wavelength <code class="inline">λ = h/p</code>).</li>
+                    <li>Uncertainty principle: <code class="inline">Δx·Δp ≥ ℏ/2</code>.</li>
+                    <li>Schrödinger equation: <code class="inline">iℏ ∂Ψ/∂t = ĤΨ</code>.</li>
+                </ul>
+                <h3>Quantum Numbers</h3>
+                <p>n (principal), l (azimuthal), m_l (magnetic), m_s (spin). Pauli exclusion principle.</p>
+            </section>
+
+            <!-- 11. Nuclear & Particle Physics -->
+            <section id="nuclear">
+                <h2>11. Nuclear & Particle Physics</h2>
+                <h3>Radioactivity</h3>
+                <p>Alpha, beta, gamma decay. Half‑life: <code class="inline">N = N₀·(½)^(t/T₁/₂)</code>.</p>
+                <h3>Standard Model</h3>
+                <p>Quarks, leptons, gauge bosons, Higgs boson. Fundamental forces: electromagnetic, weak, strong, gravity.</p>
+                <h3>Fission & Fusion</h3>
+                <p>Binding energy curve. Nuclear power (fission) and stellar energy (fusion).</p>
+            </section>
+
+            <!-- 12. Cosmology & Astrophysics -->
+            <section id="cosmo">
+                <h2>12. Cosmology & Astrophysics</h2>
+                <ul>
+                    <li>Hubble's law: <code class="inline">v = H₀·d</code> (expansion of universe).</li>
+                    <li>Cosmic microwave background radiation.</li>
+                    <li>Dark matter & dark energy.</li>
+                    <li>Stellar evolution (HR diagram, neutron stars, black holes).</li>
+                </ul>
+            </section>
+
+            <!-- 13. Essential Formulas & Constants -->
+            <section id="formulas">
+                <h2>13. Essential Formulas & Constants</h2>
+                <table>
+                    <tr><th>Constant</th><th>Symbol</th><th>Value</th></tr>
+                    <tr><td>Speed of light</td><td>c</td><td>3.00 × 10⁸ m/s</td></tr>
+                    <tr><td>Planck's constant</td><td>h</td><td>6.626 × 10⁻³⁴ J·s</td></tr>
+                    <tr><td>Gravitational constant</td><td>G</td><td>6.674 × 10⁻¹¹ N·m²/kg²</td></tr>
+                    <tr><td>Electron charge</td><td>e</td><td>1.602 × 10⁻¹⁹ C</td></tr>
+                    <tr><td>Boltzmann constant</td><td>k</td><td>1.381 × 10⁻²³ J/K</td></tr>
+                    <tr><td>Avogadro's number</td><td>Nₐ</td><td>6.022 × 10²³ mol⁻¹</td></tr>
+                    <tr><td>Universal gas constant</td><td>R</td><td>8.314 J/(mol·K)</td></tr>
+                    <tr><td>Permittivity of free space</td><td>ε₀</td><td>8.854 × 10⁻¹² F/m</td></tr>
+                </table>
+            </section>
+
+            <!-- 14. Quick Tips & Common Mistakes -->
+            <section id="tips">
+                <h2>14. Quick Tips & Common Pitfalls</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Units</h3>
+                        <p>Always convert to SI before calculations. Check unit consistency in formulas.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Vectors</h3>
+                        <p>Don't forget direction; use components correctly. Force is a vector.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Sign conventions</h3>
+                        <p>In kinematics, gravity often negative; in optics, sign conventions for mirrors/lenses matter.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Energy conservation</h3>
+                        <p>Only holds in isolated systems; non‑conservative forces (friction) dissipate energy.</p>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common mistakes: using weight (N) instead of mass (kg), forgetting air resistance,
+                    mixing up series/parallel rules, and ignoring relativistic effects at high speeds.
+                </div>
+            </section>
+        </main>
+    </div>
+
+
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+<!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>

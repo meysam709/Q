@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Computer Networking – The Complete Reference</title>
+    <style>
+        :root {
+            --bg: #0b1220;
+            --bg2: #111827;
+            --card: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent2: #2563eb;
+            --accent3: #60a5fa;
+            --danger: #ef4444;
+            --code-bg: #0a0f1c;
+            --shadow: 0 10px 30px rgba(0,0,0,0.35);
+            --radius: 18px;
+            --nav-bg: rgba(255,255,255,0.06);
+            --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+
+            --tok-keyword: #c586c0;
+            --tok-type: #4ec9b0;
+            --tok-string: #ce9178;
+            --tok-number: #b5cea8;
+            --tok-comment: #6a9955;
+            --tok-method: #dcdcaa;
+            --tok-class: #4ec9b0;
+            --tok-property: #9cdcfe;
+            --tok-operator: #d4d4d4;
+            --tok-punctuation: #d4d4d4;
+            --tok-variable: #9cdcfe;
+            --tok-namespace: #4fc1ff;
+            --tok-preproc: #c586c0;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --bg2: #e2e8f0;
+            --card: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(15, 23, 42, 0.1);
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent2: #1d4ed8;
+            --accent3: #60a5fa;
+            --danger: #dc2626;
+            --code-bg: #f3f7ff;
+            --shadow: 0 10px 30px rgba(15,23,42,0.08);
+            --nav-bg: rgba(255,255,255,0.75);
+            --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
+
+            --tok-keyword: #af00db;
+            --tok-type: #267f99;
+            --tok-string: #a31515;
+            --tok-number: #098658;
+            --tok-comment: #008000;
+            --tok-method: #795e26;
+            --tok-class: #267f99;
+            --tok-property: #001080;
+            --tok-operator: #111827;
+            --tok-punctuation: #111827;
+            --tok-variable: #001080;
+            --tok-namespace: #0070c1;
+            --tok-preproc: #af00db;
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 28%),
+                radial-gradient(circle at top right, rgba(37,99,235,0.14), transparent 25%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        header {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--hero-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            max-width: 950px;
+            margin: 15px auto 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .layout {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        main {
+            display: grid;
+            gap: 22px;
+        }
+
+        section {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        section h2 {
+            margin-top: 0;
+            font-size: 1.7rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+
+        section h3 {
+            margin-top: 24px;
+            color: var(--accent);
+            font-size: 1.15rem;
+        }
+
+        p,
+        li {
+            color: var(--text);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(59,130,246,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(59,130,246,0.2);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin: 4px 6px 4px 0;
+            font-weight: 600;
+        }
+
+        code.inline {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #c084fc;
+            font-family: Consolas, monospace;
+        }
+
+        body.light code.inline {
+            color: #7c3aed;
+            background: rgba(15,23,42,0.06);
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 14px;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 12px;
+        }
+
+        pre code {
+            font-family: "Fira Code", Consolas, monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            white-space: pre;
+            display: block;
+        }
+
+        .tok-keyword {
+            color: var(--tok-keyword);
+        }
+        .tok-type {
+            color: var(--tok-type);
+        }
+        .tok-string {
+            color: var(--tok-string);
+        }
+        .tok-number {
+            color: var(--tok-number);
+        }
+        .tok-comment {
+            color: var(--tok-comment);
+            font-style: italic;
+        }
+        .tok-method {
+            color: var(--tok-method);
+        }
+        .tok-class {
+            color: var(--tok-class);
+        }
+        .tok-property {
+            color: var(--tok-property);
+        }
+        .tok-operator {
+            color: var(--tok-operator);
+        }
+        .tok-punctuation {
+            color: var(--tok-punctuation);
+        }
+        .tok-variable {
+            color: var(--tok-variable);
+        }
+        .tok-namespace {
+            color: var(--tok-namespace);
+        }
+        .tok-preproc {
+            color: var(--tok-preproc);
+        }
+
+        .note {
+            border-left: 4px solid var(--accent3);
+            background: rgba(96,165,250,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        .danger {
+            border-left: 4px solid var(--danger);
+            background: rgba(239,68,68,0.08);
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text);
+            margin: 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.06);
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            padding: 30px 20px 60px;
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 999px;
+            width: 52px;
+            height: 52px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                position: static;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀ Toggle Mode</button>
+        <h1>Computer Networking – The Complete Reference</h1>
+        <p>
+            An ultra‑comprehensive guide covering every fundamental networking concept:
+            OSI/TCP‑IP, IPv4/IPv6, subnetting, routing, switching, wireless, security,
+            and countless practical commands. Ideal for learners, professionals, and exam prep.
+        </p>
+    </header>
+
+    <div class="layout">
+        <main>
+            <!-- 1. Fundamentals -->
+            <section id="fundamentals">
+                <h2>1. Networking Fundamentals</h2>
+                <p>A computer network connects devices to share resources and communicate. Networks can be classified by scale, topology, and architecture.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Network types</h3>
+                        <ul>
+                            <li><strong>PAN</strong> – Personal Area Network (Bluetooth, USB)</li>
+                            <li><strong>LAN</strong> – Local Area Network (office, home)</li>
+                            <li><strong>WLAN</strong> – Wireless LAN (Wi‑Fi)</li>
+                            <li><strong>MAN</strong> – Metropolitan Area Network</li>
+                            <li><strong>WAN</strong> – Wide Area Network (Internet)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Topologies</h3>
+                        <ul>
+                            <li>Star, Mesh, Bus, Ring, Hybrid</li>
+                            <li>Physical vs logical topology</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Key terms</h3>
+                        <ul>
+                            <li><strong>Bandwidth</strong> – max data rate (bps)</li>
+                            <li><strong>Latency</strong> – delay (ms)</li>
+                            <li><strong>Throughput</strong> – actual data rate</li>
+                            <li><strong>Jitter</strong> – variation in delay</li>
+                            <li><strong>Packet loss</strong> – % of lost packets</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. OSI & TCP/IP Models -->
+            <section id="models">
+                <h2>2. OSI & TCP/IP Models</h2>
+                <p>The OSI model (7 layers) is a conceptual framework; TCP/IP (4/5 layers) is the practical Internet model.</p>
+                <table>
+                    <tr><th>OSI Layer</th><th>TCP/IP Layer</th><th>Function</th><th>Protocols / Devices</th></tr>
+                    <tr><td>7. Application</td><td rowspan="3">Application</td><td>User interfaces & apps</td><td>HTTP, FTP, SMTP, DNS</td></tr>
+                    <tr><td>6. Presentation</td><td>Data translation, encryption</td><td>SSL/TLS, JPEG, ASCII</td></tr>
+                    <tr><td>5. Session</td><td>Session management</td><td>NetBIOS, RPC</td></tr>
+                    <tr><td>4. Transport</td><td>Transport</td><td>End‑to‑end reliability</td><td>TCP, UDP</td></tr>
+                    <tr><td>3. Network</td><td>Internet</td><td>Logical addressing & routing</td><td>IP, ICMP, Routers</td></tr>
+                    <tr><td>2. Data Link</td><td>Network Access</td><td>MAC addressing, framing</td><td>Ethernet, Switches</td></tr>
+                    <tr><td>1. Physical</td><td>Physical</td><td>Raw bit transmission</td><td>Cables, Hubs</td></tr>
+                </table>
+                <div class="note">Mnemonic for OSI: <strong>P</strong>lease <strong>D</strong>o <strong>N</strong>ot <strong>T</strong>hrow <strong>S</strong>ausage <strong>P</strong>izza <strong>A</strong>way (Physical→Application).</div>
+            </section>
+
+            <!-- 3. Physical Layer -->
+            <section id="physical">
+                <h2>3. Physical Layer & Cabling</h2>
+                <p>Defines electrical, mechanical, and procedural specifications for the physical medium.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Copper cables</h3>
+                        <ul>
+                            <li><strong>Cat5e</strong> – 100 MHz, up to 1 Gbps</li>
+                            <li><strong>Cat6</strong> – 250 MHz, 10 Gbps (55m)</li>
+                            <li><strong>Cat6a</strong> – 500 MHz, 10 Gbps (100m)</li>
+                            <li><strong>RJ‑45</strong> connector, T568A/B wiring</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Fibre optic</h3>
+                        <ul>
+                            <li><strong>Single‑mode (SMF)</strong> – long distance, laser</li>
+                            <li><strong>Multi‑mode (MMF)</strong> – short distance, LED</li>
+                            <li>Connectors: LC, SC, ST</li>
+                        </ul>
+                    </div>
+                </div>
+                <p>Straight‑through vs crossover cables: modern switches use Auto‑MDIX.</p>
+            </section>
+
+            <!-- 4. Data Link & Switching -->
+            <section id="datalink">
+                <h2>4. Data Link Layer & Switching</h2>
+                <p>The data link layer provides node‑to‑node delivery using MAC addresses and frames.</p>
+                <h3>Ethernet frame structure</h3>
+                <pre><code>| Preamble | SFD | Dest MAC | Src MAC | Type/Length | Payload | FCS |
+  7 bytes   1 byte   6 bytes    6 bytes    2 bytes     46‑1500   4 bytes</code></pre>
+                <h3>MAC address</h3>
+                <p>48‑bit (6 bytes), written as <code class="inline">AA:BB:CC:DD:EE:FF</code>. First 3 bytes = OUI (vendor).</p>
+                <h3>Switching</h3>
+                <p>A switch learns MAC addresses and forwards frames only to the correct port. It uses a MAC address table (CAM table).</p>
+                <pre><code><span class="tok-comment"># Show MAC table on Cisco</span>
+show mac address-table</code></pre>
+                <ul>
+                    <li><strong>Flooding</strong> – unknown unicast sent to all ports</li>
+                    <li><strong>Filtering</strong> – forward only to known port</li>
+                    <li><strong>Spanning Tree Protocol (STP)</strong> – prevents loops</li>
+                </ul>
+            </section>
+
+            <!-- 5. Network Layer & Routing -->
+            <section id="network">
+                <h2>5. Network Layer & Routing</h2>
+                <p>Handles logical addressing (IP) and path determination (routing). Routers operate at this layer.</p>
+                <h3>IP packet structure</h3>
+                <pre><code>| Version | IHL | TOS | Total Length | Identification | Flags | Fragment Offset |
+| TTL | Protocol | Header Checksum | Source IP | Destination IP | Options | Data |</code></pre>
+                <h3>TTL (Time To Live)</h3>
+                <p>Decremented at each hop; packet dropped when TTL=0. Prevents infinite loops.</p>
+                <h3>Routing table</h3>
+                <pre><code><span class="tok-comment"># Linux</span>
+ip route show
+route -n
+
+<span class="tok-comment"># Windows</span>
+route print</code></pre>
+                <p>Routing decisions: longest prefix match. Static routes vs dynamic routing protocols.</p>
+            </section>
+
+            <!-- 6. IPv4 Addressing & Subnetting -->
+            <section id="ipv4">
+                <h2>6. IPv4 Addressing & Subnetting</h2>
+                <p>IPv4 address: 32 bits, written as dotted decimal (e.g., 192.168.1.1).</p>
+                <h3>Address classes</h3>
+                <table>
+                    <tr><th>Class</th><th>Range</th><th>Default mask</th><th>CIDR</th></tr>
+                    <tr><td>A</td><td>1.0.0.0 – 126.255.255.255</td><td>255.0.0.0</td><td>/8</td></tr>
+                    <tr><td>B</td><td>128.0.0.0 – 191.255.255.255</td><td>255.255.0.0</td><td>/16</td></tr>
+                    <tr><td>C</td><td>192.0.0.0 – 223.255.255.255</td><td>255.255.255.0</td><td>/24</td></tr>
+                    <tr><td>D (multicast)</td><td>224.0.0.0 – 239.255.255.255</td><td>—</td><td>—</td></tr>
+                    <tr><td>E (reserved)</td><td>240.0.0.0 – 255.255.255.255</td><td>—</td><td>—</td></tr>
+                </table>
+                <h3>Private addresses (RFC 1918)</h3>
+                <ul>
+                    <li>10.0.0.0/8</li>
+                    <li>172.16.0.0/12</li>
+                    <li>192.168.0.0/16</li>
+                </ul>
+                <h3>Subnetting example</h3>
+                <p>Given 192.168.1.0/24, create 4 subnets:</p>
+                <pre><code>Borrow 2 bits → mask /26 (255.255.255.192)
+Subnets:
+  1. 192.168.1.0/26   (hosts .1 – .62)
+  2. 192.168.1.64/26  (hosts .65 – .126)
+  3. 192.168.1.128/26 (hosts .129 – .190)
+  4. 192.168.1.192/26 (hosts .193 – .254)</code></pre>
+                <p><strong>Subnetting formulas:</strong> Number of subnets = 2<sup>borrowed</sup>. Hosts per subnet = 2<sup>(32‑mask)</sup> – 2.</p>
+                <h3>CIDR (Classless Inter‑Domain Routing)</h3>
+                <p>Uses prefix length instead of class. Example: 10.10.0.0/16. Supernetting combines multiple networks.</p>
+            </section>
+
+            <!-- 7. IPv6 -->
+            <section id="ipv6">
+                <h2>7. IPv6 Addressing</h2>
+                <p>128‑bit address, written as 8 groups of hex (e.g., <code class="inline">2001:0db8:85a3::8a2e:0370:7334</code>).</p>
+                <ul>
+                    <li><strong>Global Unicast</strong> – 2000::/3</li>
+                    <li><strong>Link‑Local</strong> – fe80::/10</li>
+                    <li><strong>Unique Local</strong> – fc00::/7 (private)</li>
+                    <li><strong>Multicast</strong> – ff00::/8</li>
+                </ul>
+                <p>No broadcast – uses multicast for neighbor discovery. Stateless autoconfiguration (SLAAC) and DHCPv6.</p>
+                <pre><code><span class="tok-comment"># Windows / Linux</span>
+ping -6 google.com
+ping6 google.com</code></pre>
+            </section>
+
+            <!-- 8. Transport Layer -->
+            <section id="transport">
+                <h2>8. Transport Layer – TCP & UDP</h2>
+                <h3>TCP (Transmission Control Protocol)</h3>
+                <ul>
+                    <li>Connection‑oriented, reliable, in‑order delivery</li>
+                    <li>Three‑way handshake: SYN → SYN‑ACK → ACK</li>
+                    <li>Flow control (sliding window), congestion control</li>
+                    <li>Port numbers: 16‑bit, well‑known (0‑1023), registered (1024‑49151), dynamic (49152‑65535)</li>
+                </ul>
+                <h3>UDP (User Datagram Protocol)</h3>
+                <ul>
+                    <li>Connectionless, no reliability, lightweight</li>
+                    <li>Used for DNS, VoIP, streaming</li>
+                </ul>
+                <table>
+                    <tr><th>TCP</th><th>UDP</th></tr>
+                    <tr><td>Reliable, ordered</td><td>Best‑effort</td></tr>
+                    <tr><td>Overhead (20‑60 byte header)</td><td>8‑byte header</td></tr>
+                    <tr><td>HTTP, FTP, SSH, SMTP</td><td>DNS, DHCP, TFTP, RTP</td></tr>
+                </table>
+            </section>
+
+            <!-- 9. Application Layer -->
+            <section id="application">
+                <h2>9. Application Layer Protocols</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>HTTP / HTTPS</h3>
+                        <p>Port 80 / 443. Methods: GET, POST, PUT, DELETE. Status codes: 200 OK, 404 Not Found, 500 Internal Server Error.</p>
+                    </div>
+                    <div class="card">
+                        <h3>FTP</h3>
+                        <p>Ports 20 (data), 21 (control). Active vs passive mode.</p>
+                    </div>
+                    <div class="card">
+                        <h3>SMTP</h3>
+                        <p>Port 25 (sometimes 587/465). Email sending. POP3 (110) / IMAP (143) for retrieval.</p>
+                    </div>
+                    <div class="card">
+                        <h3>DNS</h3>
+                        <p>Port 53. Translates names to IPs. (Covered in detail next).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. DNS -->
+            <section id="dns">
+                <h2>10. DNS – Domain Name System</h2>
+                <p>Hierarchical, distributed database. Resolvers query recursively or iteratively.</p>
+                <h3>Record types</h3>
+                <table>
+                    <tr><th>Type</th><th>Purpose</th></tr>
+                    <tr><td>A</td><td>IPv4 address</td></tr>
+                    <tr><td>AAAA</td><td>IPv6 address</td></tr>
+                    <tr><td>CNAME</td><td>Canonical name (alias)</td></tr>
+                    <tr><td>MX</td><td>Mail exchange</td></tr>
+                    <tr><td>NS</td><td>Name server</td></tr>
+                    <tr><td>PTR</td><td>Pointer (reverse DNS)</td></tr>
+                    <tr><td>SOA</td><td>Start of Authority</td></tr>
+                </table>
+                <pre><code><span class="tok-comment"># dig command examples</span>
+dig example.com
+dig -t MX example.com
+nslookup example.com</code></pre>
+            </section>
+
+            <!-- 11. DHCP -->
+            <section id="dhcp">
+                <h2>11. DHCP – Dynamic Host Configuration Protocol</h2>
+                <p>Automatically assigns IP addresses and network parameters. Uses UDP ports 67 (server) and 68 (client).</p>
+                <h3>DORA process</h3>
+                <ol>
+                    <li><strong>Discover</strong> – client broadcast</li>
+                    <li><strong>Offer</strong> – server offers IP</li>
+                    <li><strong>Request</strong> – client requests offered IP</li>
+                    <li><strong>Acknowledge</strong> – server confirms</li>
+                </ol>
+                <p>Lease time, renewal (T1), rebinding (T2). DHCP relay for different subnets.</p>
+            </section>
+
+            <!-- 12. HTTP/HTTPS Deep Dive -->
+            <section id="http">
+                <h2>12. HTTP/HTTPS Deep Dive</h2>
+                <p>HTTP/1.1: persistent connections, pipelining. HTTP/2: multiplexing, header compression. HTTP/3: QUIC over UDP.</p>
+                <h3>HTTPS (TLS/SSL)</h3>
+                <ul>
+                    <li>Handshake: Client Hello → Server Hello → Certificate → Key exchange</li>
+                    <li>Versions: TLS 1.2, 1.3 (faster, 0‑RTT)</li>
+                    <li>Certificates: X.509, chain of trust, CA</li>
+                </ul>
+                <pre><code><span class="tok-comment"># curl with TLS</span>
+curl -v https://example.com</code></pre>
+            </section>
+
+            <!-- 13. Network Devices & Topologies -->
+            <section id="devices">
+                <h2>13. Network Devices & Topologies</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Repeater / Hub</h3>
+                        <p>Layer 1. Hub repeats signals to all ports (collision domain).</p>
+                    </div>
+                    <div class="card">
+                        <h3>Bridge / Switch</h3>
+                        <p>Layer 2. Switch creates separate collision domains, learns MACs.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Router</h3>
+                        <p>Layer 3. Connects different networks, forwards based on IP.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Firewall</h3>
+                        <p>Filters traffic by rules (stateless/stateful). Next‑gen includes IPS/IDS.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 14. VLANs & Trunking -->
+            <section id="vlans">
+                <h2>14. VLANs & Trunking</h2>
+                <p>Virtual LANs logically segment a switch into multiple broadcast domains.</p>
+                <ul>
+                    <li><strong>Access port</strong> – belongs to one VLAN (untagged)</li>
+                    <li><strong>Trunk port</strong> – carries multiple VLANs using 802.1Q tagging</li>
+                </ul>
+                <pre><code><span class="tok-comment">! Cisco VLAN configuration</span>
+vlan 10
+ name Engineering
+interface gig0/1
+ switchport mode access
+ switchport access vlan 10</code></pre>
+                <p><strong>VTP</strong> (VLAN Trunking Protocol) propagates VLAN databases (use with caution).</p>
+            </section>
+
+            <!-- 15. Routing Protocols -->
+            <section id="routing">
+                <h2>15. Routing Protocols</h2>
+                <h3>Distance Vector</h3>
+                <p><strong>RIP (v1/v2)</strong> – max 15 hops, metric hop count. RIPv2 supports CIDR. <strong>EIGRP</strong> (Cisco proprietary) – advanced distance vector.</p>
+                <h3>Link State</h3>
+                <p><strong>OSPF</strong> – uses Dijkstra algorithm, areas, fast convergence. <strong>IS‑IS</strong> – similar, used in large ISPs.</p>
+                <h3>Path Vector</h3>
+                <p><strong>BGP</strong> – exterior gateway protocol, AS‑path attribute, policy‑based routing. Internet backbone.</p>
+                <pre><code><span class="tok-comment"># View BGP table (Linux with Quagga/FRR)</span>
+vtysh -c "show ip bgp"</code></pre>
+                <table>
+                    <tr><th>Protocol</th><th>Type</th><th>Metric</th><th>Admin Distance</th></tr>
+                    <tr><td>RIP</td><td>Distance vector</td><td>Hop count</td><td>120</td></tr>
+                    <tr><td>OSPF</td><td>Link state</td><td>Cost (bandwidth)</td><td>110</td></tr>
+                    <tr><td>EIGRP</td><td>Advanced DV</td><td>Composite</td><td>90</td></tr>
+                    <tr><td>BGP</td><td>Path vector</td><td>Path attributes</td><td>20 (eBGP)</td></tr>
+                </table>
+            </section>
+
+            <!-- 16. NAT -->
+            <section id="nat">
+                <h2>16. Network Address Translation (NAT)</h2>
+                <p>Translates private IPs to public IPs. Types:</p>
+                <ul>
+                    <li><strong>Static NAT</strong> – 1‑to‑1 mapping</li>
+                    <li><strong>Dynamic NAT</strong> – pool of public IPs</li>
+                    <li><strong>PAT (Port Address Translation)</strong> – many‑to‑one using ports (most common)</li>
+                </ul>
+                <pre><code><span class="tok-comment">! Cisco NAT overload (PAT)</span>
+ip nat inside source list 1 interface gig0/0 overload</code></pre>
+            </section>
+
+            <!-- 17. Firewalls & Security -->
+            <section id="security">
+                <h2>17. Firewalls & Network Security</h2>
+                <h3>Firewall types</h3>
+                <ul>
+                    <li>Packet filter (ACLs)</li>
+                    <li>Stateful inspection</li>
+                    <li>Proxy firewall</li>
+                    <li>Next‑Gen Firewall (NGFW) – application awareness, IPS</li>
+                </ul>
+                <h3>Common attacks</h3>
+                <ul>
+                    <li>DoS / DDoS, SYN flood, ARP spoofing, DNS poisoning, Man‑in‑the‑Middle</li>
+                </ul>
+                <h3>Security protocols</h3>
+                <ul>
+                    <li><strong>IPsec</strong> – VPN encryption (AH/ESP)</li>
+                    <li><strong>SSL/TLS VPN</strong></li>
+                    <li><strong>WPA3</strong> – Wi‑Fi security</li>
+                </ul>
+                <pre><code><span class="tok-comment"># iptables example (Linux firewall)</span>
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -j DROP</code></pre>
+            </section>
+
+            <!-- 18. Wireless Networking -->
+            <section id="wireless">
+                <h2>18. Wireless Networking (Wi‑Fi)</h2>
+                <p>IEEE 802.11 standards:</p>
+                <table>
+                    <tr><th>Standard</th><th>Frequency</th><th>Max speed</th></tr>
+                    <tr><td>802.11a</td><td>5 GHz</td><td>54 Mbps</td></tr>
+                    <tr><td>802.11b</td><td>2.4 GHz</td><td>11 Mbps</td></tr>
+                    <tr><td>802.11g</td><td>2.4 GHz</td><td>54 Mbps</td></tr>
+                    <tr><td>802.11n (Wi‑Fi 4)</td><td>2.4/5 GHz</td><td>600 Mbps</td></tr>
+                    <tr><td>802.11ac (Wi‑Fi 5)</td><td>5 GHz</td><td>6.9 Gbps</td></tr>
+                    <tr><td>802.11ax (Wi‑Fi 6/6E)</td><td>2.4/5/6 GHz</td><td>9.6 Gbps</td></tr>
+                </table>
+                <p>Security: WEP (broken), WPA, WPA2 (AES), WPA3. SSID, BSSID, channels (2.4 GHz: 1,6,11 non‑overlapping).</p>
+            </section>
+
+            <!-- 19. Network Commands & Tools -->
+            <section id="commands">
+                <h2>19. Essential Network Commands</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>ping</h3>
+                        <pre><code>ping 8.8.8.8
+ping -t (continuous, Windows)
+ping -c 4 (count, Linux)</code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>traceroute / tracert</h3>
+                        <pre><code>tracert example.com  (Windows)
+traceroute example.com (Linux)</code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>ipconfig / ifconfig / ip</h3>
+                        <pre><code>ipconfig /all
+ifconfig
+ip addr show</code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>nslookup / dig</h3>
+                        <pre><code>nslookup example.com
+dig +short example.com</code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>netstat / ss</h3>
+                        <pre><code>netstat -an
+ss -tulpn</code></pre>
+                    </div>
+                    <div class="card">
+                        <h3>arp</h3>
+                        <pre><code>arp -a</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 20. Performance & Troubleshooting -->
+            <section id="troubleshoot">
+                <h2>20. Performance & Troubleshooting</h2>
+                <h3>Common issues & solutions</h3>
+                <table>
+                    <tr><th>Symptom</th><th>Possible cause</th><th>Check</th></tr>
+                    <tr><td>No connectivity</td><td>Cable, DHCP, IP config</td><td>ipconfig, ping loopback, ping gateway</td></tr>
+                    <tr><td>Intermittent drops</td><td>Duplex mismatch, interference</td><td>Check interface stats, Wi‑Fi channel</td></tr>
+                    <tr><td>Slow network</td><td>Congestion, faulty cable, DNS</td><td>iperf, check DNS response</td></tr>
+                    <tr><td>High latency</td><td>Routing, firewall, distance</td><td>traceroute, MTR</td></tr>
+                </table>
+                <h3>Network monitoring</h3>
+                <ul>
+                    <li><strong>Wireshark</strong> – packet capture & analysis</li>
+                    <li><strong>SNMP</strong> – device monitoring</li>
+                    <li><strong>NetFlow / sFlow</strong> – traffic analysis</li>
+                </ul>
+            </section>
+
+            <!-- 21. Advanced Concepts -->
+            <section id="advanced">
+                <h2>21. Advanced & Emerging Concepts</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>SDN (Software‑Defined Networking)</h3>
+                        <p>Separates control plane from data plane. OpenFlow, Cisco ACI, VMware NSX.</p>
+                    </div>
+                    <div class="card">
+                        <h3>VPN Technologies</h3>
+                        <p>IPsec, SSL VPN, WireGuard, MPLS VPN, DMVPN.</p>
+                    </div>
+                    <div class="card">
+                        <h3>QoS (Quality of Service)</h3>
+                        <p>Prioritize traffic (voice, video). DSCP, CoS, queuing (CBWFQ, LLQ).</p>
+                    </div>
+                    <div class="card">
+                        <h3>Network Function Virtualization (NFV)</h3>
+                        <p>Virtual routers, firewalls, load balancers on standard hardware.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 22. Quick Reference Tables -->
+            <section id="cheatsheets">
+                <h2>22. Quick Reference Tables & Cheat Sheets</h2>
+                <h3>Common port numbers</h3>
+                <table>
+                    <tr><th>Port</th><th>Protocol</th><th>Service</th></tr>
+                    <tr><td>20, 21</td><td>TCP</td><td>FTP</td></tr>
+                    <tr><td>22</td><td>TCP</td><td>SSH</td></tr>
+                    <tr><td>23</td><td>TCP</td><td>Telnet</td></tr>
+                    <tr><td>25</td><td>TCP</td><td>SMTP</td></tr>
+                    <tr><td>53</td><td>UDP/TCP</td><td>DNS</td></tr>
+                    <tr><td>67, 68</td><td>UDP</td><td>DHCP</td></tr>
+                    <tr><td>80</td><td>TCP</td><td>HTTP</td></tr>
+                    <tr><td>110</td><td>TCP</td><td>POP3</td></tr>
+                    <tr><td>123</td><td>UDP</td><td>NTP</td></tr>
+                    <tr><td>143</td><td>TCP</td><td>IMAP</td></tr>
+                    <tr><td>161, 162</td><td>UDP</td><td>SNMP</td></tr>
+                    <tr><td>443</td><td>TCP</td><td>HTTPS</td></tr>
+                    <tr><td>3389</td><td>TCP</td><td>RDP</td></tr>
+                </table>
+                <h3>IPv4 subnet mask chart</h3>
+                <table>
+                    <tr><th>CIDR</th><th>Mask</th><th>Hosts</th></tr>
+                    <tr><td>/8</td><td>255.0.0.0</td><td>16,777,214</td></tr>
+                    <tr><td>/16</td><td>255.255.0.0</td><td>65,534</td></tr>
+                    <tr><td>/24</td><td>255.255.255.0</td><td>254</td></tr>
+                    <tr><td>/25</td><td>255.255.255.128</td><td>126</td></tr>
+                    <tr><td>/26</td><td>255.255.255.192</td><td>62</td></tr>
+                    <tr><td>/27</td><td>255.255.255.224</td><td>30</td></tr>
+                    <tr><td>/28</td><td>255.255.255.240</td><td>14</td></tr>
+                    <tr><td>/29</td><td>255.255.255.248</td><td>6</td></tr>
+                    <tr><td>/30</td><td>255.255.255.252</td><td>2</td></tr>
+                </table>
+            </section>
+
+            <section id="tips">
+                <h2>23. Final Tips & Best Practices</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Design</h3>
+                        <ul>
+                            <li>Use hierarchy: core, distribution, access</li>
+                            <li>Plan for redundancy (STP, HSRP/VRRP)</li>
+                            <li>Document everything</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Security</h3>
+                        <ul>
+                            <li>Follow principle of least privilege</li>
+                            <li>Segment networks (DMZ, VLANs)</li>
+                            <li>Regular updates & patches</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Troubleshooting methodology</h3>
+                        <ol>
+                            <li>Define the problem</li>
+                            <li>Gather facts</li>
+                            <li>Consider possibilities</li>
+                            <li>Create action plan</li>
+                            <li>Implement & observe</li>
+                            <li>Document solution</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="danger">
+                    Common mistakes: misconfiguring subnet masks, forgetting to allow established connections in firewall,
+                    ignoring DNS, not checking physical layer first, and failing to save configuration changes.
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <button class="top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+        }
+
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light') {
+                document.body.classList.add('light');
+            }
+        })();
+    </script>
+<!-- Back to Index Button (place right before </body>) -->
+<style>
+    .back-to-index {
+        display: block;
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto 20px;
+        padding: 16px 0;
+        text-align: center;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
+    }
+    .back-to-index:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+    }
+</style>
+<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+</body>
+</html>
