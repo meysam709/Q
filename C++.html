@@ -19,7 +19,6 @@
             --code-bg: #0a0f1c;
             --shadow: 0 10px 30px rgba(0,0,0,0.35);
             --radius: 18px;
-            --nav-bg: rgba(255,255,255,0.06);
             --hero-grad: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
 
             --tok-keyword: #c586c0;
@@ -50,7 +49,6 @@
             --danger: #dc2626;
             --code-bg: #f3f7ff;
             --shadow: 0 10px 30px rgba(15,23,42,0.08);
-            --nav-bg: rgba(255,255,255,0.75);
             --hero-grad: linear-gradient(90deg, #93c5fd, #3b82f6, #1d4ed8);
 
             --tok-keyword: #af00db;
@@ -121,6 +119,7 @@
             font-weight: 700;
             box-shadow: var(--shadow);
             transition: transform 0.2s ease;
+            z-index: 10;
         }
 
         .theme-toggle:hover {
@@ -132,41 +131,8 @@
             margin: 0 auto;
             padding: 20px;
             display: grid;
-            grid-template-columns: 290px 1fr;
+            grid-template-columns: 1fr;
             gap: 24px;
-        }
-
-        nav {
-            position: sticky;
-            top: 20px;
-            height: fit-content;
-            background: var(--nav-bg);
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(12px);
-            border-radius: var(--radius);
-            padding: 18px;
-            box-shadow: var(--shadow);
-        }
-
-        nav h2 {
-            margin-top: 0;
-            font-size: 1rem;
-        }
-
-        nav a {
-            display: block;
-            color: var(--muted);
-            text-decoration: none;
-            padding: 8px 10px;
-            border-radius: 10px;
-            transition: 0.25s;
-            font-size: 0.95rem;
-        }
-
-        nav a:hover {
-            background: rgba(59,130,246,0.12);
-            color: var(--text);
-            transform: translateX(4px);
         }
 
         main {
@@ -367,19 +333,28 @@
             box-shadow: var(--shadow);
         }
 
-        @media (max-width: 980px) {
-            .layout {
-                grid-template-columns: 1fr;
+        @media (max-width: 600px) {
+            header h1 {
+                background: none !important;
+                -webkit-text-fill-color: var(--text);
+                color: var(--text);
+                font-size: 2.2rem;
             }
-            nav {
-                position: relative;
-                top: 0;
+            header {
+                padding-top: 40px;
             }
             .theme-toggle {
                 position: static;
                 margin-top: 20px;
             }
+            section {
+                padding: 18px;
+            }
+            pre {
+                padding: 12px;
+            }
         }
+        
     </style>
 </head>
 
@@ -394,30 +369,6 @@
     </header>
 
     <div class="layout">
-        <nav>
-            <h2>Contents</h2>
-            <a href="#intro">1. C++ Basics</a>
-            <a href="#syntax">2. Syntax & Structure</a>
-            <a href="#variables">3. Variables & Data Types</a>
-            <a href="#operators">4. Operators</a>
-            <a href="#control">5. Control Flow</a>
-            <a href="#functions">6. Functions</a>
-            <a href="#arrays">7. Arrays & Strings</a>
-            <a href="#oop">8. OOP</a>
-            <a href="#inheritance">9. Inheritance & Polymorphism</a>
-            <a href="#abstraction">10. Abstract Classes & Interfaces</a>
-            <a href="#encapsulation">11. Encapsulation</a>
-            <a href="#exceptions">12. Exception Handling</a>
-            <a href="#collections">13. STL Collections</a>
-            <a href="#templates">14. Templates</a>
-            <a href="#lambdas">15. Lambdas & Function Objects</a>
-            <a href="#algorithms">16. STL Algorithms</a>
-            <a href="#files">17. File I/O</a>
-            <a href="#concurrency">18. Concurrency</a>
-            <a href="#modern">19. Modern C++ Features</a>
-            <a href="#tips">20. Quick Remember Tips</a>
-        </nav>
-
         <main>
             <!-- 1. Basics -->
             <section id="intro">
@@ -858,30 +809,31 @@ t<span class="tok-punctuation">.</span><span class="tok-method">join</span><span
             }
         })();
     </script>
-    <!-- Back to Index Button (place right before </body>) -->
-<style>
-    .back-to-index {
-        display: block;
-        width: 90%;
-        max-width: 600px;
-        margin: 40px auto 20px;
-        padding: 16px 0;
-        text-align: center;
-        background: linear-gradient(135deg, #3b82f6, #2563eb);
-        color: white;
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 1.1rem;
-        border-radius: 14px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        transition: transform 0.2s, box-shadow 0.2s;
-        letter-spacing: 0.5px;
-    }
-    .back-to-index:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 14px 30px rgba(0,0,0,0.4);
-    }
-</style>
-<a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
+
+    <!-- Back to Index Button -->
+    <style>
+        .back-to-index {
+            display: block;
+            width: 90%;
+            max-width: 600px;
+            margin: 40px auto 20px;
+            padding: 16px 0;
+            text-align: center;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .back-to-index:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px rgba(0,0,0,0.4);
+        }
+    </style>
+    <a href="index.html" class="back-to-index">← Back to Knowledge Hub</a>
 </body>
 </html>
